@@ -19,7 +19,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   modulePathIgnorePatterns: ['dist'],
   moduleNameMapper: {
-    '@jsx-lite/(.+)$': '<rootDir>../../packages/$1/src',
+    '@builder.io/morpho/(.+)$': '<rootDir>../../packages/$1/src',
   },
   notify: true,
   notifyMode: 'always',

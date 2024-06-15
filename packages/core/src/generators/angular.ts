@@ -8,8 +8,8 @@ import { mapRefs } from '../helpers/map-refs';
 import { renderPreComponent } from '../helpers/render-imports';
 import { stripStateAndPropsRefs } from '../helpers/strip-state-and-props-refs';
 import { selfClosingTags } from '../parsers/jsx';
-import { JSXLiteComponent } from '../types/jsx-lite-component';
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoNode } from '../types/morpho-node';
 import {
   Plugin,
   runPostCodePlugins,
@@ -29,7 +29,7 @@ export type ToAngularOptions = {
 };
 
 const mappers: {
-  [key: string]: (json: JSXLiteNode, options: ToAngularOptions) => string;
+  [key: string]: (json: MorphoNode, options: ToAngularOptions) => string;
 } = {
   Fragment: (json, options) => {
     return `<div>${json.children
@@ -39,7 +39,7 @@ const mappers: {
 };
 
 export const blockToAngular = (
-  json: JSXLiteNode,
+  json: MorphoNode,
   options: ToAngularOptions = {},
 ): string => {
   if (mappers[json.name]) {
@@ -142,7 +142,7 @@ const indent = (str: string, spaces = 4) =>
   str.replace(/\n([^\n])/g, `\n${' '.repeat(spaces)}$1`);
 
 export const componentToAngular = (
-  componentJson: JSXLiteComponent,
+  componentJson: MorphoComponent,
   options: ToAngularOptions = {},
 ) => {
   // Make a copy we can safely mutate, similar to babel's toolchain

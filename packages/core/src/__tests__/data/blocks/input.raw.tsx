@@ -1,4 +1,4 @@
-import '@jsx-lite/core';
+import '@builder.io/morpho';
 import { Builder } from '@builder.io/sdk';
 
 export interface FormInputProps {

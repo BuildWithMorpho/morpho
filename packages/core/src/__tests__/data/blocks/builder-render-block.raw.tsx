@@ -7,7 +7,7 @@ import {
   onError,
   useContext,
   For,
-} from '@jsx-lite/core';
+} from '@builder.io/morpho';
 import {
   stringToFunction,
   getBlockOptions, // TODO: migrate logic here

@@ -1,5 +1,5 @@
 import traverse from 'traverse';
-import { JSXLiteComponent } from '../types/jsx-lite-component';
+import { MorphoComponent } from '../types/morpho-component';
 
 const propsRegex = /props\s*\.\s*([a-zA-Z0-9_\$]+)/;
 const allPropsMatchesRegex = new RegExp(propsRegex, 'g');
@@ -7,7 +7,7 @@ const allPropsMatchesRegex = new RegExp(propsRegex, 'g');
 /**
  * Get props used in the components by reference
  */
-export const getProps = (json: JSXLiteComponent) => {
+export const getProps = (json: MorphoComponent) => {
   const props = new Set<string>();
   traverse(json).forEach(function(item) {
     if (typeof item === 'string') {

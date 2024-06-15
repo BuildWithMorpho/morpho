@@ -8,24 +8,24 @@ import {
   BoundText,
 } from '@angular/compiler/src/render3/r3_ast';
 import { ASTWithSource } from '@angular/compiler/src/expression_parser/ast';
-import { createJSXLiteComponent } from '../helpers/create-jsx-lite-component';
-import { createJSXLiteNode } from '../helpers/create-jsx-lite-node';
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { createMorphoComponent } from '../helpers/create-morpho-component';
+import { createMorphoNode } from '../helpers/create-morpho-node';
+import { MorphoNode } from '../types/morpho-node';
 import { omit } from 'lodash';
 import { babelTransformCode } from '../helpers/babel-transform';
 import { types } from '@babel/core';
-import { JSXLiteComponent } from '../types/jsx-lite-component';
+import { MorphoComponent } from '../types/morpho-component';
 import { capitalize } from '../helpers/capitalize';
 
 const getTsAST = (code: string) => {
   return ts.createSourceFile('code.ts', code, ts.ScriptTarget.Latest, true);
 };
 
-interface AngularToJsxLiteOptions {}
+interface AngularToMorphoOptions {}
 
 const transformBinding = (
   binding: string,
-  _options: AngularToJsxLiteOptions,
+  _options: AngularToMorphoOptions,
 ) => {
   return babelTransformCode(binding, {
     Identifier(path: babel.NodePath<babel.types.Identifier>) {
@@ -63,14 +63,14 @@ const isText = (node: Node): node is Text =>
 const isBoundText = (node: Node): node is BoundText =>
   typeof (node as any).value === 'object';
 
-const angularTemplateNodeToJsxLiteNode = (
+const angularTemplateNodeToMorphoNode = (
   node: Node,
-  options: AngularToJsxLiteOptions,
-): JSXLiteNode => {
+  options: AngularToMorphoOptions,
+): MorphoNode => {
   if (isTemplate(node)) {
     const ngIf = node.templateAttrs.find((item) => item.name === 'ngIf');
     if (ngIf) {
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: 'Show',
         bindings: {
           when: transformBinding(
@@ -79,7 +79,7 @@ const angularTemplateNodeToJsxLiteNode = (
           ),
         },
         children: [
-          angularTemplateNodeToJsxLiteNode(
+          angularTemplateNodeToMorphoNode(
             omit(node, 'templateAttrs'),
             options,
           ),
@@ -91,7 +91,7 @@ const angularTemplateNodeToJsxLiteNode = (
       const value = (ngFor.value as ASTWithSource).source!;
       const split = value.split(/let\s|\sof\s/);
       const [_let, itemName, _of, expression] = split;
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: 'For',
         bindings: {
           each: transformBinding(expression, options),
@@ -100,7 +100,7 @@ const angularTemplateNodeToJsxLiteNode = (
           _forName: itemName,
         },
         children: [
-          angularTemplateNodeToJsxLiteNode(
+          angularTemplateNodeToMorphoNode(
             omit(node, 'templateAttrs'),
             options,
           ),
@@ -131,18 +131,18 @@ const angularTemplateNodeToJsxLiteNode = (
       properties[attribute.name] = attribute.value;
     }
 
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: node.name,
       properties,
       bindings,
       children: node.children.map((node) =>
-        angularTemplateNodeToJsxLiteNode(node, options),
+        angularTemplateNodeToMorphoNode(node, options),
       ),
     });
   }
 
   if (isText(node)) {
-    return createJSXLiteNode({
+    return createMorphoNode({
       properties: {
         _text: node.value,
       },
@@ -151,7 +151,7 @@ const angularTemplateNodeToJsxLiteNode = (
 
   if (isBoundText(node)) {
     // TODO: handle the bindings
-    return createJSXLiteNode({
+    return createMorphoNode({
       properties: {
         _text: (node.value as ASTWithSource).source!,
       },
@@ -161,20 +161,20 @@ const angularTemplateNodeToJsxLiteNode = (
   throw new Error(`Element node type {${node}} is not supported`);
 };
 
-const angularTemplateToJsxLiteNodes = (
+const angularTemplateToMorphoNodes = (
   template: string,
-  options: AngularToJsxLiteOptions,
+  options: AngularToMorphoOptions,
 ) => {
   const ast = parseTemplate(template, '.');
   const blocks = ast.nodes.map((node) =>
-    angularTemplateNodeToJsxLiteNode(node, options),
+    angularTemplateNodeToMorphoNode(node, options),
   );
 
   return blocks;
 };
 
-const parseTypescript = (code: string, options: AngularToJsxLiteOptions) => {
-  const component = createJSXLiteComponent();
+const parseTypescript = (code: string, options: AngularToMorphoOptions) => {
+  const component = createMorphoComponent();
 
   const ast = getTsAST(code);
   for (const statement of ast.statements) {
@@ -200,7 +200,7 @@ const parseTypescript = (code: string, options: AngularToJsxLiteOptions) => {
                           .getText()
                           .trim()
                           .slice(1, -1);
-                        component.children = angularTemplateToJsxLiteNodes(
+                        component.children = angularTemplateToMorphoNodes(
                           template,
                           options,
                         );
@@ -218,9 +218,9 @@ const parseTypescript = (code: string, options: AngularToJsxLiteOptions) => {
   return component;
 };
 
-export function angularToJsxLiteComponent(
+export function angularToMorphoComponent(
   code: string,
-  options: AngularToJsxLiteOptions = {},
-): JSXLiteComponent {
+  options: AngularToMorphoOptions = {},
+): MorphoComponent {
   return parseTypescript(code, options);
 }

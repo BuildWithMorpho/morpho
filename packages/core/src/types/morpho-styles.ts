@@ -1,4 +1,4 @@
-export type JSXLiteStyles = Omit<
+export type MorphoStyles = Omit<
   Partial<CSSStyleDeclaration>,
   | 'length'
   | 'getPropertyPriority'

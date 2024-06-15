@@ -27,15 +27,15 @@ export * from './generators/builder';
 export * from './generators/qwik';
 export * from './generators/html';
 export * from './generators/svelte';
-export * from './generators/jsx-lite';
+export * from './generators/morpho';
 export * from './generators/template';
 export * from './generators/swift-ui';
 export * from './generators/react-native';
 export * from './helpers/parse-reactive-script';
-export * from './helpers/is-jsx-lite-node';
+export * from './helpers/is-morpho-node';
 
-export * from './types/jsx-lite-node';
-export * from './types/jsx-lite-component';
+export * from './types/morpho-node';
+export * from './types/morpho-component';
 
 export * from './plugins/compile-away-builder-components';
 export * from './plugins/map-styles';
