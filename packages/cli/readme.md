@@ -1,30 +1,30 @@
 # JSX-Lite CLI
 
-A CLI for jsx-lite.
+A CLI for morpho.
 
 ## Installation
 
 ```bash
-npm install -g @jsx-lite/cli
+npm install -g @builder.io/morpho-cli
 ```
 
 ## Usage
 
 ```bash
-jsx-lite compile --to=<format> < <input-file>
-cat my-file.tsx | jsx-lite compile -t=<format>
-jsx-lite compile -t=<format> <input-file>
+morpho compile --to=<format> < <input-file>
+cat my-file.tsx | morpho compile -t=<format>
+morpho compile -t=<format> <input-file>
 ```
 
-Check the output from `jsx-lite compile --help`.
+Check the output from `morpho compile --help`.
 
 **Examples**
 
 ```bash
-jsx-lite compile -t react component.tsx
-jsx-lite compile -t react < component.tsx
-cat component.tsx | jsx-lite compile -t html -
-jsx-lite compile -t react --out-dir build -- src/**/*.tsx
+morpho compile -t react component.tsx
+morpho compile -t react < component.tsx
+cat component.tsx | morpho compile -t html -
+morpho compile -t react --out-dir build -- src/**/*.tsx
 ```
 
 ## Options
@@ -38,7 +38,7 @@ Supported formats for `--to` are:
 - `template`
 - `html`
 - `customElement`
-- `jsxLite`
+- `morpho`
 - `builder`
 - `swift`
 - `svelte`
@@ -47,7 +47,7 @@ Supported formats for `--to` are:
 
 Supported formats for `--from` are:
 
-- `jsxLite`
+- `morpho`
 - `builder`
 - `liquid`
 
@@ -55,15 +55,15 @@ Supported formats for `--from` are:
 
 Here are some recipes for standard tasks
 
-### Validate how Builder will transform JSX Lite
+### Validate how Builder will transform Morpho
 
 ```bash
 cat components/postscript.lite.tsx |
-  jsx-lite compile -t builder - |
-  jsx-lite compile -f builder -t jsxLite
+  morpho compile -t builder - |
+  morpho compile -f builder -t morpho
 ```
 
-### Run jsx-lite on file system change
+### Run morpho on file system change
 
 Use a tool like [entr](https://github.com/eradman/entr) or [guard](https://github.com/guard/guard)
 
@@ -73,7 +73,7 @@ find . -name '*lite.tsx' | entr make /_
 
 ## Known issues
 
-- Running `jsx-lite` from the root of this repository breaks due to some
+- Running `morpho` from the root of this repository breaks due to some
   dynamic babel configuration look up
 - Files that are created as the result of `--out-dir=<dir>` maintain the original
   file extension of the input file, which doesn't make any sense in the case of
@@ -83,8 +83,8 @@ find . -name '*lite.tsx' | entr make /_
 ## Manual installation
 
 ```bash
-git clone git@github.com:BuilderIO/jsx-lite.git
-cd jsx-lite/packages/cli
+git clone git@github.com:BuilderIO/morpho.git
+cd morpho/packages/cli
 npm install
 npm run build
 npm link

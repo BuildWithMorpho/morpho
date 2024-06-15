@@ -1,4 +1,4 @@
-import { Show } from '@jsx-lite/core';
+import { Show } from '@builder.io/morpho';
 
 export interface ButtonProps {
   attributes?: any;

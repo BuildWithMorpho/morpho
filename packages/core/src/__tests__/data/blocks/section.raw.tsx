@@ -1,4 +1,4 @@
-import '@jsx-lite/core';
+import '@builder.io/morpho';
 
 export interface SectionProps {
   maxWidth?: number;

@@ -1,13 +1,13 @@
 import { format } from 'prettier/standalone';
 import { getMemberObjectString } from '../../helpers/get-state-object-string';
-import { JSXLiteContext } from '../../types/jsx-lite-context';
+import { MorphoContext } from '../../types/morpho-context';
 
 type ContextToReactOptions = {
   format?: boolean;
 };
 
 export function contextToReact(
-  context: JSXLiteContext,
+  context: MorphoContext,
   options: ContextToReactOptions = {},
 ): string {
   let str = `

@@ -1,10 +1,10 @@
-# Plugin guide for jsx-lite
+# Plugin guide for morpho
 
-Plugins allow you to add features to jsx-lite, such as commands and
+Plugins allow you to add features to morpho, such as commands and
 extensions to the `toolbox` object that provides the majority of the functionality
-used by jsx-lite.
+used by morpho.
 
-Creating a jsx-lite plugin is easy. Just create a repo with two folders:
+Creating a morpho plugin is easy. Just create a repo with two folders:
 
 ```
 commands/
@@ -44,6 +44,6 @@ This is then accessible in your plugin's commands as `toolbox.bar`.
 
 # Loading a plugin
 
-To load a particular plugin (which has to start with `jsx-lite-*`),
-install it to your project using `npm install --save-dev jsx-lite-PLUGINNAME`,
-and jsx-lite will pick it up automatically.
+To load a particular plugin (which has to start with `morpho-*`),
+install it to your project using `npm install --save-dev morpho-PLUGINNAME`,
+and morpho will pick it up automatically.

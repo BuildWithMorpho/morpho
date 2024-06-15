@@ -1,27 +1,27 @@
 import * as CSS from 'csstype';
 import json5 from 'json5';
 import { camelCase, pickBy } from 'lodash';
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { MorphoNode } from '../types/morpho-node';
 import traverse from 'traverse';
-import { JSXLiteComponent } from '../types/jsx-lite-component';
+import { MorphoComponent } from '../types/morpho-component';
 import { capitalize } from './capitalize';
 import { dashCase } from './dash-case';
-import { isJsxLiteNode } from './is-jsx-lite-node';
+import { isMorphoNode } from './is-morpho-node';
 import { isUpperCase } from './is-upper-case';
 import hash from 'object-hash';
 
-export const nodeHasStyles = (node: JSXLiteNode) => {
+export const nodeHasStyles = (node: MorphoNode) => {
   return Boolean(
     typeof node.bindings.css === 'string' &&
       node.bindings.css.trim().length > 6,
   );
 };
 
-export const hasStyles = (component: JSXLiteComponent) => {
+export const hasStyles = (component: MorphoComponent) => {
   let hasStyles = false;
 
   traverse(component).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       if (nodeHasStyles(item)) {
         hasStyles = true;
         this.stop();
@@ -56,14 +56,14 @@ type CollectStyleOptions = {
   prefix?: string;
 };
 
-export const collectStyledComponents = (json: JSXLiteComponent): string => {
+export const collectStyledComponents = (json: MorphoComponent): string => {
   let styledComponentsCode = `import styled from 'styled-components';\n`;
 
   const componentIndexes: { [className: string]: number | undefined } = {};
   const componentHashes: { [className: string]: string | undefined } = {};
 
   traverse(json).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       if (nodeHasStyles(item)) {
         const value = parseCssObject(item.bindings.css as string);
         delete item.bindings.css;
@@ -123,7 +123,7 @@ export const parseCssObject = (css: string) => {
 };
 
 export const collectStyles = (
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: CollectStyleOptions = {},
 ): ClassStyleMap => {
   const styleMap: ClassStyleMap = {};
@@ -134,7 +134,7 @@ export const collectStyles = (
   const componentHashes: { [className: string]: string | undefined } = {};
 
   traverse(json).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       if (nodeHasStyles(item)) {
         const value = parseCssObject(item.bindings.css as string);
         delete item.bindings.css;
@@ -181,7 +181,7 @@ export const collectStyles = (
 };
 
 export const collectCss = (
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: CollectStyleOptions = {},
 ): string => {
   const styles = collectStyles(json, options);

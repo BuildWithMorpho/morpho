@@ -1,11 +1,11 @@
 import { JSON, JSONObject } from './json';
-import { JSXLiteNode } from './jsx-lite-node';
+import { MorphoNode } from './morpho-node';
 
 /**
  * @example
- *  // import core, { useState, someThing as someAlias } from '@jsx-lite/core'
+ *  // import core, { useState, someThing as someAlias } from '@builder.io/morpho'
  *  {
- *    path: '@jsx-lite/core',
+ *    path: '@builder.io/morpho',
  *    imports: {
  *      useState: 'useState',
  *      someAlias: 'someThing',
@@ -14,15 +14,15 @@ import { JSXLiteNode } from './jsx-lite-node';
  *  }
  *
  * @example
- *  // import * as core from '@jsx-lite/core'
+ *  // import * as core from '@builder.io/morpho'
  *  {
- *    path: '@jsx-lite/core',
+ *    path: '@builder.io/morpho',
  *    imports: {
  *      core: '*',
  *    }
  *  }
  */
-export interface JSXLiteImport {
+export interface MorphoImport {
   path: string;
   imports: {
     [key: string]: string | undefined;
@@ -31,10 +31,10 @@ export interface JSXLiteImport {
 
 type ContextInfo = { name: string; path: string };
 
-export type JSXLiteComponent = {
-  '@type': '@jsx-lite/component';
+export type MorphoComponent = {
+  '@type': '@builder.io/morpho/component';
   name: string;
-  imports: JSXLiteImport[];
+  imports: MorphoImport[];
   meta: JSONObject & {
     metadataHook?: JSONObject;
   };
@@ -50,6 +50,6 @@ export type JSXLiteComponent = {
     preComponent?: string;
     postComponent?: string;
   };
-  children: JSXLiteNode[];
-  subComponents: JSXLiteComponent[];
+  children: MorphoNode[];
+  subComponents: MorphoComponent[];
 };

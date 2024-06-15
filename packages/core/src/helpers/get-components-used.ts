@@ -1,12 +1,12 @@
-import { JSXLiteComponent } from '../types/jsx-lite-component';
+import { MorphoComponent } from '../types/morpho-component';
 import traverse from 'traverse';
-import { isJsxLiteNode } from './is-jsx-lite-node';
+import { isMorphoNode } from './is-morpho-node';
 
-export function getComponentsUsed(json: JSXLiteComponent) {
+export function getComponentsUsed(json: MorphoComponent) {
   const components = new Set<string>();
 
   traverse(json).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       components.add(item.name);
     }
   });

@@ -1,6 +1,6 @@
-import '@jsx-lite/core/dist/src/jsx-types';
+import '@builder.io/morpho/dist/src/jsx-types';
 import todosState from '../shared/todos-state.lite';
-import { Show, useState } from '@jsx-lite/core';
+import { Show, useState } from '@builder.io/morpho';
 import { Todo as TodoType } from '../shared/todos-state.lite';
 
 export type TodoProps = {
