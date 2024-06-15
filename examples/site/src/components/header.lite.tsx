@@ -1,5 +1,5 @@
-import '@jsx-lite/core/dist/src/jsx-types';
-import { Show, useState } from '@jsx-lite/core';
+import '@builder.io/morpho/dist/src/jsx-types';
+import { Show, useState } from '@builder.io/morpho';
 
 export type HeaderProps = {};
 

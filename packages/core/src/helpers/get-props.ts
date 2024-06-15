@@ -1,5 +1,5 @@
 import traverse from 'traverse';
-import { JSXLiteComponent } from '../types/jsx-lite-component';
+import { JSXLiteComponent } from '../types/morpho-component';
 
 const propsRegex = /props\s*\.\s*([a-zA-Z0-9_\$]+)/;
 const allPropsMatchesRegex = new RegExp(propsRegex, 'g');

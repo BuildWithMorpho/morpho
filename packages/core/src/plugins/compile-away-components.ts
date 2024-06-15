@@ -1,8 +1,8 @@
 import { mapValues } from 'lodash';
 import traverse, { TraverseContext } from 'traverse';
-import { isJsxLiteNode } from '../helpers/is-jsx-lite-node';
-import { JSXLiteComponent } from '../types/jsx-lite-component';
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { isJsxLiteNode } from '../helpers/is-morpho-node';
+import { JSXLiteComponent } from '../types/morpho-component';
+import { JSXLiteNode } from '../types/morpho-node';
 
 export const getRenderOptions = (node: JSXLiteNode) => {
   return {

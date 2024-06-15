@@ -1,9 +1,9 @@
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { JSXLiteNode } from '../types/morpho-node';
 
 export const createJSXLiteNode = (
   options: Partial<JSXLiteNode>,
 ): JSXLiteNode => ({
-  '@type': '@jsx-lite/node',
+  '@type': '@builder.io/morpho/node',
   name: 'div',
   meta: {},
   properties: {},

@@ -1,4 +1,4 @@
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { JSXLiteNode } from '../types/morpho-node';
 
 /**
  * This node is a component, vs a plain html tag (<Foo> vs <div>)

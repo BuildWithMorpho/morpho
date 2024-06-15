@@ -3,7 +3,7 @@ import {
   compileAwayBuilderComponents,
   JSXLiteComponent,
   parseJsx
-} from '@jsx-lite/core'
+} from '@builder.io/morpho'
 import { GluegunCommand } from 'gluegun'
 import { join } from 'path'
 import * as targets from '../targets'

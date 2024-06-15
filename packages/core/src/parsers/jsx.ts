@@ -7,14 +7,14 @@ import { functionLiteralPrefix } from '../constants/function-literal-prefix';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
 import { babelTransformExpression } from '../helpers/babel-transform';
 import { capitalize } from '../helpers/capitalize';
-import { createJSXLiteComponent } from '../helpers/create-jsx-lite-component';
-import { createJSXLiteNode } from '../helpers/create-jsx-lite-node';
-import { isJsxLiteNode } from '../helpers/is-jsx-lite-node';
+import { createJSXLiteComponent } from '../helpers/create-morpho-component';
+import { createJSXLiteNode } from '../helpers/create-morpho-node';
+import { isJsxLiteNode } from '../helpers/is-morpho-node';
 import { replaceIdentifiers } from '../helpers/replace-idenifiers';
 import { stripNewlinesInStrings } from '../helpers/replace-new-lines-in-strings';
 import { JSONObject, JSONOrNode, JSONOrNodeObject } from '../types/json';
-import { JSXLiteComponent, JSXLiteImport } from '../types/jsx-lite-component';
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { JSXLiteComponent, JSXLiteImport } from '../types/morpho-component';
+import { JSXLiteNode } from '../types/morpho-node';
 
 const jsxPlugin = require('@babel/plugin-syntax-jsx');
 const tsPreset = require('@babel/preset-typescript');
@@ -567,7 +567,7 @@ function mapReactIdentifiersInExpression(
 }
 
 /**
- * Convert state identifiers from React hooks format to the state.* format JSX Lite needs
+ * Convert state identifiers from React hooks format to the state.* format Morpho needs
  * e.g.
  *   text -> state.text
  *   setText(...) -> state.text = ...
@@ -716,9 +716,9 @@ export function parseJsx(
             path: babel.NodePath<babel.types.ImportDeclaration>,
             context: Context,
           ) {
-            // @jsx-lite/core or React imports compile away
+            // @builder.io/morpho or React imports compile away
             if (
-              ['react', '@jsx-lite/core', '@emotion/react'].includes(
+              ['react', '@builder.io/morpho', '@emotion/react'].includes(
                 path.node.source.value,
               )
             ) {

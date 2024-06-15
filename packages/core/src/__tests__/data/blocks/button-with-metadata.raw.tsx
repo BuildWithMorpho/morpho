@@ -1,4 +1,4 @@
-import { Show, useMetadata } from '@jsx-lite/core';
+import { Show, useMetadata } from '@builder.io/morpho';
 
 export interface ButtonProps {
   attributes?: any;

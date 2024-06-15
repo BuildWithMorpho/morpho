@@ -1,4 +1,4 @@
-import { useState } from '@jsx-lite/core';
+import { useState } from '@builder.io/morpho';
 
 export default function MyComponent(props) {
   const state = useState({ name: 'Steve' });
