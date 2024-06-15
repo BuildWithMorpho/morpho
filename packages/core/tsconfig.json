@@ -11,7 +11,7 @@
     "target": "ES5",
     "baseUrl": ".",
     "paths": {
-      "@jsx-lite/core": ["./src"]
+      "@builder.io/morpho": ["./src"]
     }
   },
   "include": ["./src", "./typings.d.ts"],

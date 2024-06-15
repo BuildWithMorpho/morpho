@@ -1,4 +1,4 @@
-import { JSXLiteNode } from '../types/jsx-lite-node';
+import { JSXLiteNode } from '../types/morpho-node';
 
 export default function isChildren(node: JSXLiteNode): boolean {
   return (

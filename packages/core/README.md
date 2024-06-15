@@ -6,10 +6,10 @@
 
 <p align="center">
   <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" /></a>
-  <a href="https://github.com/BuilderIO/jsx-lite/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
-  <a href="https://github.com/BuilderIO/jsx-lite"><img alt="License" src="https://img.shields.io/github/license/BuilderIO/jsx-lite" /></a>
-  <a href="https://www.npmjs.com/package/@jsx-lite/core"><img alt="Types" src="https://img.shields.io/npm/types/@jsx-lite/core" /></a>
-  <a href="https://www.npmjs.com/package/@jsx-lite/core" rel="nofollow"><img src="https://img.shields.io/npm/v/@jsx-lite/core.svg?sanitize=true"></a>
+  <a href="https://github.com/BuilderIO/morpho/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
+  <a href="https://github.com/BuilderIO/morpho"><img alt="License" src="https://img.shields.io/github/license/BuilderIO/morpho" /></a>
+  <a href="https://www.npmjs.com/package/@builder.io/morpho"><img alt="Types" src="https://img.shields.io/npm/types/@builder.io/morpho" /></a>
+  <a href="https://www.npmjs.com/package/@builder.io/morpho" rel="nofollow"><img src="https://img.shields.io/npm/v/@builder.io/morpho.svg?sanitize=true"></a>
 </p>
 
 <br />
@@ -33,7 +33,7 @@
           <img height="50" src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F467c9b604d4e486abfc39d27a2fddc12" />
         </p>
         <p align="center">
-          Try our  <a href="https://jsx-lite.builder.io/"><b>interactive fiddle</b></a>
+          Try our  <a href="https://morpho.builder.io/"><b>interactive fiddle</b></a>
         </p>
       </td>
     </tr>
@@ -42,7 +42,7 @@
         <a href="https://github.com/builderio/figma-html"><img width="400" alt="Figma plugin" src="https://i.imgur.com/BoKsLFs.gif" /></a>
       </td>
       <td>
-        <a href="https://jsx-lite.builder.io/"><img width="400" alt="Fiddle" src="https://imgur.com/H1WTtGe.gif" /></a>
+        <a href="https://morpho.builder.io/"><img width="400" alt="Fiddle" src="https://imgur.com/H1WTtGe.gif" /></a>
       </td>
     </tr>
     <tr>
@@ -107,7 +107,7 @@
 
 ### Component libraries
 
-Managing support for libraries that provide UI components across frameworks is a _pain_, esp when webcomponents are not an option (e.g. for server side rendering, best performance, etc). With JSX Lite you can write once, and run everywhere with full compatibilty
+Managing support for libraries that provide UI components across frameworks is a _pain_, esp when webcomponents are not an option (e.g. for server side rendering, best performance, etc). With Morpho you can write once, and run everywhere with full compatibilty
 
 ### Modern workflows for all platforms
 
@@ -127,7 +127,7 @@ With JSX lite, you can convert designs from [Figma](https://github.com/BuilderIO
 
 ## How does it work
 
-JSX Lite uses a static subset of JSX, inspired by [Solid](https://github.com/ryansolid/solid/blob/master/documentation/rendering.md). This means we can parse it to a simple JSON structure that it is easy easy to build stringifers off of for various frameworks and implementations
+Morpho uses a static subset of JSX, inspired by [Solid](https://github.com/ryansolid/solid/blob/master/documentation/rendering.md). This means we can parse it to a simple JSON structure that it is easy easy to build stringifers off of for various frameworks and implementations
 
 ```tsx
 export function MyComponent() {
@@ -150,17 +150,17 @@ becomes:
 
 ```json
 {
-  "@type": "@jsx-lite/component",
+  "@type": "@builder.io/morpho/component",
   "state": {
     "name": "Steve"
   },
   "nodes": [
     {
-      "@type": "@jsx-lite/node",
+      "@type": "@builder.io/morpho/node",
       "name": "div",
       "children": [
         {
-          "@type": "@jsx-lite/node",
+          "@type": "@builder.io/morpho/node",
           "bindings": {
             "value": "state.name",
             "onChange": "state.name = event.target.value"
@@ -191,7 +191,7 @@ Adding framework support is surprisingly easy with our plugins (docs coming soon
 
 ## No-code tooling
 
-JSX Lite's static JSON format also enables no-code tooling for visual code editing and importing, for instance with [Builder.io](https://github.com/builderio/builder) or [Figma](https://github.com/BuilderIO/html-to-figma)
+Morpho's static JSON format also enables no-code tooling for visual code editing and importing, for instance with [Builder.io](https://github.com/builderio/builder) or [Figma](https://github.com/BuilderIO/html-to-figma)
 
 <img src="https://imgur.com/3TjfY2H.gif" >
 
@@ -199,7 +199,7 @@ JSX Lite's static JSON format also enables no-code tooling for visual code editi
 
 ## Formatting options
 
-JSX Lite supports settings for generating code to match your preferred formatting, libraries, etc. These output options will be customizable and extensible with plugins soon too
+Morpho supports settings for generating code to match your preferred formatting, libraries, etc. These output options will be customizable and extensible with plugins soon too
 
 <img src="https://imgur.com/hWXfNF3.gif "/>
 

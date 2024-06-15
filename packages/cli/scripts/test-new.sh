@@ -15,7 +15,7 @@ cd "$tempdir"
 
 set -x
 
-jsx-lite new
+morpho new
 
 echo "exit-code: $?"
 

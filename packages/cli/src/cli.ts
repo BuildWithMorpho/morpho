@@ -5,20 +5,20 @@ const help = (toolbox: Toolbox) =>
   toolbox.print.info(
     // TODO: break docs up by command
     `
-jsx-lite command line component processor [version ${toolbox.meta.version()}]
+morpho command line component processor [version ${toolbox.meta.version()}]
 
 USAGE
-	jsx-lite compile --to=<format> [options] [files]
-	jsx-lite compile -t=<format> [options] [files]
+	morpho compile --to=<format> [options] [files]
+	morpho compile -t=<format> [options] [files]
 
 	If no [input-files] are specified or when [files] is "-", input
 	is read from standard input.
 
 EXAMPLES
-	jsx-lite compile -t react component.tsx
-	jsx-lite compile -t react < component.tsx
-	cat component.tsx | jsx-lite compile -t html -
-	jsx-lite compile -t react --out-dir build -- src/**/*.tsx
+	morpho compile -t react component.tsx
+	morpho compile -t react < component.tsx
+	cat component.tsx | morpho compile -t html -
+	morpho compile -t react --out-dir build -- src/**/*.tsx
 
 OPTIONS
 	--to=<format>, -t=<format>
@@ -60,7 +60,7 @@ OUTPUT OPTIONS
 		   ├── b.tsx
 		   └── c.tsx
 
-		The command "jsx-lite compile -t react --out-dir lib -- src/*.tsx" would
+		The command "morpho compile -t react --out-dir lib -- src/*.tsx" would
 		produce a structure like:
 
 		├── src
@@ -83,7 +83,7 @@ OUTPUT OPTIONS
 		output is JSON.
 	--builder-components
 		Compiled output should will include builder components where
-		available. Useful if you're outputing jsx-lite that will run
+		available. Useful if you're outputing morpho that will run
 		in Builder.
 
 GENERATOR OPTIONS
@@ -101,9 +101,9 @@ GENERATOR OPTIONS
 async function run(argv: any) {
   // create a CLI runtime
   const cli = build()
-    .brand('jsx-lite')
+    .brand('morpho')
     .src(__dirname)
-    .plugins('./node_modules', { matching: 'jsx-lite-*', hidden: true })
+    .plugins('./node_modules', { matching: 'morpho-*', hidden: true })
     .help(help) // provides default for help, h, --help, -h
     .version() // provides default for version, v, --version, -v
     // enable the following method if you'd like to skip loading one of these core extensions

@@ -1,6 +1,6 @@
-// TODO: get the exports alias working here so this is just `import '@jsx-lite/core/jsx'
-import '@jsx-lite/core/dist/src/jsx-types'
-import { useState, Show } from '@jsx-lite/core'
+// TODO: get the exports alias working here so this is just `import '@builder.io/morpho/jsx'
+import '@builder.io/morpho/dist/src/jsx-types'
+import { useState, Show } from '@builder.io/morpho'
 
 type MyProps = {
   showInput?: boolean

@@ -1,4 +1,4 @@
-import { For } from '@jsx-lite/core';
+import { For } from '@builder.io/morpho';
 import { Builder } from '@builder.io/sdk';
 
 export interface FormSelectProps {

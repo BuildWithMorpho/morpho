@@ -1,6 +1,6 @@
 import * as babel from '@babel/core';
-import { JSXLiteContext } from '../types/jsx-lite-context';
-import { createJsxLiteContext } from '../helpers/create-jsx-lite-context';
+import { JSXLiteContext } from '../types/morpho-context';
+import { createJsxLiteContext } from '../helpers/create-morpho-context';
 import { parseStateObject } from './jsx';
 
 const { types } = babel;
