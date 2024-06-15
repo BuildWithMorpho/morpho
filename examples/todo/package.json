@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@builder.io/morpho-cli": "0.0.5",
-    "@builder.io/morpho": "0.0.32",
+    "@builder.io/morpho": "0.0.44-18",
     "eslint": "^7.21.0"
   }
 }
