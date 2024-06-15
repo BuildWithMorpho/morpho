@@ -1,7 +1,7 @@
 import {
-  builderContentToJsxLiteComponent,
+  builderContentToMorphoComponent,
   compileAwayBuilderComponents,
-  JSXLiteComponent,
+  MorphoComponent,
   parseJsx
 } from '@builder.io/morpho'
 import { GluegunCommand } from 'gluegun'
@@ -30,7 +30,7 @@ const command: GluegunCommand = {
     }
 
     // Flags and aliases
-    const from_ = strings.camelCase(opts.f ?? opts.from ?? 'jsxLite')
+    const from_ = strings.camelCase(opts.f ?? opts.from ?? 'morpho')
     const to = strings.camelCase(opts.t ?? opts.to)
     let out = opts.o ?? opts.out
     const force = opts.force ?? false
@@ -111,15 +111,15 @@ const command: GluegunCommand = {
       }
 
       try {
-        let json: JSXLiteComponent
+        let json: MorphoComponent
 
         switch (from_) {
-          case 'jsxLite':
+          case 'morpho':
             json = parseJsx(data)
             break
 
           case 'builder':
-            json = builderContentToJsxLiteComponent(JSON.parse(data))
+            json = builderContentToMorphoComponent(JSON.parse(data))
             break
 
           default:

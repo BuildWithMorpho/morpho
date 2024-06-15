@@ -1,6 +1,6 @@
-import { JSXLiteComponent, JSXLiteImport } from '../types/morpho-component';
+import { MorphoComponent, MorphoImport } from '../types/morpho-component';
 
-const getStarImport = (theImport: JSXLiteImport): string | null => {
+const getStarImport = (theImport: MorphoImport): string | null => {
   for (const key in theImport.imports) {
     const value = theImport.imports[key];
     if (value === '*') {
@@ -9,7 +9,7 @@ const getStarImport = (theImport: JSXLiteImport): string | null => {
   }
   return null;
 };
-const getDefaultImport = (theImport: JSXLiteImport): string | null => {
+const getDefaultImport = (theImport: MorphoImport): string | null => {
   for (const key in theImport.imports) {
     const value = theImport.imports[key];
     if (value === 'default') {
@@ -19,7 +19,7 @@ const getDefaultImport = (theImport: JSXLiteImport): string | null => {
   return null;
 };
 
-export const renderImport = (theImport: JSXLiteImport): string => {
+export const renderImport = (theImport: MorphoImport): string => {
   let importString = 'import ';
 
   const starImport = getStarImport(theImport);
@@ -58,7 +58,7 @@ export const renderImport = (theImport: JSXLiteImport): string => {
   return importString;
 };
 
-export const renderImports = (imports: JSXLiteImport[]): string => {
+export const renderImports = (imports: MorphoImport[]): string => {
   let importString = '';
 
   for (const theImport of imports) {
@@ -76,7 +76,7 @@ export const renderImports = (imports: JSXLiteImport[]): string => {
   return importString;
 };
 
-export const renderPreComponent = (component: JSXLiteComponent): string => {
+export const renderPreComponent = (component: MorphoComponent): string => {
   return `
     ${renderImports(component.imports)}
     ${component.hooks.preComponent || ''}

@@ -1,7 +1,7 @@
-import { JSXLiteImport } from '../types/morpho-component';
+import { MorphoImport } from '../types/morpho-component';
 
 export function traceReferenceToModulePath(
-  imports: JSXLiteImport[],
+  imports: MorphoImport[],
   name: string,
 ): string | null {
   let response: string | null = null;

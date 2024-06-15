@@ -1,11 +1,11 @@
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
-import { JSXLiteComponent } from '../types/morpho-component';
+import { MorphoComponent } from '../types/morpho-component';
 import traverse from 'traverse';
 
 /**
  * Map getters like `useState({ get foo() { ... }})` from `state.foo` to `foo()`
  */
-export const gettersToFunctions = (json: JSXLiteComponent) => {
+export const gettersToFunctions = (json: MorphoComponent) => {
   const getterKeys = Object.keys(json.state).filter((item) => {
     const value = json.state[item];
     if (

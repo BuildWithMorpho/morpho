@@ -1,7 +1,7 @@
 import pathModule from 'path'
 import chalk from 'chalk'
 import { GluegunCommand } from 'gluegun'
-import { getJsxLiteConfig } from '../helpers/get-morpho-config'
+import { getMorphoConfig } from '../helpers/get-morpho-config'
 import globby from 'globby'
 import fs from 'fs-extra'
 import {
@@ -25,7 +25,7 @@ const command: GluegunCommand = {
       targets: [],
       dest: 'dist',
       files: 'src/*',
-      ...getJsxLiteConfig()
+      ...getMorphoConfig()
     }
     const cwd = process.cwd()
 

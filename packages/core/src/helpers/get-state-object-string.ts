@@ -2,7 +2,7 @@ import json5 from 'json5';
 import { JSONObject } from '../types/json';
 import { functionLiteralPrefix } from '../constants/function-literal-prefix';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
-import { JSXLiteComponent } from '../types/morpho-component';
+import { MorphoComponent } from '../types/morpho-component';
 
 export type GetStateObjectStringOptions = {
   data?: boolean;
@@ -76,7 +76,7 @@ export const getMemberObjectString = (
 };
 
 export const getStateObjectStringFromComponent = (
-  component: JSXLiteComponent,
+  component: MorphoComponent,
   options: GetStateObjectStringOptions = {},
 ) => {
   return getMemberObjectString(component.state, options);

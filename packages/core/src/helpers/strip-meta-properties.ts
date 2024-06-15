@@ -1,10 +1,10 @@
 import traverse from 'traverse';
-import { JSXLiteComponent } from '../types/morpho-component';
-import { isJsxLiteNode } from './is-morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { isMorphoNode } from './is-morpho-node';
 
-export const stripMetaProperties = (json: JSXLiteComponent) => {
+export const stripMetaProperties = (json: MorphoComponent) => {
   traverse(json).forEach((item) => {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       for (const property in item.properties) {
         if (property.startsWith('$')) {
           delete item.properties[property];

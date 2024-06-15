@@ -1,11 +1,11 @@
 import traverse from 'traverse';
-import { JSXLiteComponent } from '../types/morpho-component';
-import { isJsxLiteNode } from './is-morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { isMorphoNode } from './is-morpho-node';
 
-export const getRefs = (json: JSXLiteComponent) => {
+export const getRefs = (json: MorphoComponent) => {
   const refs = new Set<string>();
   traverse(json).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       if (typeof item.bindings.ref === 'string') {
         refs.add(item.bindings.ref);
       }

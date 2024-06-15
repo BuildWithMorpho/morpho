@@ -2,7 +2,7 @@ import { types } from '@babel/core';
 import dedent from 'dedent';
 import json5 from 'json5';
 import { format } from 'prettier/standalone';
-import { createJSXLiteNode } from '../helpers/create-morpho-node';
+import { createMorphoNode } from '../helpers/create-morpho-node';
 import traverse from 'traverse';
 import { functionLiteralPrefix } from '../constants/function-literal-prefix';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
@@ -22,7 +22,7 @@ import {
   getStateObjectStringFromComponent,
 } from '../helpers/get-state-object-string';
 import { gettersToFunctions } from '../helpers/getters-to-functions';
-import { isJsxLiteNode } from '../helpers/is-morpho-node';
+import { isMorphoNode } from '../helpers/is-morpho-node';
 import { isValidAttributeName } from '../helpers/is-valid-attribute-name';
 import { mapRefs } from '../helpers/map-refs';
 import { processTagReferences } from '../helpers/process-tag-references';
@@ -38,8 +38,8 @@ import {
   runPreJsonPlugins,
 } from '../modules/plugins';
 import { selfClosingTags } from '../parsers/jsx';
-import { JSXLiteComponent } from '../types/morpho-component';
-import { JSXLiteNode } from '../types/morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoNode } from '../types/morpho-node';
 import { collectReactNativeStyles } from './react-native';
 
 type ToReactOptions = {
@@ -51,11 +51,11 @@ type ToReactOptions = {
   plugins?: Plugin[];
 };
 
-const wrapInFragment = (json: JSXLiteComponent | JSXLiteNode) =>
+const wrapInFragment = (json: MorphoComponent | MorphoNode) =>
   json.children.length !== 1;
 
 const NODE_MAPPERS: {
-  [key: string]: (json: JSXLiteNode, options: ToReactOptions) => string;
+  [key: string]: (json: MorphoNode, options: ToReactOptions) => string;
 } = {
   Fragment(json, options) {
     const wrap = wrapInFragment(json);
@@ -100,7 +100,7 @@ const BINDING_MAPPERS: {
   },
 };
 
-export const blockToReact = (json: JSXLiteNode, options: ToReactOptions) => {
+export const blockToReact = (json: MorphoNode, options: ToReactOptions) => {
   if (NODE_MAPPERS[json.name]) {
     return NODE_MAPPERS[json.name](json, options);
   }
@@ -196,7 +196,7 @@ export const blockToReact = (json: JSXLiteNode, options: ToReactOptions) => {
   return str + `</${json.name}>`;
 };
 
-const getRefsString = (json: JSXLiteComponent, refs = getRefs(json)) => {
+const getRefsString = (json: MorphoComponent, refs = getRefs(json)) => {
   let str = '';
 
   for (const ref of Array.from(refs)) {
@@ -217,7 +217,7 @@ const processBinding = (str: string, options: ToReactOptions) => {
   });
 };
 
-const getUseStateCode = (json: JSXLiteComponent, options: ToReactOptions) => {
+const getUseStateCode = (json: MorphoComponent, options: ToReactOptions) => {
   let str = '';
 
   const { state } = json;
@@ -258,14 +258,14 @@ const getUseStateCode = (json: JSXLiteComponent, options: ToReactOptions) => {
 };
 
 const updateStateSetters = (
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: ToReactOptions,
 ) => {
   if (options.stateType !== 'useState') {
     return;
   }
   traverse(json).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       for (const key in item.bindings) {
         const value = item.bindings[key] as string;
         const newValue = updateStateSettersInCode(value, options);
@@ -278,13 +278,13 @@ const updateStateSetters = (
 };
 
 function addProviderComponents(
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: ToReactOptions,
 ) {
   for (const key in json.context.set) {
     const { name, value } = json.context.set[key];
     json.children = [
-      createJSXLiteNode({
+      createMorphoNode({
         name: `${name}.Provider`,
         children: json.children,
         ...(value && {
@@ -326,7 +326,7 @@ const updateStateSettersInCode = (value: string, options: ToReactOptions) => {
 };
 
 function getContextString(
-  component: JSXLiteComponent,
+  component: MorphoComponent,
   options: ToReactOptions,
 ) {
   let str = '';
@@ -339,12 +339,12 @@ function getContextString(
   return str;
 }
 
-function hasContext(component: JSXLiteComponent) {
+function hasContext(component: MorphoComponent) {
   return Object.keys(component.context).length;
 }
 
 const getInitCode = (
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: ToReactOptions,
 ): string => {
   return processBinding(json.hooks.init || '', options);
@@ -358,7 +358,7 @@ type ReactExports =
   | 'useContext';
 
 export const componentToReact = (
-  componentJson: JSXLiteComponent,
+  componentJson: MorphoComponent,
   reactOptions: ToReactOptions = {},
 ) => {
   let json = fastClone(componentJson);
@@ -409,7 +409,7 @@ export const componentToReact = (
 };
 
 const _componentToReact = (
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: ToReactOptions,
   isSubComponent = false,
 ) => {
