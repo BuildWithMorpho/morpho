@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" /></a>
-  <a href="https://github.com/BuilderIO/morpho/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
+  <a href="https://github.com/BuilderIO/morpho/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badghttps://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fbd8709e610d44cde8f623ebcc960e7dde/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://github.com/BuilderIO/morpho"><img alt="License" src="https://img.shields.io/github/license/BuilderIO/morpho" /></a>
   <a href="https://www.npmjs.com/package/@builder.io/morpho"><img alt="Types" src="https://img.shields.io/npm/types/@builder.io/morpho" /></a>
   <a href="https://www.npmjs.com/package/@builder.io/morpho" rel="nofollow"><img src="https://img.shields.io/npm/v/@builder.io/morpho.svg?sanitize=true"></a>
