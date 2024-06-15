@@ -1,14 +1,14 @@
-import { JSXLiteComponent } from '../types/morpho-component';
-import { JSXLiteNode } from '../types/morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoNode } from '../types/morpho-node';
 import traverse, { TraverseContext } from 'traverse';
-import { isJsxLiteNode } from './is-morpho-node';
+import { isMorphoNode } from './is-morpho-node';
 
 export function tarverseNodes(
-  component: JSXLiteComponent | JSXLiteNode,
-  cb: (node: JSXLiteNode, context: TraverseContext) => void,
+  component: MorphoComponent | MorphoNode,
+  cb: (node: MorphoNode, context: TraverseContext) => void,
 ) {
   traverse(component).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       cb(item, this);
     }
   });

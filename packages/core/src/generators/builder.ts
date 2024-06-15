@@ -1,5 +1,5 @@
-import { JSXLiteComponent } from '../types/morpho-component';
-import { JSXLiteNode } from '../types/morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoNode } from '../types/morpho-node';
 import { BuilderContent, BuilderElement } from '@builder.io/sdk';
 import { getStateObjectStringFromComponent } from '../helpers/get-state-object-string';
 import { fastClone } from '../helpers/fast-clone';
@@ -37,7 +37,7 @@ const mapComponentName = (name: string) => {
 
 const componentMappers: {
   [key: string]: (
-    node: JSXLiteNode,
+    node: MorphoNode,
     options: ToBuilderOptions,
   ) => BuilderElement;
 } = {
@@ -163,7 +163,7 @@ type InternalOptions = {
 };
 
 export const blockToBuilder = (
-  json: JSXLiteNode,
+  json: MorphoNode,
   options: ToBuilderOptions = {},
   _internalOptions: InternalOptions = {},
 ): BuilderElement => {
@@ -309,7 +309,7 @@ export const blockToBuilder = (
 };
 
 export const componentToBuilder = (
-  componentJson: JSXLiteComponent,
+  componentJson: MorphoComponent,
   options: ToBuilderOptions = {},
 ) => {
   const hasState = Boolean(Object.keys(componentJson.state).length);

@@ -8,8 +8,8 @@ import { renderPreComponent } from '../helpers/render-imports';
 import { stripStateAndPropsRefs } from '../helpers/strip-state-and-props-refs';
 import { getProps } from '../helpers/get-props';
 import { selfClosingTags } from '../parsers/jsx';
-import { JSXLiteComponent } from '../types/morpho-component';
-import { JSXLiteNode } from '../types/morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoNode } from '../types/morpho-node';
 import {
   Plugin,
   runPostCodePlugins,
@@ -20,7 +20,7 @@ import {
 import isChildren from '../helpers/is-children';
 import { stripMetaProperties } from '../helpers/strip-meta-properties';
 import { removeSurroundingBlock } from '../helpers/remove-surrounding-block';
-import { isJsxLiteNode } from '../helpers/is-morpho-node';
+import { isMorphoNode } from '../helpers/is-morpho-node';
 import traverse from 'traverse';
 import { getComponentsUsed } from '../helpers/get-components-used';
 
@@ -40,7 +40,7 @@ function processBinding(code: string, _options: ToVueOptions): string {
 
 const NODE_MAPPERS: {
   [key: string]:
-    | ((json: JSXLiteNode, options: ToVueOptions) => string)
+    | ((json: MorphoNode, options: ToVueOptions) => string)
     | undefined;
 } = {
   Fragment(json, options) {
@@ -69,11 +69,11 @@ const BINDING_MAPPERS: { [key: string]: string | undefined } = {
 
 // Transform <foo.bar key="value" /> to <component :is="foo.bar" key="value" />
 function processDynamicComponents(
-  json: JSXLiteComponent,
+  json: MorphoComponent,
   options: ToVueOptions,
 ) {
   traverse(json).forEach((node) => {
-    if (isJsxLiteNode(node)) {
+    if (isMorphoNode(node)) {
       if (node.name.includes('.')) {
         node.bindings.is = node.name;
         node.name = 'component';
@@ -83,7 +83,7 @@ function processDynamicComponents(
 }
 
 export const blockToVue = (
-  node: JSXLiteNode,
+  node: MorphoNode,
   options: ToVueOptions,
 ): string => {
   const nodeMapper = NODE_MAPPERS[node.name];
@@ -171,7 +171,7 @@ export const blockToVue = (
 };
 
 export const componentToVue = (
-  component: JSXLiteComponent,
+  component: MorphoComponent,
   options: ToVueOptions = {},
 ) => {
   // Make a copy we can safely mutate, similar to babel's toolchain can be used

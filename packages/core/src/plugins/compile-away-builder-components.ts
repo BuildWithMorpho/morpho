@@ -1,14 +1,14 @@
 import { mapValues, omit, pick } from 'lodash';
 import { parseNode, parseNodes } from '../helpers/parse-node';
 import traverse, { TraverseContext } from 'traverse';
-import { JSXLiteNode } from '../types/morpho-node';
-import { blockToJsxLite } from '../generators/morpho';
+import { MorphoNode } from '../types/morpho-node';
+import { blockToMorpho } from '../generators/morpho';
 import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
-import { createJSXLiteNode } from '../helpers/create-morpho-node';
-import { isJsxLiteNode } from '../helpers/is-morpho-node';
-import { JSXLiteComponent } from '../types/morpho-component';
+import { createMorphoNode } from '../helpers/create-morpho-node';
+import { isMorphoNode } from '../helpers/is-morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
 
-const getRenderOptions = (node: JSXLiteNode) => {
+const getRenderOptions = (node: MorphoNode) => {
   return {
     ...mapValues(node.properties, (value) => `"${value}"`),
     ...mapValues(node.bindings, (value) => `{${value}}`),
@@ -26,12 +26,12 @@ function updateQueryParam(uri = '', key: string, value: string) {
 }
 
 const wrapOutput = (
-  node: JSXLiteNode,
-  child: JSXLiteNode | JSXLiteNode[],
+  node: MorphoNode,
+  child: MorphoNode | MorphoNode[],
   components: CompileAwayComponentsMap,
 ) => {
   compileAwayBuilderComponentsFromTree(child as any, components);
-  return createJSXLiteNode({
+  return createMorphoNode({
     ...node,
     properties: {
       ...omit(
@@ -59,14 +59,14 @@ const wrapOutput = (
 
 type CompileAwayComponentsMap = {
   [key: string]: (
-    node: JSXLiteNode,
+    node: MorphoNode,
     context: TraverseContext,
     components: CompileAwayComponentsMap,
-  ) => JSXLiteNode | void;
+  ) => MorphoNode | void;
 };
 
 export const components: CompileAwayComponentsMap = {
-  CoreButton(node: JSXLiteNode, context, components) {
+  CoreButton(node: MorphoNode, context, components) {
     const properties: Record<string, string> = {};
     const bindings: Record<string, string> = {};
 
@@ -90,7 +90,7 @@ export const components: CompileAwayComponentsMap = {
 
     const hasLink = node.properties.link || node.bindings.link;
 
-    return createJSXLiteNode({
+    return createMorphoNode({
       ...node,
       name: hasLink ? 'a' : node.properties.$tagName || 'span',
       properties: {
@@ -103,10 +103,10 @@ export const components: CompileAwayComponentsMap = {
       },
     });
   },
-  Embed(node: JSXLiteNode, context, components) {
+  Embed(node: MorphoNode, context, components) {
     return wrapOutput(
       node,
-      createJSXLiteNode({
+      createMorphoNode({
         name: (node.properties.builderTag as string) || 'div',
         properties: {
           innerHTML: (node.properties.content || '').replace(/"/g, '&quot;'),
@@ -117,37 +117,37 @@ export const components: CompileAwayComponentsMap = {
   },
   BuilderAccordion() {
     // TODO
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: 'div',
       properties: { 'data-missing-component': 'BuilderAccordion' },
     });
   },
   BuilderMasonry() {
     // TODO
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: 'div',
       properties: { 'data-missing-component': 'BuilderMasonry' },
     });
   },
   BuilderTabs() {
     // TODO
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: 'div',
       properties: { 'data-missing-component': 'BuilderTabs' },
     });
   },
   BuilderCarousel() {
     // TODO
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: 'div',
       properties: { 'data-missing-component': 'BuilderCarousel' },
     });
   },
-  CustomCode(node: JSXLiteNode, context, components) {
+  CustomCode(node: MorphoNode, context, components) {
     const options = getRenderOptions(node);
     return wrapOutput(
       node,
-      createJSXLiteNode({
+      createMorphoNode({
         name: (node.properties.builderTag as string) || 'div',
         properties: {
           innerHTML: (node.properties.code || '').replace(/"/g, '&quot;'),
@@ -156,7 +156,7 @@ export const components: CompileAwayComponentsMap = {
       components,
     );
   },
-  CoreSection(node: JSXLiteNode, context, components) {
+  CoreSection(node: MorphoNode, context, components) {
     return wrapOutput(
       node,
       parseNode(`<div
@@ -178,7 +178,7 @@ export const components: CompileAwayComponentsMap = {
     >
     ${node.children
       .map((block) =>
-        blockToJsxLite(block, {
+        blockToMorpho(block, {
           prettier: false,
         }),
       )
@@ -187,7 +187,7 @@ export const components: CompileAwayComponentsMap = {
       components,
     );
   },
-  Columns(node: JSXLiteNode, context, components) {
+  Columns(node: MorphoNode, context, components) {
     const columns = node.children.filter(filterEmptyTextNodes).map((item) => ({
       width:
         parseFloat(item.properties.width || item.bindings.width || '0') || 0,
@@ -265,7 +265,7 @@ export const components: CompileAwayComponentsMap = {
             >
               ${col.children
                 .map((block) =>
-                  blockToJsxLite(block, {
+                  blockToMorpho(block, {
                     prettier: false,
                   }),
                 )
@@ -279,7 +279,7 @@ export const components: CompileAwayComponentsMap = {
       components,
     );
   },
-  Image(node: JSXLiteNode, context, components) {
+  Image(node: MorphoNode, context, components) {
     const options = getRenderOptions(node);
     const { backgroundSize, backgroundPosition, sizes, lazy, image } = options;
     const { srcset } = node.properties;
@@ -375,7 +375,7 @@ export const components: CompileAwayComponentsMap = {
           >
             ${node.children
               .map((block) =>
-                blockToJsxLite(block, {
+                blockToMorpho(block, {
                   prettier: false,
                 }),
               )
@@ -387,7 +387,7 @@ export const components: CompileAwayComponentsMap = {
       components,
     );
   },
-  Video(node: JSXLiteNode, context, components) {
+  Video(node: MorphoNode, context, components) {
     const options = getRenderOptions(node);
     let aspectRatio = node.bindings.aspectRatio
       ? parseFloat(node.bindings.aspectRatio as string)
@@ -450,7 +450,7 @@ export const components: CompileAwayComponentsMap = {
         >
           ${node.children
             .map((block) =>
-              blockToJsxLite(block, {
+              blockToMorpho(block, {
                 prettier: false,
               }),
             )
@@ -473,11 +473,11 @@ type CompileAwayBuilderComponentsOptions = {
 };
 
 export const compileAwayBuilderComponentsFromTree = (
-  tree: JSXLiteNode | JSXLiteComponent,
+  tree: MorphoNode | MorphoComponent,
   components: CompileAwayComponentsMap,
 ) => {
   traverse(tree).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       const mapper = components[item.name];
       if (mapper) {
         const result = mapper(item, this, components);
@@ -502,7 +502,7 @@ export const compileAwayBuilderComponents = (
 
   return (options?: any) => ({
     json: {
-      pre: (json: JSXLiteComponent) => {
+      pre: (json: MorphoComponent) => {
         compileAwayBuilderComponentsFromTree(json, components);
       },
     },

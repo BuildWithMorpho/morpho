@@ -1,10 +1,10 @@
 import { mapValues } from 'lodash';
 import traverse, { TraverseContext } from 'traverse';
-import { isJsxLiteNode } from '../helpers/is-morpho-node';
-import { JSXLiteComponent } from '../types/morpho-component';
-import { JSXLiteNode } from '../types/morpho-node';
+import { isMorphoNode } from '../helpers/is-morpho-node';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoNode } from '../types/morpho-node';
 
-export const getRenderOptions = (node: JSXLiteNode) => {
+export const getRenderOptions = (node: MorphoNode) => {
   return {
     ...mapValues(node.properties, (value) => `"${value}"`),
     ...mapValues(node.bindings, (value) => `{${value}}`),
@@ -14,15 +14,15 @@ export const getRenderOptions = (node: JSXLiteNode) => {
 type CompileAwayComponentsOptions = {
   components: {
     [key: string]: (
-      node: JSXLiteNode,
+      node: MorphoNode,
       context: TraverseContext,
-    ) => JSXLiteNode | void;
+    ) => MorphoNode | void;
   };
 };
 
 /**
  * @example
- *    componentToReact(jsxLiteJson, {
+ *    componentToReact(morphoJson, {
  *      plugins: [
  *        compileAwayComponents({
  *          Image: (node) => {
@@ -40,9 +40,9 @@ export const compileAwayComponents = (
   pluginOptions: CompileAwayComponentsOptions,
 ) => (options?: any) => ({
   json: {
-    pre: (json: JSXLiteComponent) => {
+    pre: (json: MorphoComponent) => {
       traverse(json).forEach(function(item) {
-        if (isJsxLiteNode(item)) {
+        if (isMorphoNode(item)) {
           const mapper = pluginOptions.components[item.name];
           if (mapper) {
             const result = mapper(item, this);

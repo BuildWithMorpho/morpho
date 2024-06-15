@@ -1,6 +1,6 @@
-import { JSXLiteNode } from '../types/morpho-node';
+import { MorphoNode } from '../types/morpho-node';
 
-export default function isChildren(node: JSXLiteNode): boolean {
+export default function isChildren(node: MorphoNode): boolean {
   return (
     `${node.bindings._text || ''}`.replace(/\s+/g, '') === 'props.children'
   );

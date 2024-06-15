@@ -38,7 +38,7 @@ Supported formats for `--to` are:
 - `template`
 - `html`
 - `customElement`
-- `jsxLite`
+- `morpho`
 - `builder`
 - `swift`
 - `svelte`
@@ -47,7 +47,7 @@ Supported formats for `--to` are:
 
 Supported formats for `--from` are:
 
-- `jsxLite`
+- `morpho`
 - `builder`
 - `liquid`
 
@@ -60,7 +60,7 @@ Here are some recipes for standard tasks
 ```bash
 cat components/postscript.lite.tsx |
   morpho compile -t builder - |
-  morpho compile -f builder -t jsxLite
+  morpho compile -f builder -t morpho
 ```
 
 ### Run morpho on file system change

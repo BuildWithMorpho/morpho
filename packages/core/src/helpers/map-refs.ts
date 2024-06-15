@@ -1,9 +1,9 @@
 import traverse from 'traverse';
 import * as babel from '@babel/core';
 
-import { JSXLiteComponent } from '../types/morpho-component';
+import { MorphoComponent } from '../types/morpho-component';
 import { getRefs } from './get-refs';
-import { isJsxLiteNode } from './is-morpho-node';
+import { isMorphoNode } from './is-morpho-node';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
 import { functionLiteralPrefix } from '../constants/function-literal-prefix';
 import { babelTransformExpression } from './babel-transform';
@@ -29,7 +29,7 @@ const replaceRefsInString = (
 };
 
 export const mapRefs = (
-  component: JSXLiteComponent,
+  component: MorphoComponent,
   mapper: RefMapper,
 ): void => {
   const refs = Array.from(getRefs(component));
@@ -61,7 +61,7 @@ export const mapRefs = (
   }
 
   traverse(component).forEach(function(item) {
-    if (isJsxLiteNode(item)) {
+    if (isMorphoNode(item)) {
       for (const key of Object.keys(item.bindings)) {
         const value = item.bindings[key];
         if (typeof value === 'string' && key !== 'ref') {

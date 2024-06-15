@@ -1,5 +1,5 @@
 import { JSON, JSONObject } from './json';
-import { JSXLiteNode } from './morpho-node';
+import { MorphoNode } from './morpho-node';
 
 /**
  * @example
@@ -22,7 +22,7 @@ import { JSXLiteNode } from './morpho-node';
  *    }
  *  }
  */
-export interface JSXLiteImport {
+export interface MorphoImport {
   path: string;
   imports: {
     [key: string]: string | undefined;
@@ -31,10 +31,10 @@ export interface JSXLiteImport {
 
 type ContextInfo = { name: string; path: string };
 
-export type JSXLiteComponent = {
+export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
-  imports: JSXLiteImport[];
+  imports: MorphoImport[];
   meta: JSONObject & {
     metadataHook?: JSONObject;
   };
@@ -50,6 +50,6 @@ export type JSXLiteComponent = {
     preComponent?: string;
     postComponent?: string;
   };
-  children: JSXLiteNode[];
-  subComponents: JSXLiteComponent[];
+  children: MorphoNode[];
+  subComponents: MorphoComponent[];
 };

@@ -7,9 +7,9 @@ import { fastClone } from '../helpers/fast-clone';
 import traverse from 'traverse';
 import { Size, sizeNames, sizes } from '../constants/media-sizes';
 import { capitalize } from '../helpers/capitalize';
-import { createJSXLiteComponent } from '../helpers/create-morpho-component';
-import { createJSXLiteNode } from '../helpers/create-morpho-node';
-import { JSXLiteNode } from '../types/morpho-node';
+import { createMorphoComponent } from '../helpers/create-morpho-component';
+import { createMorphoNode } from '../helpers/create-morpho-node';
+import { MorphoNode } from '../types/morpho-node';
 import { parseJsx, parseStateObject } from './jsx';
 
 const jsxPlugin = require('@babel/plugin-syntax-jsx');
@@ -76,7 +76,7 @@ const verifyIsValid = (
 
 const getActionBindingsFromBlock = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   const actions = {
     ...block.actions,
@@ -101,7 +101,7 @@ const getActionBindingsFromBlock = (
 
 const getStyleStringFromBlock = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   const styleBindings: any = {};
   let styleString = '';
@@ -152,7 +152,7 @@ type InternalOptions = {
 
 const wrapBindingIfNeeded = (
   value: string,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   if (options.includeBuilderExtras) {
     return wrapBinding(value);
@@ -173,7 +173,7 @@ const wrapBindingIfNeeded = (
 
 const getBlockActions = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   const obj = {
     ...block.actions,
@@ -191,7 +191,7 @@ const getBlockActions = (
 
 const getBlockActionsAsBindings = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   return mapKeys(
     getBlockActions(block, options),
@@ -205,7 +205,7 @@ const isValidBindingKey = (str: string) => {
 
 const getBlockNonActionBindings = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   const obj = {
     ...block.bindings,
@@ -252,7 +252,7 @@ const wrapBinding = (value: string) => {
 
 const getBlockBindings = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions,
+  options: BuilderToMorphoOptions,
 ) => {
   const obj = {
     ...getBlockNonActionBindings(block, options),
@@ -268,15 +268,15 @@ export const symbolBlocksAsChildren = false;
 const componentMappers: {
   [key: string]: (
     block: BuilderElement,
-    options: BuilderToJSXLiteOptions,
-  ) => JSXLiteNode;
+    options: BuilderToMorphoOptions,
+  ) => MorphoNode;
 } = {
   Symbol(block, options) {
     let css = getCssFromBlock(block);
     const styleString = getStyleStringFromBlock(block, options);
     const actionBindings = getActionBindingsFromBlock(block, options);
 
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: 'Symbol',
       bindings: {
         symbol: JSON.stringify({
@@ -307,7 +307,7 @@ const componentMappers: {
             content.data.blocks = null;
           }
 
-          return createJSXLiteNode({
+          return createMorphoNode({
             name: 'Symbol',
             bindings: {
               // TODO: this doesn't use all attrs
@@ -326,11 +326,11 @@ const componentMappers: {
             children: !blocks
               ? []
               : [
-                  createJSXLiteNode({
+                  createMorphoNode({
                     // TODO: the Builder generator side of this converting to blocks
                     name: 'BuilderSymbolContents',
                     children: blocks.map((item: any) =>
-                      builderElementToJsxLiteNode(item, options),
+                      builderElementToMorphoNode(item, options),
                     ),
                   }),
                 ],
@@ -338,7 +338,7 @@ const componentMappers: {
         },
       }),
   Columns(block, options) {
-    const node = builderElementToJsxLiteNode(block, options, {
+    const node = builderElementToMorphoNode(block, options, {
       skipMapper: true,
     });
 
@@ -347,7 +347,7 @@ const componentMappers: {
 
     node.children = block.component?.options.columns?.map(
       (col: any, index: number) =>
-        createJSXLiteNode({
+        createMorphoNode({
           name: 'Column',
           bindings: {
             width: col.width,
@@ -358,7 +358,7 @@ const componentMappers: {
             },
           }),
           children: col.blocks.map((col: any) =>
-            builderElementToJsxLiteNode(col, options),
+            builderElementToMorphoNode(col, options),
           ),
         }),
     );
@@ -366,7 +366,7 @@ const componentMappers: {
     return node;
   },
   'Shopify:For': (block, options) => {
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: 'For',
       bindings: {
         each: `state.${block.component!.options!.repeat!.collection}`,
@@ -375,7 +375,7 @@ const componentMappers: {
         _forName: block.component!.options!.repeat!.itemName,
       },
       children: (block.children || []).map((child) =>
-        builderElementToJsxLiteNode(child, options),
+        builderElementToMorphoNode(child, options),
       ),
     });
   },
@@ -427,12 +427,12 @@ const componentMappers: {
     };
 
     if (options.preserveTextBlocks) {
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: block.tagName || 'div',
         bindings,
         properties,
         children: [
-          createJSXLiteNode({
+          createMorphoNode({
             bindings: innerBindings,
             properties: {
               ...innerProperties,
@@ -444,12 +444,12 @@ const componentMappers: {
     }
 
     if ((block.tagName && block.tagName !== 'div') || hasStyles(block)) {
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: block.tagName || 'div',
         bindings,
         properties,
         children: [
-          createJSXLiteNode({
+          createMorphoNode({
             bindings: innerBindings,
             properties: innerProperties,
           }),
@@ -457,7 +457,7 @@ const componentMappers: {
       });
     }
 
-    return createJSXLiteNode({
+    return createMorphoNode({
       name: block.tagName || 'div',
       properties: {
         ...properties,
@@ -471,20 +471,20 @@ const componentMappers: {
   },
 };
 
-export type BuilderToJSXLiteOptions = {
+export type BuilderToMorphoOptions = {
   context?: { [key: string]: any };
   includeBuilderExtras?: boolean;
   preserveTextBlocks?: boolean;
 };
-export type InternalBuilderToJSXLiteOptions = BuilderToJSXLiteOptions & {
+export type InternalBuilderToMorphoOptions = BuilderToMorphoOptions & {
   context: { [key: string]: any };
 };
 
-export const builderElementToJsxLiteNode = (
+export const builderElementToMorphoNode = (
   block: BuilderElement,
-  options: BuilderToJSXLiteOptions = {},
+  options: BuilderToMorphoOptions = {},
   _internalOptions: InternalOptions = {},
-): JSXLiteNode => {
+): MorphoNode => {
   if (block.component?.name === 'Core:Fragment') {
     block.component.name = 'Fragment';
   }
@@ -496,24 +496,24 @@ export const builderElementToJsxLiteNode = (
     const isFragment = block.component?.name === 'Fragment';
     // TODO: handle having other things, like a repeat too
     if (isFragment) {
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: 'Show',
         bindings: {
           when: wrapBindingIfNeeded(showBinding, options),
         },
         children:
           block.children?.map((child) =>
-            builderElementToJsxLiteNode(child, options),
+            builderElementToMorphoNode(child, options),
           ) || [],
       });
     } else {
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: 'Show',
         bindings: {
           when: wrapBindingIfNeeded(showBinding, options),
         },
         children: [
-          builderElementToJsxLiteNode({
+          builderElementToMorphoNode({
             ...block,
             code: {
               ...block.code,
@@ -530,7 +530,7 @@ export const builderElementToJsxLiteNode = (
     const isFragment = block.component?.name === 'Fragment';
     // TODO: handle having other things, like a repeat too
     if (isFragment) {
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: 'For',
         bindings: {
           each: wrapBindingIfNeeded(block.repeat?.collection!, options),
@@ -540,7 +540,7 @@ export const builderElementToJsxLiteNode = (
         },
         children:
           block.children?.map((child) =>
-            builderElementToJsxLiteNode(child, options),
+            builderElementToMorphoNode(child, options),
           ) || [],
       });
     } else {
@@ -549,7 +549,7 @@ export const builderElementToJsxLiteNode = (
         block.children?.length === 1
           ? block.children[0]
           : block;
-      return createJSXLiteNode({
+      return createMorphoNode({
         name: 'For',
         bindings: {
           each: wrapBindingIfNeeded(block.repeat?.collection!, options),
@@ -557,7 +557,7 @@ export const builderElementToJsxLiteNode = (
         properties: {
           _forName: block.repeat?.itemName || 'item',
         },
-        children: [builderElementToJsxLiteNode(omit(useBlock, 'repeat'))],
+        children: [builderElementToMorphoNode(omit(useBlock, 'repeat'))],
       });
     }
   }
@@ -634,7 +634,7 @@ export const builderElementToJsxLiteNode = (
     }
   }
 
-  const node = createJSXLiteNode({
+  const node = createMorphoNode({
     name:
       block.component?.name?.replace(/[^a-z0-9]/gi, '') ||
       block.tagName ||
@@ -666,7 +666,7 @@ export const builderElementToJsxLiteNode = (
     block.children[0].component?.name === 'Text' &&
     !options.preserveTextBlocks
   ) {
-    const textProperties = builderElementToJsxLiteNode(
+    const textProperties = builderElementToMorphoNode(
       block.children[0],
       options,
     );
@@ -684,7 +684,7 @@ export const builderElementToJsxLiteNode = (
   }
 
   node.children = (block.children || []).map((item) =>
-    builderElementToJsxLiteNode(item, options),
+    builderElementToMorphoNode(item, options),
   );
 
   return node;
@@ -823,9 +823,9 @@ function extractSymbols(json: BuilderContent) {
 export const isBuilderElement = (el: unknown): el is BuilderElement =>
   (el as any)?.['@type'] === '@builder.io/sdk:Element';
 
-const builderContentPartToJsxLiteComponent = (
+const builderContentPartToMorphoComponent = (
   builderContent: BuilderContent,
-  options: BuilderToJSXLiteOptions = {},
+  options: BuilderToMorphoOptions = {},
 ) => {
   builderContent = fastClone(builderContent);
   traverse(builderContent).forEach(function(elem) {
@@ -866,7 +866,7 @@ const builderContentPartToJsxLiteComponent = (
 
   const parsed = getHooks(builderContent);
 
-  const componentJson = createJSXLiteComponent({
+  const componentJson = createMorphoComponent({
     state: parsed?.state || {
       ...state,
       ...builderContent.data?.state,
@@ -883,24 +883,24 @@ const builderContentPartToJsxLiteComponent = (
         }
         return true;
       })
-      .map((item) => builderElementToJsxLiteNode(item, options)),
+      .map((item) => builderElementToMorphoNode(item, options)),
   });
 
   return componentJson;
 };
 
-export const builderContentToJsxLiteComponent = (
+export const builderContentToMorphoComponent = (
   builderContent: BuilderContent,
-  options: BuilderToJSXLiteOptions = {},
+  options: BuilderToMorphoOptions = {},
 ) => {
   builderContent = fastClone(builderContent);
 
   const separated = extractSymbols(builderContent);
 
   const componentJson = {
-    ...builderContentPartToJsxLiteComponent(separated.content, options),
+    ...builderContentPartToMorphoComponent(separated.content, options),
     subComponents: separated.subComponents.map((item) => ({
-      ...builderContentPartToJsxLiteComponent(item.content, options),
+      ...builderContentPartToMorphoComponent(item.content, options),
       name: item.name,
     })),
   };

@@ -3,7 +3,7 @@ export {
   componentToBuilder as builder,
   componentToCustomElement as customElement,
   componentToHtml as html,
-  componentToJsxLite as jsxLite,
+  componentToMorpho as morpho,
   componentToLiquid as liquid,
   componentToReact as react,
   componentToReactNative as reactNative,

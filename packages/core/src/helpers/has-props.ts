@@ -1,7 +1,7 @@
 import traverse from 'traverse';
-import { JSXLiteComponent } from '../types/morpho-component';
+import { MorphoComponent } from '../types/morpho-component';
 
-export const hasProps = (json: JSXLiteComponent) => {
+export const hasProps = (json: MorphoComponent) => {
   let has = false;
   traverse(json).forEach(function(item) {
     // TODO: use proper reference tracking

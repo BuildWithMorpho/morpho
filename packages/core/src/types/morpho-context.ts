@@ -1,6 +1,6 @@
-import { JSONObject } from '../types/json';
+import { JSONObject } from './json';
 
-export type JSXLiteContext = {
+export type MorphoContext = {
   '@type': '@builder.io/morpho/context';
   name: string;
   value: JSONObject; // TODO: support non objects too

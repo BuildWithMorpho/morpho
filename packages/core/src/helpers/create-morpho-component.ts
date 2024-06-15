@@ -1,8 +1,8 @@
-import { JSXLiteComponent } from '../types/morpho-component';
+import { MorphoComponent } from '../types/morpho-component';
 
-export const createJSXLiteComponent = (
-  options?: Partial<JSXLiteComponent>,
-): JSXLiteComponent => ({
+export const createMorphoComponent = (
+  options?: Partial<MorphoComponent>,
+): MorphoComponent => ({
   '@type': '@builder.io/morpho/component',
   imports: [],
   meta: {},

@@ -1,11 +1,11 @@
 import {
-  builderContentToJsxLiteComponent,
+  builderContentToMorphoComponent,
   compileAwayBuilderComponents,
   componentToAngular,
   componentToBuilder,
   componentToCustomElement,
   componentToHtml,
-  componentToJsxLite,
+  componentToMorpho,
   componentToLiquid,
   componentToQwik,
   componentToReact,
@@ -16,7 +16,7 @@ import {
   componentToTemplate,
   componentToVue,
   liquidToBuilder,
-  angularToJsxLiteComponent,
+  angularToMorphoComponent,
   mapStyles,
   parseJsx,
   parseReactiveScript,
@@ -298,8 +298,8 @@ export default function Fiddle() {
       if (!builderJson) {
         return;
       }
-      const jsxJson = builderContentToJsxLiteComponent(builderJson);
-      state.code = componentToJsxLite(jsxJson);
+      const jsxJson = builderContentToMorphoComponent(builderJson);
+      state.code = componentToMorpho(jsxJson);
       state.pendingBuilderChange = null;
     },
     async parseLiquidInputCode() {
@@ -311,7 +311,7 @@ export default function Fiddle() {
         state.inputCode.replace(reactiveScriptRe, ''),
       );
 
-      const jsx = builderContentToJsxLiteComponent({
+      const jsx = builderContentToMorphoComponent({
         data: { blocks: builderJson },
       });
       jsx.state = jsxState;
@@ -324,7 +324,7 @@ export default function Fiddle() {
         staticState.ignoreNextBuilderUpdate = true;
         const json =
           state.inputTab === 'angular'
-            ? angularToJsxLiteComponent(state.inputCode)
+            ? angularToMorphoComponent(state.inputCode)
             : state.inputTab === 'liquid'
             ? await this.parseLiquidInputCode()
             : parseJsx(state.code);
@@ -371,7 +371,7 @@ export default function Fiddle() {
               ).files.find((file) => file.path.endsWith('template.tsx'))!
                 ?.contents
             : state.outputTab === 'morpho'
-            ? componentToJsxLite(json)
+            ? componentToMorpho(json)
             : state.outputTab === 'json'
             ? JSON.stringify(json, null, 2)
             : state.outputTab === 'builder'
