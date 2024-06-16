@@ -13,5 +13,6 @@ export type MorphoConfig = {
   targets: Target[]
   dest?: string
   files?: string | string[]
+  overridesDir?: string
   mapFile?: (info: FileInfo) => FileInfo | Promise<FileInfo>
 }
