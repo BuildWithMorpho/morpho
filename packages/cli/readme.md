@@ -1,6 +1,6 @@
-# JSX-Lite CLI
+# Morpho CLI
 
-A CLI for morpho.
+A CLI for Morpho.
 
 ## Installation
 
