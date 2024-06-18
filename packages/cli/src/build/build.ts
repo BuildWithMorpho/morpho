@@ -2,6 +2,7 @@ import {
   componentToReact,
   componentToReactNative,
   componentToSolid,
+  componentToSwift,
   componentToVue,
   contextToReact,
   MorphoComponent,
@@ -113,6 +114,8 @@ async function outputTsxLiteFiles(
         ? componentToVue(morphoJson)
         : target === 'react'
         ? componentToReact(morphoJson)
+        : target === 'swift'
+        ? componentToSwift(morphoJson)
         : target === 'solid'
         ? componentToSolid(morphoJson)
         : (null as never)
@@ -158,17 +161,21 @@ async function outputTsxLiteFiles(
         outputFile(
           `${options.dest}/${kebabTarget}/${path.replace(
             /\.lite\.tsx$/,
-            '.js'
+            target === 'swift' ? '.swift' : '.js'
           )}`,
           transpiled
         ),
-        outputFile(
-          `${options.dest}/${kebabTarget}/${path.replace(
-            /\.original\.jsx$/,
-            '.js'
-          )}`,
-          original
-        )
+        ...(target === 'swift'
+          ? []
+          : [
+              outputFile(
+                `${options.dest}/${kebabTarget}/${path.replace(
+                  /\.original\.jsx$/,
+                  '.js'
+                )}`,
+                original
+              )
+            ])
       ])
     }
   })
