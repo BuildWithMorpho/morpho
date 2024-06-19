@@ -19,6 +19,8 @@ export function parseContext(
   const context = createMorphoContext({ name: options.name });
 
   babel.transform(code, {
+    configFile: false,
+    babelrc: false,
     presets: [[tsPreset, { isTSX: true, allExtensions: true }]],
     plugins: [
       () => ({
