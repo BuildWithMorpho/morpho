@@ -96,7 +96,7 @@ With Morpho, you can convert designs from [Figma](https://github.com/BuilderIO/h
 
 ## How does it work
 
-Morpho uses a static subset of JSX, inspired by [Solid](https://github.com/ryansolid/solid/blob/master/documentation/rendering.md). This means we can parse it to a simple JSON structure, then easily build serializers that target various frameworks and implementations.
+Morpho uses a static subset of JSX, inspired by [Solid](https://www.solidjs.com/guide#jsx-compilation). This means we can parse it to a simple JSON structure, then easily build serializers that target various frameworks and implementations.
 
 ```tsx
 export function MyComponent() {
