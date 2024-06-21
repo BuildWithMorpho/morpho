@@ -18,6 +18,7 @@ import { camelCase, kebabCase, last, upperFirst } from 'lodash'
 import micromatch from 'micromatch'
 import { MorphoConfig, Target } from '../types/morpho-config'
 import { compileVueFile } from './helpers/compile-vue-file'
+import { getSimpleId } from './helpers/get-simple-id'
 import { transpile } from './helpers/transpile'
 import { transpileSolidFile } from './helpers/transpile-solid-file'
 
@@ -120,6 +121,7 @@ async function outputTsxLiteFiles(
       ? await readFile(overrideFilePath, 'utf8')
       : null
 
+    const id = getSimpleId()
     let transpiled =
       overrideFile ??
       (target === 'reactNative'
@@ -127,7 +129,9 @@ async function outputTsxLiteFiles(
             stateType: 'useState'
           })
         : target === 'vue'
-        ? componentToVue(morphoJson)
+        ? componentToVue(morphoJson, {
+            cssNamespace: id
+          })
             // Transform <FooBar> to <foo-bar> as Vue2 needs
             .replace(/<\/?\w+/g, match =>
               match.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
@@ -176,7 +180,8 @@ async function outputTsxLiteFiles(
           contents: transpiled,
           path,
           morphoComponent: morphoJson,
-          vueVersion: 2
+          vueVersion: 2,
+          id: id
         })
         await Promise.all(
           files.map(file => outputFile(file.path, file.contents))
