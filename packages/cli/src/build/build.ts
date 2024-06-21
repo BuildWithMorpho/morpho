@@ -5,6 +5,7 @@ import {
   componentToSwift,
   componentToVue,
   contextToReact,
+  contextToVue,
   MorphoComponent,
   parseContext,
   parseJsx
@@ -153,7 +154,8 @@ async function outputTsxLiteFiles(
         distDir: options.dest,
         contents: transpiled,
         path,
-        morphoComponent: morphoJson
+        morphoComponent: morphoJson,
+        vueVersion: 2
       })
       await Promise.all(files.map(file => outputFile(file.path, file.contents)))
     } else {
@@ -214,7 +216,11 @@ async function buildTsFiles(target: Target, options?: MorphoConfig) {
         if (!context) {
           console.warn('Could not parse context from file', path)
         } else {
-          output = contextToReact(context)
+          if (target === 'vue') {
+            output = contextToVue(context)
+          } else {
+            output = contextToReact(context)
+          }
         }
         path = path.replace('.lite.ts', '.ts')
       }
