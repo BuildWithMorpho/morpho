@@ -406,15 +406,17 @@ const jsxElementToJson = (
   const nodeName = generate(node.openingElement.name).code;
 
   if (nodeName === 'Show') {
-    const whenAttr: babel.types.JSXAttribute | undefined =
-      node.openingElement.attributes.find(
-        (item) => types.isJSXAttribute(item) && item.name.name === 'when',
-      ) as any;
+    const whenAttr:
+      | babel.types.JSXAttribute
+      | undefined = node.openingElement.attributes.find(
+      (item) => types.isJSXAttribute(item) && item.name.name === 'when',
+    ) as any;
 
-    const elseAttr: babel.types.JSXAttribute | undefined =
-      node.openingElement.attributes.find(
-        (item) => types.isJSXAttribute(item) && item.name.name === 'else',
-      ) as any;
+    const elseAttr:
+      | babel.types.JSXAttribute
+      | undefined = node.openingElement.attributes.find(
+      (item) => types.isJSXAttribute(item) && item.name.name === 'else',
+    ) as any;
 
     const whenValue =
       whenAttr &&
@@ -455,10 +457,8 @@ const jsxElementToJson = (
           name: 'For',
           bindings: {
             each: generate(
-              (
-                (node.openingElement.attributes[0] as babel.types.JSXAttribute)
-                  .value as babel.types.JSXExpressionContainer
-              ).expression,
+              ((node.openingElement.attributes[0] as babel.types.JSXAttribute)
+                .value as babel.types.JSXExpressionContainer).expression,
             ).code,
           },
           properties: {
@@ -621,7 +621,7 @@ function mapReactIdentifiers(json: MorphoComponent) {
     }
   }
 
-  traverse(json).forEach(function (item) {
+  traverse(json).forEach(function(item) {
     if (isMorphoNode(item)) {
       for (const key in item.bindings) {
         const value = item.bindings[key];
@@ -650,10 +650,8 @@ function mapReactIdentifiers(json: MorphoComponent) {
 
 const expressionToNode = (str: string) => {
   const code = `export default ${str}`;
-  return (
-    (babel.parse(code) as babel.types.File).program
-      .body[0] as babel.types.ExportDefaultDeclaration
-  ).declaration;
+  return ((babel.parse(code) as babel.types.File).program
+    .body[0] as babel.types.ExportDefaultDeclaration).declaration;
 };
 
 /**
@@ -661,7 +659,7 @@ const expressionToNode = (str: string) => {
  * MorphoComponent tree
  */
 function extractContextComponents(json: MorphoComponent) {
-  traverse(json).forEach(function (item) {
+  traverse(json).forEach(function(item) {
     if (isMorphoNode(item)) {
       if (item.name.endsWith('.Provider')) {
         const value = item.bindings.value;
