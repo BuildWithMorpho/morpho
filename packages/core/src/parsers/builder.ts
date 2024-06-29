@@ -867,6 +867,11 @@ const builderContentPartToMorphoComponent = (
   const parsed = getHooks(builderContent);
 
   const componentJson = createMorphoComponent({
+    meta: {
+      useMetadata: {
+        httpRequests: builderContent.data?.httpRequests,
+      },
+    },
     state: parsed?.state || {
       ...state,
       ...builderContent.data?.state,
