@@ -161,9 +161,9 @@ export const components: CompileAwayComponentsMap = {
             alignSelf: 'stretch',
             flexGrow: '1',
             boxSizing: 'border-box',
-            maxWidth: `${
-              (node.bindings.maxWidth && Number(node.bindings.maxWidth)) || 1200
-            }px`,
+            maxWidth: `${(node.bindings.maxWidth &&
+              Number(node.bindings.maxWidth)) ||
+              1200}px`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'stretch',
@@ -491,7 +491,7 @@ export const compileAwayBuilderComponentsFromTree = (
   tree: MorphoNode | MorphoComponent,
   components: CompileAwayComponentsMap,
 ) => {
-  traverse(tree).forEach(function (item) {
+  traverse(tree).forEach(function(item) {
     if (isMorphoNode(item)) {
       const mapper = components[item.name];
       if (mapper) {
