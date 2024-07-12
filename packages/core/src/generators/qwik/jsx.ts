@@ -1,6 +1,5 @@
 import { MorphoNode } from '../../types/morpho-node';
 import { DIRECTIVES } from './directives';
-import { extractJSBlock } from './handlers';
 import {
   File,
   INDENT,

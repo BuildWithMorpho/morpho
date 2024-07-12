@@ -6,6 +6,9 @@ import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
+import * as JSON5 from 'json5';
+import { BuilderElement } from '@builder.io/sdk';
+import { builderElementToMorphoNode } from '../parsers/builder';
 
 function getComponentInputNames(componentName: string): string[] {
   const componentInfo = Builder.components.find(
@@ -52,6 +55,11 @@ type CompileAwayComponentsMap = {
     components: CompileAwayComponentsMap,
   ) => MorphoNode | void;
 };
+
+interface AccordionItem {
+  title: BuilderElement[];
+  detail: BuilderElement[];
+}
 
 export const components: CompileAwayComponentsMap = {
   CoreButton(node: MorphoNode, context, components) {
@@ -103,12 +111,51 @@ export const components: CompileAwayComponentsMap = {
       components,
     );
   },
-  BuilderAccordion() {
-    // TODO
-    return createMorphoNode({
-      name: 'div',
-      properties: { 'data-missing-component': 'BuilderAccordion' },
+  BuilderAccordion(node: MorphoNode, context, components) {
+    const itemsJSON = node.bindings.items || '[]';
+    const accordionItems: AccordionItem[] = JSON5.parse(itemsJSON);
+    const children: MorphoNode[] = accordionItems.map((accordionItem) => {
+      const titleChildren: MorphoNode[] = accordionItem.title.map((element) =>
+        builderElementToMorphoNode(element, {
+          includeBuilderExtras: true,
+          preserveTextBlocks: true,
+        }),
+      );
+      const detailChildren: MorphoNode[] = accordionItem.detail.map(
+        (element) =>
+          builderElementToMorphoNode(element, {
+            includeBuilderExtras: true,
+            preserveTextBlocks: true,
+          }),
+      );
+      return createMorphoNode({
+        name: 'div',
+        properties: { builder: 'accordion' },
+        children: [
+          createMorphoNode({
+            name: 'div',
+            properties: { builder: 'accordion-title' },
+            children: titleChildren,
+          }),
+          createMorphoNode({
+            name: 'div',
+            properties: { builder: 'accordion-detail' },
+            children: detailChildren,
+          }),
+        ],
+      });
     });
+    return wrapOutput(
+      node,
+      createMorphoNode({
+        name: (node.properties.builderTag as string) || 'div',
+        properties: {
+          $name: 'accordion',
+        },
+        children: children,
+      }),
+      components,
+    );
   },
   BuilderMasonry() {
     // TODO
