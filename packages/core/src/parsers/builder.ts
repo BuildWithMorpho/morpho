@@ -481,7 +481,7 @@ export type InternalBuilderToMorphoOptions = BuilderToMorphoOptions & {
 
 export const builderElementToMorphoNode = (
   block: BuilderElement,
-  options: BuilderToMorphoOptions = {},
+  options: BuilderToMorphoOptions,
   _internalOptions: InternalOptions = {},
 ): MorphoNode => {
   if (block.component?.name === 'Core:Fragment') {
@@ -512,14 +512,17 @@ export const builderElementToMorphoNode = (
           when: wrapBindingIfNeeded(showBinding, options),
         },
         children: [
-          builderElementToMorphoNode({
-            ...block,
-            code: {
-              ...block.code,
+          builderElementToMorphoNode(
+            {
+              ...block,
+              code: {
+                ...block.code,
+                bindings: omit(blockBindings, 'show'),
+              },
               bindings: omit(blockBindings, 'show'),
             },
-            bindings: omit(blockBindings, 'show'),
-          }),
+            options,
+          ),
         ],
       });
     }
@@ -556,7 +559,9 @@ export const builderElementToMorphoNode = (
         properties: {
           _forName: block.repeat?.itemName || 'item',
         },
-        children: [builderElementToMorphoNode(omit(useBlock, 'repeat'))],
+        children: [
+          builderElementToMorphoNode(omit(useBlock, 'repeat'), options),
+        ],
       });
     }
   }
