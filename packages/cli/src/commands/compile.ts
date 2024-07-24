@@ -1,16 +1,17 @@
 import {
   builderContentToMorphoComponent,
   compileAwayBuilderComponents,
+  GeneratorOptions,
   MorphoComponent,
-  parseJsx
+  parseJsx,
+  Target,
+  targets
 } from '@builder.io/morpho'
 import { GluegunCommand } from 'gluegun'
 import { join } from 'path'
-import * as targets from '../targets'
 import { UnionToIntersection } from '../types'
-import { Target, Targets } from '../types/morpho-config'
 
-type GeneratorOpts = Parameters<Targets[Target]>[1]
+type GeneratorOpts = GeneratorOptions[Target]
 
 type AllGeneratorOption = UnionToIntersection<GeneratorOpts>
 // The only purpose this really serves is to ensure I provide a flag API
@@ -129,7 +130,7 @@ const command: GluegunCommand = {
         }
 
         // TODO validate generator options
-        output = generator(json, generatorOpts as any)
+        output = generator(generatorOpts as any)({ component: json, path })
       } catch (e) {
         print.divider()
         print.info(`Path: ${path}`)

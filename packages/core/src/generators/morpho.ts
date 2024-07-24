@@ -1,6 +1,7 @@
 import dedent from 'dedent';
 import json5 from 'json5';
 import { format } from 'prettier/standalone';
+import { Transpiler } from '..';
 import { fastClone } from '../helpers/fast-clone';
 import { getComponents } from '../helpers/get-components';
 import { getRefs } from '../helpers/get-refs';
@@ -12,19 +13,18 @@ import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { blockToReact, componentToReact } from './react';
 
-export const DEFAULT_FORMAT = 'legacy';
+export interface ToMorphoOptions {
+  prettier?: boolean;
+  format: 'react' | 'legacy';
+}
 
-export type MorphoFormat = 'react' | 'legacy';
+export const DEFAULT_FORMAT: ToMorphoOptions['format'] = 'legacy';
 
 // Special isValidAttributeName for Morpho so we can allow for $ in names
 const isValidAttributeName = (str: string) => {
   return Boolean(str && /^[$a-z0-9\-_:]+$/i.test(str));
 };
 
-export type ToMorphoOptions = {
-  prettier?: boolean;
-  format: MorphoFormat;
-};
 export const blockToMorpho = (
   json: MorphoNode,
   toMorphoOptions: Partial<ToMorphoOptions> = {},
@@ -129,24 +129,23 @@ const getRefsString = (json: MorphoComponent, refs = getRefs(json)) => {
 const morphoCoreComponents = ['Show', 'For'];
 
 export const componentToMorpho = (
-  componentJson: MorphoComponent,
   toMorphoOptions: Partial<ToMorphoOptions> = {},
-) => {
+): Transpiler => ({ component }) => {
   const options: ToMorphoOptions = {
     format: DEFAULT_FORMAT,
     ...toMorphoOptions,
   };
 
   if (options.format === 'react') {
-    return componentToReact(componentJson, {
+    return componentToReact({
       format: 'lite',
       stateType: 'useState',
       stylesType: 'emotion',
       prettier: options.prettier,
-    });
+    })({ component });
   }
 
-  const json = fastClone(componentJson);
+  const json = fastClone(component);
 
   const refs = getRefs(json);
 
@@ -163,7 +162,7 @@ export const componentToMorpho = (
     (item) => !morphoCoreComponents.includes(item),
   );
 
-  const hasState = Boolean(Object.keys(componentJson.state).length);
+  const hasState = Boolean(Object.keys(component.state).length);
 
   const needsMorphoCoreImport = Boolean(
     hasState || refs.size || morphoComponents.length,
@@ -186,14 +185,14 @@ export const componentToMorpho = (
     ${renderPreComponent(json)}
 
     ${
-      !componentJson.meta.metadataHook
+      !component.meta.metadataHook
         ? ''
         : `${METADATA_HOOK_NAME}(${json5.stringify(
-            componentJson.meta.metadataHook,
+            component.meta.metadataHook,
           )})`
     }
 
-    export default function ${componentJson.name}(props) {
+    export default function ${component.name}(props) {
       ${
         !hasState
           ? ''
