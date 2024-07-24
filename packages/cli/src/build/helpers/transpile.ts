@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild'
 import { readFile } from 'fs-extra'
-import { Target } from '../../types/morpho-config'
+import { Target } from '@builder.io/morpho'
 
 export const transpile = async ({
   path,
