@@ -11,6 +11,7 @@ import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
+import { Transpiler } from '..';
 
 export type ToSwiftOptions = {
   prettier?: boolean;
@@ -299,11 +300,10 @@ function getInputBindings(json: MorphoComponent, options: ToSwiftOptions) {
   }
   return str;
 }
-export const componentToSwift = (
-  componentJson: MorphoComponent,
-  options: ToSwiftOptions = {},
-) => {
-  const json = fastClone(componentJson);
+export const componentToSwift = (options: ToSwiftOptions = {}): Transpiler => ({
+  component,
+}) => {
+  const json = fastClone(component);
   mapDataForSwiftCompatability(json);
 
   const hasDyanmicData = componentHasDynamicData(json);
@@ -331,7 +331,7 @@ export const componentToSwift = (
     `
     }
 
-    struct ${componentJson.name}: View {
+    struct ${component.name}: View {
       ${
         !hasDyanmicData
           ? ''

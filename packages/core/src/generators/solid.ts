@@ -8,7 +8,6 @@ import { selfClosingTags } from '../parsers/jsx';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import {
-  Plugin,
   runPostCodePlugins,
   runPostJsonPlugins,
   runPreCodePlugins,
@@ -19,6 +18,9 @@ import { stripMetaProperties } from '../helpers/strip-meta-properties';
 import { getComponentsUsed } from '../helpers/get-components-used';
 import traverse from 'traverse';
 import { isMorphoNode } from '../helpers/is-morpho-node';
+import { BaseTranspilerOptions, Transpiler } from '../types/config';
+
+export interface ToSolidOptions extends BaseTranspilerOptions {}
 
 // Transform <foo.bar key="value" /> to <component :is="foo.bar" key="value" />
 function processDynamicComponents(
@@ -94,10 +96,6 @@ const collectClassString = (json: MorphoNode): string | null => {
   return null;
 };
 
-type ToSolidOptions = {
-  prettier?: boolean;
-  plugins?: Plugin[];
-};
 const blockToSolid = (
   json: MorphoNode,
   options: ToSolidOptions = {},
@@ -181,11 +179,10 @@ const getRefsString = (json: MorphoComponent, refs = getRefs(json)) => {
   return str;
 };
 
-export const componentToSolid = (
-  componentJson: MorphoComponent,
-  options: ToSolidOptions = {},
-) => {
-  let json = fastClone(componentJson);
+export const componentToSolid = (options: ToSolidOptions = {}): Transpiler => ({
+  component,
+}) => {
+  let json = fastClone(component);
   if (options.plugins) {
     json = runPreJsonPlugins(json, options.plugins);
   }
@@ -198,7 +195,7 @@ export const componentToSolid = (
   const foundDynamicComponents = processDynamicComponents(json, options);
 
   const stateString = getStateObjectStringFromComponent(json);
-  const hasState = Boolean(Object.keys(componentJson.state).length);
+  const hasState = Boolean(Object.keys(component.state).length);
   const componentsUsed = getComponentsUsed(json);
 
   const hasShowComponent = componentsUsed.has('Show');

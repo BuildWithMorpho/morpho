@@ -9,7 +9,7 @@ import {
 } from '../parsers/builder';
 import { parseJsx } from '../parsers/jsx';
 import { compileAwayBuilderComponents } from '../plugins/compile-away-builder-components';
-import { componentToReact } from '..';
+import { componentToReact, ToMorphoOptions } from '..';
 
 /**
  * Load a file using nodejs resolution as a string.
@@ -28,6 +28,10 @@ const lazyLoadSection = JSON.parse(
   fixture('./data/builder/lazy-load-section.json'),
 );
 
+const morphoOptions: ToMorphoOptions = {
+  format: 'legacy',
+};
+
 describe('Builder', () => {
   test('extractStateHook', () => {
     const code = `useState({ foo: 'bar' }); alert('hi');`;
@@ -43,61 +47,61 @@ describe('Builder', () => {
   });
 
   test('Stamped', () => {
-    const json = parseJsx(stamped);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(stamped);
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
 
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho);
+    const morpho = componentToMorpho()({ component: backToMorpho });
     expect(morpho).toMatchSnapshot();
   });
 
   test('CustomCode', () => {
-    const json = parseJsx(customCode);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(customCode);
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
 
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho);
+    const morpho = componentToMorpho()({ component: backToMorpho });
     expect(morpho).toMatchSnapshot();
   });
 
   test('Embed', () => {
-    const json = parseJsx(embed);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(embed);
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
 
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho);
+    const morpho = componentToMorpho()({ component: backToMorpho });
     expect(morpho).toMatchSnapshot();
   });
 
   test('Image', () => {
-    const json = parseJsx(image);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(image);
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
 
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho);
+    const morpho = componentToMorpho()({ component: backToMorpho });
     expect(morpho).toMatchSnapshot();
   });
 
   test('Columns', () => {
-    const json = parseJsx(columns);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(columns);
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
 
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho);
+    const morpho = componentToMorpho()({ component: backToMorpho });
     expect(morpho).toMatchSnapshot();
   });
 
   test('Section', async () => {
-    const morphoComponent = builderContentToMorphoComponent(lazyLoadSection);
+    const component = builderContentToMorphoComponent(lazyLoadSection);
 
-    const html = await componentToHtml(morphoComponent, {
+    const html = await componentToHtml({
       plugins: [compileAwayBuilderComponents()],
-    });
+    })({ component });
 
     expect(html).toMatchSnapshot();
   });
@@ -130,16 +134,16 @@ describe('Builder', () => {
       }
     `;
 
-    const json = parseJsx(code);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(code);
+    const builderJson = componentToBuilder()({ component });
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho, {
-      format: 'legacy',
+    const morpho = componentToMorpho(morphoOptions)({
+      component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
-    const react = componentToReact(json, {
+    const react = componentToReact({
       plugins: [compileAwayBuilderComponents()],
-    });
+    })({ component });
     expect(react).toMatchSnapshot();
   });
 
@@ -168,11 +172,11 @@ describe('Builder', () => {
       }
     `;
 
-    const json = parseJsx(code);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(code);
+    const builderJson = componentToBuilder()({ component });
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho, {
-      format: 'legacy',
+    const morpho = componentToMorpho(morphoOptions)({
+      component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
   });
@@ -201,11 +205,11 @@ describe('Builder', () => {
       }
     `;
 
-    const json = parseJsx(code);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(code);
+    const builderJson = componentToBuilder()({ component });
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho, {
-      format: 'legacy',
+    const morpho = componentToMorpho(morphoOptions)({
+      component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
   });
@@ -236,14 +240,14 @@ describe('Builder', () => {
       }
     `;
 
-    const json = parseJsx(code);
-    expect(json).toMatchSnapshot();
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(code);
+    expect(component).toMatchSnapshot();
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
     const backToMorpho = builderContentToMorphoComponent(builderJson);
     expect(backToMorpho).toMatchSnapshot();
-    const morpho = componentToMorpho(backToMorpho, {
-      format: 'legacy',
+    const morpho = componentToMorpho(morphoOptions)({
+      component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
   });
@@ -264,14 +268,14 @@ describe('Builder', () => {
       }
     `;
 
-    const json = parseJsx(code);
-    expect(json).toMatchSnapshot();
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(code);
+    expect(component).toMatchSnapshot();
+    const builderJson = componentToBuilder()({ component });
     expect(builderJson).toMatchSnapshot();
     const backToMorpho = builderContentToMorphoComponent(builderJson);
     expect(backToMorpho).toMatchSnapshot();
-    const morpho = componentToMorpho(backToMorpho, {
-      format: 'legacy',
+    const morpho = componentToMorpho(morphoOptions)({
+      component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
   });
@@ -299,11 +303,11 @@ describe('Builder', () => {
       }
     `;
 
-    const json = parseJsx(code);
-    const builderJson = componentToBuilder(json);
+    const component = parseJsx(code);
+    const builderJson = componentToBuilder()({ component });
     const backToMorpho = builderContentToMorphoComponent(builderJson);
-    const morpho = componentToMorpho(backToMorpho, {
-      format: 'legacy',
+    const morpho = componentToMorpho(morphoOptions)({
+      component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
   });
