@@ -41,6 +41,9 @@ export * from './helpers/is-morpho-node';
 
 export * from './types/morpho-node';
 export * from './types/morpho-component';
+export * from './types/config';
 
 export * from './plugins/compile-away-builder-components';
 export * from './plugins/map-styles';
+
+export * from './targets';

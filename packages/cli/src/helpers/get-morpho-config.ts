@@ -1,4 +1,4 @@
-import { MorphoConfig } from 'src/types/morpho-config'
+import { MorphoConfig } from '@builder.io/morpho'
 
 export function getMorphoConfig(): MorphoConfig | null {
   const module = require(process.cwd() + '/morpho.config')

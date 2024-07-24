@@ -8,7 +8,10 @@ import {
   contextToVue,
   MorphoComponent,
   parseContext,
-  parseJsx
+  parseJsx,
+  MorphoConfig,
+  Target,
+  Transpiler
 } from '@builder.io/morpho'
 import dedent from 'dedent'
 import glob from 'fast-glob'
@@ -16,8 +19,6 @@ import { outputFile, pathExists, readFile, remove } from 'fs-extra'
 import * as json5 from 'json5'
 import { camelCase, kebabCase, last, upperFirst } from 'lodash'
 import micromatch from 'micromatch'
-import { MorphoConfig, Target } from '../types/morpho-config'
-import { compileVueFile } from './helpers/compile-vue-file'
 import { getSimpleId } from './helpers/get-simple-id'
 import { transpile } from './helpers/transpile'
 import { transpileOptionalChaining } from './helpers/transpile-optional-chaining'
@@ -25,13 +26,32 @@ import { transpileSolidFile } from './helpers/transpile-solid-file'
 
 const cwd = process.cwd()
 
+const DEFAULT_CONFIG: Partial<MorphoConfig> = {
+  targets: [],
+  dest: 'output',
+  files: 'src/*',
+  overridesDir: 'overrides'
+}
+
+const DEFAULT_OPTIONS: MorphoConfig['options'] = {
+  vue: {
+    cssNamespace: () => getSimpleId(),
+    namePrefix: path => (path.includes('/blocks/') ? 'builder' : undefined),
+    builderRegister: true
+  }
+}
+
 export async function build(config?: MorphoConfig) {
   const options: MorphoConfig = {
-    targets: [],
-    dest: 'output',
-    files: 'src/*',
-    overridesDir: 'overrides',
-    ...config
+    ...DEFAULT_CONFIG,
+    ...config,
+    options: {
+      ...DEFAULT_OPTIONS,
+      vue: {
+        ...DEFAULT_OPTIONS.vue,
+        ...config?.options?.vue
+      }
+    }
   }
 
   await clean(options)
@@ -112,6 +132,30 @@ async function outputOverrides(target: Target, options: MorphoConfig) {
   )
 }
 
+const getTranspilerForTarget = ({
+  target,
+  options
+}: {
+  target: Target
+  options: MorphoConfig
+}): Transpiler => {
+  switch (target) {
+    case 'reactNative':
+      return componentToReactNative({ stateType: 'useState' })
+    case 'vue':
+      return componentToVue(options.options.vue)
+    case 'react':
+      return componentToReact()
+    case 'swift':
+      return componentToSwift()
+    case 'solid':
+      return componentToSolid()
+    default:
+      // TO-DO: throw instead of `never`
+      return null as never
+  }
+}
+
 async function outputTsxLiteFiles(
   target: Target,
   files: { path: string; morphoJson: MorphoComponent }[],
@@ -129,31 +173,12 @@ async function outputTsxLiteFiles(
       ? await readFile(overrideFilePath, 'utf8')
       : null
 
-    const id = getSimpleId()
     let transpiled =
       overrideFile ??
-      (target === 'reactNative'
-        ? componentToReactNative(morphoJson, {
-            stateType: 'useState'
-          })
-        : target === 'vue'
-        ? componentToVue(morphoJson, {
-            cssNamespace: id,
-            // TODO: config for this
-            namePrefix: path.includes('/blocks/') ? 'builder' : undefined,
-            builderRegister: true
-          })
-            // Transform <FooBar> to <foo-bar> as Vue2 needs
-            .replace(/<\/?\w+/g, match =>
-              match.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
-            )
-        : target === 'react'
-        ? componentToReact(morphoJson)
-        : target === 'swift'
-        ? componentToSwift(morphoJson)
-        : target === 'solid'
-        ? componentToSolid(morphoJson)
-        : (null as never))
+      getTranspilerForTarget({ options, target })({
+        path,
+        component: morphoJson
+      })
 
     const original = transpiled
 
@@ -305,7 +330,7 @@ async function buildTsFiles(target: Target, options?: MorphoConfig) {
           if (target === 'vue') {
             output = contextToVue(context)
           } else {
-            output = contextToReact(context)
+            output = contextToReact()({ context })
           }
         }
         path = path.replace('.lite.ts', '.ts')
