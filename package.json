@@ -1,6 +1,5 @@
 {
   "name": "@builder.io/morpho-repo",
-  "version": "0.0.0",
   "workspaces": [
     "packages/*"
   ],
