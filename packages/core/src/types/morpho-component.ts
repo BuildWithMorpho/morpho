@@ -31,6 +31,8 @@ export interface MorphoImport {
 
 type ContextInfo = { name: string; path: string };
 
+type extendedHook = { code: string; deps?: string };
+
 export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
@@ -44,11 +46,12 @@ export type MorphoComponent = {
     set: { [key: string]: { name: string; value?: JSONObject } }; // TODO: support non object values
   };
   hooks: {
-    init?: string;
-    onMount?: string;
-    onUnMount?: string;
-    preComponent?: string;
-    postComponent?: string;
+    init?: extendedHook;
+    onMount?: extendedHook;
+    onUnMount?: extendedHook;
+    preComponent?: extendedHook;
+    postComponent?: extendedHook;
+    onUpdate?: extendedHook;
   };
   children: MorphoNode[];
   subComponents: MorphoComponent[];
