@@ -31,6 +31,5 @@ export type MorphoConfig = {
   dest?: string;
   files?: string | string[];
   overridesDir?: string;
-  mapFile?: (info: FileInfo) => FileInfo | Promise<FileInfo>;
   options: Partial<GeneratorOptions>;
 };
