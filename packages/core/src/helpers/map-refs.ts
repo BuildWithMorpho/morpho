@@ -61,7 +61,7 @@ export const mapRefs = (
     }
   }
 
-  traverse(component).forEach(function (item) {
+  traverse(component).forEach(function(item) {
     if (isMorphoNode(item)) {
       for (const key of Object.keys(item.bindings)) {
         const value = item.bindings[key];

@@ -7,7 +7,7 @@ export function tarverseNodes(
   component: MorphoComponent | MorphoNode,
   cb: (node: MorphoNode, context: TraverseContext) => void,
 ) {
-  traverse(component).forEach(function (item) {
+  traverse(component).forEach(function(item) {
     if (isMorphoNode(item)) {
       cb(item, this);
     }
