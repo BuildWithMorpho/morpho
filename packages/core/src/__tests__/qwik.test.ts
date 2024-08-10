@@ -194,9 +194,8 @@ describe('qwik', () => {
       expect(state).toMatchSnapshot();
       const fileSet = createFileSet({ output: 'mjs', jsx: true });
       hierarchy.depthFirstSymbols.forEach((builderComponent) => {
-        const morphoComponent = convertBuilderElementToMorphoComponent(
-          builderComponent,
-        );
+        const morphoComponent =
+          convertBuilderElementToMorphoComponent(builderComponent);
         morphoComponent &&
           addComponent(fileSet, morphoComponent, { isRoot: false });
       });
