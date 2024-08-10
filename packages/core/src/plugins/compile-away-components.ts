@@ -36,22 +36,21 @@ type CompileAwayComponentsOptions = {
  *      ]
  *    })
  */
-export const compileAwayComponents = (
-  pluginOptions: CompileAwayComponentsOptions,
-) => (options?: any) => ({
-  json: {
-    pre: (json: MorphoComponent) => {
-      traverse(json).forEach(function(item) {
-        if (isMorphoNode(item)) {
-          const mapper = pluginOptions.components[item.name];
-          if (mapper) {
-            const result = mapper(item, this);
-            if (result) {
-              this.update(result);
+export const compileAwayComponents =
+  (pluginOptions: CompileAwayComponentsOptions) => (options?: any) => ({
+    json: {
+      pre: (json: MorphoComponent) => {
+        traverse(json).forEach(function (item) {
+          if (isMorphoNode(item)) {
+            const mapper = pluginOptions.components[item.name];
+            if (mapper) {
+              const result = mapper(item, this);
+              if (result) {
+                this.update(result);
+              }
             }
           }
-        }
-      });
+        });
+      },
     },
-  },
-});
+  });

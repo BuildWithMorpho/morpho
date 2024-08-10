@@ -1,8 +1,6 @@
 import { MorphoComponent } from './morpho-component';
 
-export type Plugin = (
-  options?: any,
-) => {
+export type Plugin = (options?: any) => {
   json?: {
     // Happens before any modifiers
     pre?: (json: MorphoComponent) => MorphoComponent | void;

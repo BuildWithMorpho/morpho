@@ -8,15 +8,14 @@ type MapStylesOptions = {
   map: (styles: MorphoStyles, context: TraverseContext) => MorphoStyles;
 };
 
-export const mapStyles = (pluginOptions: MapStylesOptions) => (
-  options: any,
-) => ({
-  json: {
-    pre: (json: MorphoComponent) => {
-      tarverseNodes(json, (node, context) => {
-        const styles = getStyles(node);
-        setStyles(node, pluginOptions.map(styles || {}, context));
-      });
+export const mapStyles =
+  (pluginOptions: MapStylesOptions) => (options: any) => ({
+    json: {
+      pre: (json: MorphoComponent) => {
+        tarverseNodes(json, (node, context) => {
+          const styles = getStyles(node);
+          setStyles(node, pluginOptions.map(styles || {}, context));
+        });
+      },
     },
-  },
-});
+  });
