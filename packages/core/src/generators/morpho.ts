@@ -128,48 +128,48 @@ const getRefsString = (json: MorphoComponent, refs = getRefs(json)) => {
 
 const morphoCoreComponents = ['Show', 'For'];
 
-export const componentToMorpho = (
-  toMorphoOptions: Partial<ToMorphoOptions> = {},
-): Transpiler => ({ component }) => {
-  const options: ToMorphoOptions = {
-    format: DEFAULT_FORMAT,
-    ...toMorphoOptions,
-  };
+export const componentToMorpho =
+  (toMorphoOptions: Partial<ToMorphoOptions> = {}): Transpiler =>
+  ({ component }) => {
+    const options: ToMorphoOptions = {
+      format: DEFAULT_FORMAT,
+      ...toMorphoOptions,
+    };
 
-  if (options.format === 'react') {
-    return componentToReact({
-      format: 'lite',
-      stateType: 'useState',
-      stylesType: 'emotion',
-      prettier: options.prettier,
-    })({ component });
-  }
+    if (options.format === 'react') {
+      return componentToReact({
+        format: 'lite',
+        stateType: 'useState',
+        stylesType: 'emotion',
+        prettier: options.prettier,
+      })({ component });
+    }
 
-  const json = fastClone(component);
+    const json = fastClone(component);
 
-  const refs = getRefs(json);
+    const refs = getRefs(json);
 
-  mapRefs(json, (refName) => `${refName}.current`);
+    mapRefs(json, (refName) => `${refName}.current`);
 
-  const addWrapper = json.children.length !== 1;
+    const addWrapper = json.children.length !== 1;
 
-  const components = Array.from(getComponents(json));
+    const components = Array.from(getComponents(json));
 
-  const morphoComponents = components.filter((item) =>
-    morphoCoreComponents.includes(item),
-  );
-  const otherComponents = components.filter(
-    (item) => !morphoCoreComponents.includes(item),
-  );
+    const morphoComponents = components.filter((item) =>
+      morphoCoreComponents.includes(item),
+    );
+    const otherComponents = components.filter(
+      (item) => !morphoCoreComponents.includes(item),
+    );
 
-  const hasState = Boolean(Object.keys(component.state).length);
+    const hasState = Boolean(Object.keys(component.state).length);
 
-  const needsMorphoCoreImport = Boolean(
-    hasState || refs.size || morphoComponents.length,
-  );
+    const needsMorphoCoreImport = Boolean(
+      hasState || refs.size || morphoComponents.length,
+    );
 
-  // TODO: smart only pull in imports as needed
-  let str = dedent`
+    // TODO: smart only pull in imports as needed
+    let str = dedent`
     ${
       !needsMorphoCoreImport
         ? ''
@@ -221,22 +221,22 @@ export const componentToMorpho = (
 
   `;
 
-  if (options.prettier !== false) {
-    try {
-      str = format(str, {
-        parser: 'typescript',
-        plugins: [
-          require('prettier/parser-typescript'), // To support running in browsers
-        ],
-      });
-    } catch (err) {
-      console.error(
-        'Format error for file:',
-        str,
-        JSON.stringify(json, null, 2),
-      );
-      throw err;
+    if (options.prettier !== false) {
+      try {
+        str = format(str, {
+          parser: 'typescript',
+          plugins: [
+            require('prettier/parser-typescript'), // To support running in browsers
+          ],
+        });
+      } catch (err) {
+        console.error(
+          'Format error for file:',
+          str,
+          JSON.stringify(json, null, 2),
+        );
+        throw err;
+      }
     }
-  }
-  return str;
-};
+    return str;
+  };
