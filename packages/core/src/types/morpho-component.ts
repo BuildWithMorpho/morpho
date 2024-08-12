@@ -33,6 +33,11 @@ type ContextInfo = { name: string; path: string };
 
 type extendedHook = { code: string; deps?: string };
 
+export type MorphoComponentInput = {
+  name: string;
+  defaultValue: any;
+};
+
 export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
@@ -40,6 +45,7 @@ export type MorphoComponent = {
   meta: JSONObject & {
     metadataHook?: JSONObject;
   };
+  inputs: MorphoComponentInput[];
   state: JSONObject;
   context: {
     get: { [key: string]: ContextInfo };
