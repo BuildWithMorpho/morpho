@@ -31,7 +31,7 @@ export interface MorphoImport {
 
 type ContextInfo = { name: string; path: string };
 
-type extendedHook = { code: string; deps?: string };
+export type extendedHook = { code: string; deps?: string };
 
 export type MorphoComponentInput = {
   name: string;
