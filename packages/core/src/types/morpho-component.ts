@@ -43,6 +43,8 @@ export type MorphoComponent = {
   name: string;
   imports: MorphoImport[];
   meta: JSONObject & {
+    useMetadata?: JSONObject;
+    // TO-DO: remove this? seems to be legacy/outdated, and superseeded by `useMetadata`
     metadataHook?: JSONObject;
   };
   inputs: MorphoComponentInput[];
