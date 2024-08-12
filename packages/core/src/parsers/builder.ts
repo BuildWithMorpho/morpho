@@ -926,6 +926,10 @@ const builderContentPartToMorphoComponent = (
         httpRequests: builderContent.data?.httpRequests,
       },
     },
+    inputs: builderContent.data?.inputs?.map((input) => ({
+      name: input.name,
+      defaultValue: input.defaultValue,
+    })),
     state: parsed?.state || {
       ...state,
       ...builderContent.data?.state,
