@@ -1,6 +1,6 @@
 {
   "name": "@builder.io/morpho-cli",
-  "version": "0.0.13-1",
+  "version": "0.0.13-2",
   "description": "morpho CLI",
   "types": "build/types/types.d.ts",
   "bin": {
@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/preset-typescript": "^7.15.0",
-    "@builder.io/morpho": "0.0.50-6",
+    "@builder.io/morpho": "0.0.50-7",
     "@vue/compiler-sfc": "^3.1.5",
     "babel-preset-solid": "^1.0.6",
     "chalk": "^4.1.0",
