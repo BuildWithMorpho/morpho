@@ -1,5 +1,5 @@
 import { Rule } from 'eslint';
-import { types } from '@babel/core';
+import * as types from '@babel/types';
 import isMorphoPath from './helpers/isMorphoPath';
 import cssNoVars from './rules/css-no-vars';
 import refNoCurrent from './rules/ref-no-current';
