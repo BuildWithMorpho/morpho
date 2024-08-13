@@ -1,7 +1,7 @@
 import traverse from 'traverse';
 import * as babel from '@babel/core';
 
-import { MorphoComponent } from '../types/morpho-component';
+import { extendedHook, MorphoComponent } from '../types/morpho-component';
 import { getRefs } from './get-refs';
 import { isMorphoNode } from './is-morpho-node';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
@@ -75,9 +75,18 @@ export const mapRefs = (
   for (const key of Object.keys(
     component.hooks,
   ) as (keyof typeof component.hooks)[]) {
-    const hookCode = component.hooks[key]?.code;
-    if (hookCode) {
-      component.hooks[key]!.code = replaceRefsInString(hookCode, refs, mapper);
+    const hooks = component.hooks[key];
+    if (Array.isArray(hooks)) {
+      hooks.forEach((hook) => {
+        if (hook.code) {
+          hook.code = replaceRefsInString(hook.code, refs, mapper);
+        }
+      });
+    } else {
+      const hookCode = hooks?.code;
+      if (hookCode) {
+        hooks.code = replaceRefsInString(hookCode, refs, mapper);
+      }
     }
   }
 };
