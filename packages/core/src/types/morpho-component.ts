@@ -59,7 +59,7 @@ export type MorphoComponent = {
     onUnMount?: extendedHook;
     preComponent?: extendedHook;
     postComponent?: extendedHook;
-    onUpdate?: extendedHook;
+    onUpdate?: extendedHook[];
   };
   children: MorphoNode[];
   subComponents: MorphoComponent[];
