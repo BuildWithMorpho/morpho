@@ -1,4 +1,4 @@
-import { JSON, JSONObject } from './json';
+import { JSONObject } from './json';
 import { MorphoNode } from './morpho-node';
 
 /**
