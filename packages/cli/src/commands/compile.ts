@@ -10,7 +10,7 @@ import {
 import { GluegunCommand } from 'gluegun';
 import { join } from 'path';
 import { UnionToIntersection } from '../types';
-import { getMorphoConfig } from 'src/helpers/get-morpho-config';
+import { getMorphoConfig } from '../helpers/get-morpho-config';
 
 type GeneratorOpts = GeneratorOptions[Target];
 
