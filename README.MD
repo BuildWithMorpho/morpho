@@ -27,7 +27,7 @@
 
 - [Getting Started](#getting-started)
 - [Docs](#docs)
-- [Why use Morpho?](#why-use-morpho-)
+- [Why use Morpho?](#why-use-morpho)
   - [Component libraries](#component-libraries)
   - [Modern workflows for all platforms](#modern-workflows-for-all-platforms)
   - [JS framework fatigue](#js-framework-fatigue)
