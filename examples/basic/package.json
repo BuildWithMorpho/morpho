@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "morpho": "morpho build",
-    "build": "npm run morpho",
-    "start": "watch 'npm run morpho' ./src ./overrides",
+    "build": "yarn run morpho",
+    "start": "watch 'yarn run morpho' ./src ./overrides",
     "test": "jest"
   },
   "dependencies": {
