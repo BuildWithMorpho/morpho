@@ -723,6 +723,13 @@ function extractContextComponents(json: MorphoComponent) {
 const isImportOrDefaultExport = (node: babel.Node) =>
   types.isExportDefaultDeclaration(node) || types.isImportDeclaration(node);
 
+/**
+ * This function takes the raw string from a Morpho component, and converts it into a JSON that can be processed by
+ * each generator function.
+ *
+ * @param jsx string representation of the Morpho component
+ * @returns A JSON representation of the Morpho component
+ */
 export function parseJsx(
   jsx: string,
   options: Partial<ParseMorphoOptions> = {},
