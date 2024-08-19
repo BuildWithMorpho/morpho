@@ -7,6 +7,7 @@ import {
   componentToHtml,
   componentToCustomElement,
   contextToReact,
+  contextToSolid,
   contextToVue,
   MorphoComponent,
   parseContext,
@@ -344,6 +345,9 @@ async function buildTsFiles(target: Target, options?: MorphoConfig) {
             case 'svelte':
             case 'vue':
               output = contextToVue(context);
+              break;
+            case 'solid':
+              output = contextToSolid()({ context });
               break;
             case 'react':
             case 'reactNative':
