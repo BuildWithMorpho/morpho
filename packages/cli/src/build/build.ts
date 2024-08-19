@@ -14,7 +14,9 @@ import {
   MorphoConfig,
   Target,
   Transpiler,
+  componentToSvelte,
 } from '@builder.io/morpho';
+import debug from 'debug';
 import dedent from 'dedent';
 import glob from 'fast-glob';
 import { outputFile, pathExists, readFile, remove } from 'fs-extra';
@@ -49,6 +51,7 @@ export async function build(config?: MorphoConfig) {
     ...config,
     options: {
       ...DEFAULT_OPTIONS,
+      ...config?.options,
       vue: {
         ...DEFAULT_OPTIONS.vue,
         ...config?.options?.vue,
@@ -102,9 +105,10 @@ async function clean(options: MorphoConfig) {
 
 async function outputOverrides(target: Target, options: MorphoConfig) {
   const kebabTarget = kebabCase(target);
+  const outputDirPath = `${options.overridesDir}/${kebabTarget}`;
   const files = await glob([
-    `${options.overridesDir}/${kebabTarget}/**/*`,
-    `!${options.overridesDir}/${kebabTarget}/node_modules/**/*`,
+    `${outputDirPath}/**/*`,
+    `!${outputDirPath}/node_modules/**/*`,
   ]);
   await Promise.all(
     files.map(async (file) => {
@@ -121,10 +125,7 @@ async function outputOverrides(target: Target, options: MorphoConfig) {
         targetPaths.map((targetPath) =>
           outputFile(
             file
-              .replace(
-                `${options.overridesDir}/${kebabTarget}`,
-                `${options.dest}/${targetPath}`,
-              )
+              .replace(`${outputDirPath}`, `${options.dest}/${targetPath}`)
               .replace(/\.tsx?$/, '.js'),
             contents,
           ),
@@ -151,140 +152,139 @@ const getTranspilerForTarget = ({
     case 'vue':
       return componentToVue(options.options.vue);
     case 'react':
-      return componentToReact();
+      return componentToReact(options.options.react);
     case 'swift':
-      return componentToSwift();
+      return componentToSwift(options.options.swift);
     case 'solid':
-      return componentToSolid();
+      return componentToSolid(options.options.solid);
     case 'webcomponent':
       return componentToCustomElement(options.options.webcomponent);
+    case 'svelte':
+      return componentToSvelte(options.options.svelte);
     default:
       // TO-DO: throw instead of `never`
       return null as never;
   }
 };
 
+const getFileExtensionForTarget = (target: Target) => {
+  switch (target) {
+    case 'vue':
+      return '.vue';
+    case 'swift':
+      return '.swift';
+    case 'svelte':
+      return '.svelte';
+    default:
+      return '.js';
+  }
+};
+
+const replaceFileExtensionForTarget = ({
+  target,
+  path,
+}: {
+  target: Target;
+  path: string;
+}) => path.replace(/\.lite\.tsx$/, getFileExtensionForTarget(target));
+
+/**
+ * Transpiles and outputs Morpho component files.
+ */
 async function outputTsxLiteFiles(
   target: Target,
   files: { path: string; morphoJson: MorphoComponent }[],
   options: MorphoConfig,
 ) {
   const kebabTarget = kebabCase(target);
+  const debugTarget = debug(`morpho:${target}`);
+  const transpiler = getTranspilerForTarget({ options, target });
   const output = files.map(async ({ path, morphoJson }) => {
-    const overrideFilePath = `${
-      options.overridesDir
-    }/${kebabTarget}/${path.replace(
-      /\.lite\.tsx$/,
-      target === 'vue' ? '.vue' : target === 'swift' ? '.swift' : '.js',
-    )}`;
+    const outputFilePath = replaceFileExtensionForTarget({
+      target,
+      path,
+    });
+
+    // try to find override file
+    const overrideFilePath = `${options.overridesDir}/${kebabTarget}/${outputFilePath}`;
     const overrideFile = (await pathExists(overrideFilePath))
       ? await readFile(overrideFilePath, 'utf8')
       : null;
 
-    let transpiled =
-      overrideFile ??
-      getTranspilerForTarget({ options, target })({
-        path,
-        component: morphoJson,
-      });
+    debugTarget(`transpiling ${path}...`);
+    let transpiled = '';
+
+    if (overrideFile) {
+      debugTarget(`override exists for ${path}: ${!!overrideFile}`);
+    }
+    try {
+      transpiled = overrideFile ?? transpiler({ path, component: morphoJson });
+      debugTarget(
+        `Success: transpiled ${path}. Output length: ${transpiled.length}`,
+      );
+    } catch (error) {
+      debugTarget(`Failure: transpiled ${path}.`);
+      debugTarget(error);
+      return;
+    }
 
     const original = transpiled;
 
-    const solidTranspile = target === 'solid';
-    if (solidTranspile) {
-      transpiled = await transpileSolidFile({
-        contents: transpiled,
-        path,
-        morphoComponent: morphoJson,
-      });
-    }
-
-    const esbuildTranspile = target === 'reactNative' || target === 'react';
-    if (esbuildTranspile) {
-      transpiled = await transpile({ path, content: transpiled, target });
-      const registerComponentHook = morphoJson.meta.registerComponent;
-      if (registerComponentHook) {
-        transpiled = dedent`
+    // perform additional transpilation steps per-target
+    // TO-DO: it makes no sense for there to be this kind of logic here. Move it to the transpiler.
+    switch (target) {
+      case 'solid':
+        transpiled = await transpileSolidFile({
+          contents: transpiled,
+          path,
+          morphoComponent: morphoJson,
+        });
+        break;
+      case 'reactNative':
+      case 'react':
+        transpiled = await transpile({ path, content: transpiled, target });
+        const registerComponentHook = morphoJson.meta.registerComponent;
+        if (registerComponentHook) {
+          transpiled = dedent`
           import { registerComponent } from '../functions/register-component';
-
+          
           ${transpiled}
-
+          
           registerComponent(${morphoJson.name}, ${json5.stringify(
-          registerComponentHook,
-        )});
-        `;
-      }
+            registerComponentHook,
+          )});
+            `;
+        }
+        break;
+
+      case 'vue':
+        // TODO: transform to CJS (?)
+        transpiled = transpileOptionalChaining(transpiled).replace(
+          /\.lite(['"];)/g,
+          '$1',
+        );
     }
-    const vueCompile = target === 'vue';
-    if (vueCompile) {
-      await Promise.all([
+
+    const outputDir = `${options.dest}/${kebabTarget}`;
+
+    // output files
+    switch (target) {
+      case 'vue':
         // Nuxt
-        (async () => {
-          await outputFile(
-            `${options.dest}/${kebabTarget}/nuxt2/${path.replace(
-              /\.lite\.tsx$/,
-              '.vue',
-            )}`,
-            // TODO: transform to CJS (?)
-            transpileOptionalChaining(transpiled).replace(
-              /\.lite(['"];)/g,
-              '$1',
-            ),
-          );
-        })(),
-        // Vue 2
-        // (async () => {
-        //   // TODO: subfolders for each of these
-        //   const files = await compileVueFile({
-        //     distDir: options.dest + 'vue/vue2',
-        //     contents: transpileOptionalChaining(transpiled),
-        //     path,
-        //     morphoComponent: morphoJson,
-        //     vueVersion: 2,
-        //     id: id,
-        //   })
-        //   await Promise.all(
-        //     files.map((file) => outputFile(file.path, file.contents))
-        //   )
-        // })(),
-        // Vue 3
-        // TODO: add back
-        // (async () => {
-        //   // TODO: subfolders for each of these
-        //   const files = await compileVueFile({
-        //     distDir: options.dest + '/vue/vue3',
-        //     contents: transpiled,
-        //     path,
-        //     morphoComponent: morphoJson,
-        //     vueVersion: 3,
-        //     id: id,
-        //   })
-        //   await Promise.all(
-        //     files.map((file) => outputFile(file.path, file.contents))
-        //   )
-        // })(),
-      ]);
-    } else {
-      return await Promise.all([
-        outputFile(
-          `${options.dest}/${kebabTarget}/${path.replace(
-            /\.lite\.tsx$/,
-            target === 'swift' ? '.swift' : '.js',
-          )}`,
-          transpiled,
-        ),
-        ...(target === 'swift'
-          ? []
-          : [
-              outputFile(
-                `${options.dest}/${kebabTarget}/${path.replace(
-                  /\.original\.jsx$/,
-                  '.js',
-                )}`,
-                original,
-              ),
-            ]),
-      ]);
+        await outputFile(`${outputDir}/nuxt2/${outputFilePath}`, transpiled);
+        break;
+
+      default:
+        await Promise.all([
+          // this is the default output
+          outputFile(`${outputDir}/${outputFilePath}`, transpiled),
+          // output generated component file, before it is minified and transpiled into JS.
+          // we skip these targets because the files would be invalid.
+          ...(target === 'swift' || target === 'svelte'
+            ? []
+            : [outputFile(`${outputDir}/${path}`, original)]),
+        ]);
+        break;
     }
   });
   await Promise.all(output);
@@ -298,6 +298,9 @@ function getTargetPaths(target: Target) {
   return targetPaths;
 }
 
+/**
+ * Outputs non-component files to the destination directory, without modifying them.
+ */
 async function outputTsFiles(
   target: Target,
   files: { path: string; output: string }[],
@@ -318,6 +321,9 @@ async function outputTsFiles(
   await Promise.all(output);
 }
 
+/**
+ * Transpiles all non-component files, including Context files.
+ */
 async function buildTsFiles(target: Target, options?: MorphoConfig) {
   const tsFiles = await glob(`src/**/*.ts`, {
     cwd: cwd,
@@ -329,16 +335,25 @@ async function buildTsFiles(target: Target, options?: MorphoConfig) {
       if (path.endsWith('.context.lite.ts')) {
         // 'foo/bar/my-thing.context.ts' -> 'MyThing'
         const name = upperFirst(camelCase(last(path.split('/')).split('.')[0]));
-        const context = parseContext(await readFile(path, 'utf8'), {
-          name: name,
-        });
+        const context = parseContext(await readFile(path, 'utf8'), { name });
         if (!context) {
           console.warn('Could not parse context from file', path);
         } else {
-          if (target === 'vue') {
-            output = contextToVue(context);
-          } else {
-            output = contextToReact()({ context });
+          switch (target) {
+            // TO-DO: proper context handling for svelte
+            case 'svelte':
+            case 'vue':
+              output = contextToVue(context);
+              break;
+            case 'react':
+            case 'reactNative':
+              output = contextToReact()({ context });
+              break;
+            default:
+              console.warn(
+                'Context files are not supported for this target. Outputting no-op',
+              );
+              contextToVue(context);
           }
         }
         path = path.replace('.lite.ts', '.ts');

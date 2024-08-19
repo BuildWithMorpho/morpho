@@ -90,7 +90,7 @@ With Morpho, you can convert designs from [Figma](https://github.com/BuilderIO/h
 
 ## Contribute
 
-Interested in contribute? Head over to [developer.md](./developer.md) and see how you can get setup & started!
+Interested in contribute? Head over to the [developer](developer/) docs and see how you can get setup & started!
 
 Once you're ready, checkout our [issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) page and grab your first issue!
 

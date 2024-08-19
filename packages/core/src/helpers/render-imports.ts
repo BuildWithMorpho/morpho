@@ -1,6 +1,11 @@
+import { Target } from '../types/config';
 import { MorphoComponent, MorphoImport } from '../types/morpho-component';
 
-const getStarImport = (theImport: MorphoImport): string | null => {
+const getStarImport = ({
+  theImport,
+}: {
+  theImport: MorphoImport;
+}): string | null => {
   for (const key in theImport.imports) {
     const value = theImport.imports[key];
     if (value === '*') {
@@ -9,7 +14,11 @@ const getStarImport = (theImport: MorphoImport): string | null => {
   }
   return null;
 };
-const getDefaultImport = (theImport: MorphoImport): string | null => {
+const getDefaultImport = ({
+  theImport,
+}: {
+  theImport: MorphoImport;
+}): string | null => {
   for (const key in theImport.imports) {
     const value = theImport.imports[key];
     if (value === 'default') {
@@ -19,14 +28,20 @@ const getDefaultImport = (theImport: MorphoImport): string | null => {
   return null;
 };
 
-export const renderImport = (theImport: MorphoImport): string => {
+const renderImport = ({
+  theImport,
+  target,
+}: {
+  theImport: MorphoImport;
+  target?: Target;
+}): string => {
   let importString = 'import ';
 
-  const starImport = getStarImport(theImport);
+  const starImport = getStarImport({ theImport });
   if (starImport) {
     importString += ` * as ${starImport} `;
   } else {
-    const defaultImport = getDefaultImport(theImport);
+    const defaultImport = getDefaultImport({ theImport });
 
     if (defaultImport) {
       importString += ` ${defaultImport}, `;
@@ -53,12 +68,23 @@ export const renderImport = (theImport: MorphoImport): string => {
     importString += ' } ';
   }
 
-  importString += ` from '${theImport.path}';`;
+  const path =
+    target === 'svelte' && theImport.path.endsWith('.lite')
+      ? theImport.path.replace('.lite', '.svelte')
+      : theImport.path;
+
+  importString += ` from '${path}';`;
 
   return importString;
 };
 
-export const renderImports = (imports: MorphoImport[]): string => {
+const renderImports = ({
+  imports,
+  target,
+}: {
+  imports: MorphoImport[];
+  target?: Target;
+}): string => {
   let importString = '';
 
   for (const theImport of imports) {
@@ -70,15 +96,16 @@ export const renderImports = (imports: MorphoImport[]): string => {
     if (theImport.path.startsWith('@builder.io/morpho')) {
       continue;
     }
-    importString += renderImport(theImport) + '\n';
+    importString += renderImport({ theImport, target }) + '\n';
   }
 
   return importString;
 };
 
-export const renderPreComponent = (component: MorphoComponent): string => {
-  return `
-    ${renderImports(component.imports)}
+export const renderPreComponent = (
+  component: MorphoComponent,
+  target?: Target,
+): string => `
+    ${renderImports({ imports: component.imports, target })}
     ${component.hooks.preComponent || ''}
   `;
-};
