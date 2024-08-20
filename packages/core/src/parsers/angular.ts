@@ -28,7 +28,7 @@ const transformBinding = (
   _options: AngularToMorphoOptions,
 ) => {
   return babelTransformCode(binding, {
-    Identifier(path: babel.NodePath<babel.types.Identifier>) {
+    Identifier(path) {
       const name = path.node.name;
 
       if (

@@ -41,6 +41,7 @@ import {
 import { selfClosingTags } from '../parsers/jsx';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
+import { hasContext } from './helpers/context';
 import { collectReactNativeStyles } from './react-native';
 
 export interface ToReactOptions extends BaseTranspilerOptions {
@@ -356,13 +357,6 @@ function getContextString(
   }
 
   return str;
-}
-
-function hasContext(component: MorphoComponent) {
-  return Boolean(
-    Object.keys(component.context.get).length ||
-      Object.keys(component.context.set).length,
-  );
 }
 
 const getInitCode = (
