@@ -168,6 +168,8 @@ export const componentToMorpho =
       hasState || refs.size || morphoComponents.length,
     );
 
+    const stringifiedUseMetadata = json5.stringify(component.meta.useMetadata);
+
     // TODO: smart only pull in imports as needed
     let str = dedent`
     ${
@@ -185,11 +187,9 @@ export const componentToMorpho =
     ${renderPreComponent(json)}
 
     ${
-      !component.meta.metadataHook
-        ? ''
-        : `${METADATA_HOOK_NAME}(${json5.stringify(
-            component.meta.metadataHook,
-          )})`
+      stringifiedUseMetadata !== '{}'
+        ? `${METADATA_HOOK_NAME}(${stringifiedUseMetadata})`
+        : ''
     }
 
     export default function ${component.name}(props) {
