@@ -51,6 +51,14 @@ export interface ToReactOptions extends BaseTranspilerOptions {
   type?: 'dom' | 'native';
 }
 
+/**
+ * If the root Morpho component only has 1 child, and it is a `Show` node, then we need to wrap it in a fragment.
+ * Otherwise, we end up with invalid React render code.
+ *
+ */
+const isRootShowNode = (json: MorphoComponent) =>
+  json.children.length === 1 && ['Show'].includes(json.children[0].name);
+
 const wrapInFragment = (json: MorphoComponent | MorphoNode) =>
   json.children.length !== 1;
 
@@ -491,7 +499,9 @@ const _componentToReact = (
   }
 
   const wrap =
-    wrapInFragment(json) || (componentHasStyles && stylesType === 'styled-jsx');
+    wrapInFragment(json) ||
+    (componentHasStyles && stylesType === 'styled-jsx') ||
+    isRootShowNode(json);
 
   const nativeStyles =
     stylesType === 'react-native' &&

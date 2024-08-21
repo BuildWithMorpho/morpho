@@ -2,6 +2,7 @@
 
 - [Plugins](#plugins)
 - [useMetadata](#useMetadata)
+- [Component JSON](#Component-JSON)
 
 When building Morpho components, you might sometimes have unique and special needs. If you want to transform your Morpho-generated output to fit your needs, by doing things like:
 
@@ -75,3 +76,16 @@ const plugin = {
   },
 };
 ```
+
+## Component JSON
+
+The way Morpho' engine works is:
+
+- you write a `.lite.jsx` component
+- the morpho JSX parser converts it to a `MorphoComponent` JSON
+- that JSON is fed to the generator(s) of your choice, which provide it to the plugins.
+
+For more information on what the JSON contains, check out the documented types:
+
+- [MorphoComponent](../packages/core/src/types/morpho-component.ts)
+- [MorphoNode](../packages/core/src/types/morpho-node.ts): Each `MorphoComponent` will have multiple `MorphoNode` under `component.children`. Each node represents a DOM/JSX node
