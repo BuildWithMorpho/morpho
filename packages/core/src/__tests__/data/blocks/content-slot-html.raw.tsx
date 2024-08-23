@@ -12,7 +12,9 @@ export default function ContentSlotCode(props: Props) {
       <div>
         <hr />
       </div>
-      <div>{props.children}</div>
+      <div>
+        <Slot />
+      </div>
     </div>
   );
 }
