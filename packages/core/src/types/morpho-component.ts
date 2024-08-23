@@ -53,6 +53,7 @@ export type MorphoComponent = {
   };
   hooks: {
     init?: extendedHook;
+    onInit?: extendedHook;
     onMount?: extendedHook;
     onUnMount?: extendedHook;
     preComponent?: extendedHook;
