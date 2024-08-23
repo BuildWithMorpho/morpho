@@ -1,9 +1,13 @@
-import { useState, For } from '@builder.io/morpho';
+import { useState, For, onMount } from '@builder.io/morpho';
 
 export default function MyBasicForComponent() {
   const state = useState({
     name: 'PatrickJS',
     names: ['Steve', 'PatrickJS'],
+  });
+
+  onMount(() => {
+    console.log('onMount code');
   });
 
   return (
