@@ -6,6 +6,7 @@ export const createMorphoNode = (
   '@type': '@builder.io/morpho/node',
   name: 'div',
   meta: {},
+  scope: {},
   properties: {},
   bindings: {},
   children: [],
