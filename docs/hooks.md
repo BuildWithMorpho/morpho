@@ -11,7 +11,7 @@
 Use the `useRef` hook to hold a reference to a rendered DOM element.
 
 ```jsx
-import { useState } from '@builder.io/morpho';
+import { useState, useRef, Show } from '@builder.io/morpho';
 
 export default function MyComponent() {
   const state = useState({
