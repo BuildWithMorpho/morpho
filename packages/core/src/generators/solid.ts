@@ -93,13 +93,11 @@ const collectClassString = (json: MorphoNode): string | null => {
     dynamicClasses.push(`css(${json.bindings.css.code})`);
   }
   delete json.bindings.css;
-
-  const hasStaticClasses = Boolean(staticClasses.length);
-
   const staticClassesString = staticClasses.join(' ');
 
   const dynamicClassesString = dynamicClasses.join(" + ' ' + ");
 
+  const hasStaticClasses = Boolean(staticClasses.length);
   const hasDynamicClasses = Boolean(dynamicClasses.length);
 
   if (hasStaticClasses && !hasDynamicClasses) {
