@@ -9,7 +9,7 @@ Morpho is structured as a mono-repo. The packages live under `packages/`:
 - `core` (`@builder.io/morpho`): contains the Morpho engine
 - `cli` (`@builder.io/morpho-cli`): contains the Morpho CLI, and _depends_ on `core`
 - `fiddle`: contains the code for the interactive Morpho fiddle, which is hosted at morpho.builder.io
-- `eslint-plugin` (package TBD): contains the Morpho eslint rules to enforce valid Morpho component syntax. Yet to be released.
+- `eslint-plugin` (`@builder.io/eslint-plugin-morpho`): contains the Morpho eslint rules to enforce valid Morpho component syntax. Yet to be released.
 
 ## Installation
 
