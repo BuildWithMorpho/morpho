@@ -135,35 +135,6 @@ export default function MyComponent(props) {
 }
 ```
 
-### Callback implicitly have an "event" arg
-
-Regardless of what you make name the argument to a callback, it will be
-renamed in the output to `event`.
-
-_Morpho input_
-
-```typescript
-export default function MyComponent() {
-  return <input onClick={(e) => myCallback(e)} />;
-}
-```
-
-_Morpho output_
-
-```typescript
-export default function MyComponent(props) {
-  return (
-    <>
-      <input
-        onClick={(event) => {
-          myCallback(e);
-        }}
-      />
-    </>
-  );
-}
-```
-
 ### Functions can't be passed by reference to JSX callbacks
 
 _Morpho input_
