@@ -1,5 +1,4 @@
 {
-  "name": "@builder.io/morpho/example-todo",
   "version": "0.0.1",
   "scripts": {
     "build": "morpho build",
@@ -15,8 +14,8 @@
     "./solid/*": "./dist/solid/src/*"
   },
   "dependencies": {
-    "@builder.io/morpho-cli": "0.0.5",
-    "@builder.io/morpho": "0.0.44-18",
+    "@builder.io/morpho": "workspace:*",
+    "@builder.io/morpho-cli": "workspace:*",
     "eslint": "^7.21.0"
   }
 }
