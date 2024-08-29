@@ -1,6 +1,5 @@
 {
-  "name": "morpho-example-project",
-  "private": true,
+  "version": "0.0.1",
   "scripts": {
     "morpho": "morpho build",
     "build": "yarn run morpho",
@@ -8,7 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@builder.io/morpho-cli": "^0.0.12",
+    "@builder.io/morpho": "workspace:*",
+    "@builder.io/morpho-cli": "workspace:*",
     "node-fetch": "^2.6.1",
     "seedrandom": "^3.0.5"
   },
