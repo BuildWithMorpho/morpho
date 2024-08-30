@@ -8,6 +8,7 @@ export const createMorphoComponent = (
   exports: {},
   inputs: [],
   meta: {},
+  refs: {},
   state: {},
   children: [],
   hooks: {},
