@@ -10,9 +10,14 @@ import { createMorphoComponent } from '../helpers/create-morpho-component';
 import { createMorphoNode } from '../helpers/create-morpho-node';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { replaceIdentifiers } from '../helpers/replace-idenifiers';
+import { getBindingsCode } from '../helpers/get-bindings';
 import { stripNewlinesInStrings } from '../helpers/replace-new-lines-in-strings';
 import { JSONObject, JSONOrNode, JSONOrNodeObject } from '../types/json';
-import { MorphoComponent, MorphoImport } from '../types/morpho-component';
+import {
+  MorphoComponent,
+  MorphoImport,
+  MorphoExport,
+} from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { tryParseJson } from '../helpers/json';
 
@@ -360,6 +365,18 @@ const componentFunctionToJson = (
     if (types.isJSXElement(value) || types.isJSXFragment(value)) {
       children.push(jsxElementToJson(value) as MorphoNode);
     }
+  }
+
+  const { exports: localExports } = context.builder.component;
+  if (localExports) {
+    const bindingsCode = getBindingsCode(children);
+    Object.keys(localExports).forEach((name) => {
+      const found = bindingsCode.find((code: string) =>
+        code.match(new RegExp(`\\b${name}\\b`)),
+      );
+      localExports[name].usedInLocal = Boolean(found);
+    });
+    context.builder.component.exports = localExports;
   }
 
   return createMorphoComponent({
@@ -810,6 +827,14 @@ function extractContextComponents(json: MorphoComponent) {
 const isImportOrDefaultExport = (node: babel.Node) =>
   types.isExportDefaultDeclaration(node) || types.isImportDeclaration(node);
 
+const isTypeOrInterface = (node: babel.Node) =>
+  types.isTSTypeAliasDeclaration(node) ||
+  types.isTSInterfaceDeclaration(node) ||
+  (types.isExportNamedDeclaration(node) &&
+    types.isTSTypeAliasDeclaration(node.declaration)) ||
+  (types.isExportNamedDeclaration(node) &&
+    types.isTSInterfaceDeclaration(node.declaration));
+
 /**
  * This function takes the raw string from a Morpho component, and converts it into a JSON that can be processed by
  * each generator function.
@@ -853,6 +878,48 @@ export function parseJsx(
             const keepStatements = path.node.body.filter((statement) =>
               isImportOrDefaultExport(statement),
             );
+
+            const exportsOrLocalVariables = path.node.body.filter(
+              (statement) =>
+                !isImportOrDefaultExport(statement) &&
+                !isTypeOrInterface(statement) &&
+                !types.isExpressionStatement(statement),
+            );
+
+            context.builder.component.exports = exportsOrLocalVariables.reduce(
+              (pre, node) => {
+                let name, isFunction;
+                if (
+                  babel.types.isExportNamedDeclaration(node) &&
+                  babel.types.isVariableDeclaration(node.declaration) &&
+                  babel.types.isIdentifier(node.declaration.declarations[0].id)
+                ) {
+                  name = node.declaration.declarations[0].id.name;
+                  isFunction = babel.types.isFunction(
+                    node.declaration.declarations[0].init,
+                  );
+                } else if (
+                  babel.types.isVariableDeclaration(node) &&
+                  babel.types.isIdentifier(node.declarations[0].id)
+                ) {
+                  name = node.declarations[0].id.name;
+                  isFunction = babel.types.isFunction(
+                    node.declarations[0].init,
+                  );
+                }
+                if (name) {
+                  pre[name] = {
+                    code: generate(node).code,
+                    isFunction,
+                  };
+                } else {
+                  console.warn('export statement without name', node);
+                }
+                return pre;
+              },
+              {} as MorphoExport,
+            );
+
             let cutStatements = path.node.body.filter(
               (statement) => !isImportOrDefaultExport(statement),
             );
