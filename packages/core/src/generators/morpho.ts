@@ -199,6 +199,9 @@ export const componentToMorpho =
         ? ''
         : `import { ${otherComponents.join(',')} } from '@components';`
     }
+    ${json.types ? json.types.join('\n') : ''}
+    ${json.interfaces ? json.interfaces?.join('\n') : ''}
+
     ${renderPreComponent(json)}
 
     ${
