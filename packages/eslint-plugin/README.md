@@ -30,18 +30,18 @@ Finally, add the plugin to the `plugins` array, and the rules you want to the `r
 
 ```js
 module.exports = {
-  // [...other settings]
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
   },
-  plugins: [
-    // [...other plugins]
-    '@builder.io/morpho',
+  plugins: ['@builder.io/morpho'],
+  extends: [
+    // Use this approach for our recommended rules configuration
+    'plugin:@builder.io/morpho/recommended',
   ],
   rules: {
-    // example of adding one of our rules
+    // Use this to configure rules individually
     '@builder.io/morpho/css-no-vars': 'error',
   },
 };
