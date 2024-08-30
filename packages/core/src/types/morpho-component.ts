@@ -82,4 +82,7 @@ export type MorphoComponent = {
   };
   children: MorphoNode[];
   subComponents: MorphoComponent[];
+  types?: string[];
+  interfaces?: string[];
+  propsTypeRef?: string;
 };
