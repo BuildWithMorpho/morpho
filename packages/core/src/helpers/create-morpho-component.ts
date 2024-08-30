@@ -5,7 +5,6 @@ export const createMorphoComponent = (
 ): MorphoComponent => ({
   '@type': '@builder.io/morpho/component',
   imports: [],
-  exports: {},
   inputs: [],
   meta: {},
   state: {},
