@@ -5,6 +5,8 @@ const image = require('./data/blocks/image.raw');
 const basicOnUpdateReturn = require('./data/basic-onUpdate-return.raw');
 const basicMorpho = require('./data/basic-custom-morpho-package.raw');
 const basicRef = require('./data/basic-ref.raw');
+const basicPropsRaw = require('./data/basic-props.raw');
+const basicPropsDestructureRaw = require('./data/basic-props-destructure.raw');
 
 describe('Parse JSX', () => {
   test('metadata', () => {
@@ -31,5 +33,9 @@ describe('Parse JSX', () => {
       compileAwayPackages: ['@dummy/custom-morpho'],
     });
     expect(json).toMatchSnapshot();
+  });
+
+  test('custom morpho package', () => {
+    expect(parseJsx(basicPropsRaw)).toEqual(parseJsx(basicPropsDestructureRaw));
   });
 });
