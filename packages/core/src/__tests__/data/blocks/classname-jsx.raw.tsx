@@ -1,4 +1,4 @@
-import { useState } from '@builder.io/morpho';
+import { useStore } from '@builder.io/morpho';
 
 type Props = {
   [key: string]: string | JSX.Element;
@@ -6,7 +6,7 @@ type Props = {
 };
 
 export default function ClassNameCode(props: Props) {
-  const state = useState({
+  const state = useStore({
     bindings: 'a binding',
   });
 

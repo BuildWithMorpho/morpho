@@ -1,11 +1,11 @@
-import { useState, onUpdate } from '@builder.io/morpho';
+import { useStore, onUpdate } from '@builder.io/morpho';
 
 export interface Props {
   name: string;
 }
 
 export default function MyBasicComponent(props: Props) {
-  const state = useState({
+  const state = useStore({
     name: 'Steve',
   });
 

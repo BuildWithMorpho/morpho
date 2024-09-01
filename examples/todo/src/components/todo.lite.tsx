@@ -1,6 +1,6 @@
 import '@builder.io/morpho/dist/src/jsx-types';
 import todosState from '../shared/todos-state.lite';
-import { Show, useState } from '@builder.io/morpho';
+import { Show, useStore } from '@builder.io/morpho';
 import { Todo as TodoType } from '../shared/todos-state.lite';
 
 export type TodoProps = {
@@ -8,7 +8,7 @@ export type TodoProps = {
 };
 
 export default function Todo(props: TodoProps) {
-  const state = useState({
+  const state = useStore({
     editing: false,
     toggle() {
       props.todo.completed = !props.todo.completed;

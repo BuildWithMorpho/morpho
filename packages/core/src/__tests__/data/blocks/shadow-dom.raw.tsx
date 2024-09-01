@@ -1,4 +1,4 @@
-import { useMetadata, useState, onMount, For, Show } from '@builder.io/morpho';
+import { useMetadata, useStore, onMount, For, Show } from '@builder.io/morpho';
 
 useMetadata({ isAttachedToShadowDom: true });
 
@@ -8,7 +8,7 @@ type SmileReviewsProps = {
 };
 
 export default function SmileReviews(props: SmileReviewsProps) {
-  const state = useState({
+  const state = useStore({
     reviews: [] as any[],
     name: 'test',
     showReviewPrompt: false,

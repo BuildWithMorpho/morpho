@@ -1,4 +1,4 @@
-import { useState, onInit, onMount } from '@builder.io/morpho';
+import { useStore, onInit, onMount } from '@builder.io/morpho';
 
 export interface Props {
   hi: string;
@@ -6,7 +6,7 @@ export interface Props {
 }
 
 export default function MyBasicOnMountUpdateComponent(props: Props) {
-  const state = useState({
+  const state = useStore({
     name: 'PatrickJS',
     names: ['Steve', 'PatrickJS'],
   });

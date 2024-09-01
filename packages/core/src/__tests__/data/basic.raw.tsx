@@ -1,11 +1,11 @@
-import { useState } from '@builder.io/morpho';
+import { useStore } from '@builder.io/morpho';
 
 export const DEFAULT_VALUES = {
   name: 'Steve',
 };
 
 export default function MyBasicComponent() {
-  const state = useState({
+  const state = useStore({
     name: 'Steve',
     underscore_fn_name() {
       return 'bar';

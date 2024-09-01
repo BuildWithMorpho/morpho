@@ -190,7 +190,7 @@ export const componentToMorpho =
     ${
       !needsMorphoCoreImport
         ? ''
-        : `import { ${!hasState ? '' : 'useState, '} ${
+        : `import { ${!hasState ? '' : 'useStore, '} ${
             !refs.length ? '' : 'useRef, '
           } ${morphoComponents.join(', ')} } from '@builder.io/morpho';`
     }
@@ -214,7 +214,7 @@ export const componentToMorpho =
       ${
         !hasState
           ? ''
-          : `const state = useState(${getStateObjectStringFromComponent(
+          : `const state = useStore(${getStateObjectStringFromComponent(
               json,
             )});`
       }

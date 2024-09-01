@@ -3,7 +3,7 @@ import { MorphoComponent } from '../types/morpho-component';
 import traverse from 'traverse';
 
 /**
- * Map getters like `useState({ get foo() { ... }})` from `state.foo` to `foo()`
+ * Map getters like `useStore({ get foo() { ... }})` from `state.foo` to `foo()`
  */
 export const gettersToFunctions = (json: MorphoComponent) => {
   const getterKeys = Object.keys(json.state).filter((item) => {

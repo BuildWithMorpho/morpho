@@ -1,13 +1,13 @@
 // TODO: get the exports alias working here so this is just `import '@builder.io/morpho/jsx'
 import '@builder.io/morpho/dist/src/jsx-types';
-import { useState, Show } from '@builder.io/morpho';
+import { useStore, Show } from '@builder.io/morpho';
 
 type MyProps = {
   showInput?: boolean;
 };
 
 export default function MyComponent(props: MyProps) {
-  const state = useState({
+  const state = useStore({
     name: 'Steve',
   });
 

@@ -1,10 +1,10 @@
-import { useState, useMetadata, onMount } from '@builder.io/morpho';
+import { useStore, useMetadata, onMount } from '@builder.io/morpho';
 
 useMetadata({
   outputs: ['onMessage', 'onEvent'],
 });
 export default function MyBasicOutputsComponent(props: any) {
-  const state = useState({
+  const state = useStore({
     name: 'PatrickJS',
   });
 
