@@ -1,4 +1,3 @@
-import '@builder.io/morpho/dist/src/jsx-types';
 import { useStore } from '@builder.io/morpho';
 
 export interface State {
@@ -12,9 +11,11 @@ export default function MyComponent(props: any) {
     newItemName: 'New item',
   });
 
-  function addItem() {
-    state.list = [...state.list, state.newItemName];
-  }
+  // Inner function is more readble, but errors in Svelte generation
+  // https://github.com/BuilderIO/morpho/issues/472
+  // function addItem() {
+  //   state.list = [...state.list, state.newItemName];
+  // }
 
   return (
     <div
@@ -38,7 +39,7 @@ export default function MyComponent(props: any) {
         css={{
           margin: '10px 0',
         }}
-        onClick={(event) => addItem()}
+        onClick={(event) => (state.list = [...state.list, state.newItemName])}
       >
         Add list item
       </button>
