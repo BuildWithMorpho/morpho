@@ -23,7 +23,7 @@ export const defaultCode = dedent`
 
 export const templates: { [key: string]: string } = {
   basic: dedent`
-    import { useState } from "@builder.io/morpho";
+    import { useStore } from "@builder.io/morpho";
     
     export default function MyComponent(props) {
       const state = useStore({
@@ -47,7 +47,7 @@ export const templates: { [key: string]: string } = {
   `,
 
   tailwind: dedent`
-    import { useState } from "@builder.io/morpho";
+    import { useStore } from "@builder.io/morpho";
 
     export default function MyComponent(props) {
       const state = useStore({
@@ -125,7 +125,7 @@ export const templates: { [key: string]: string } = {
     }
   `,
   loop: dedent`
-    import { useState } from "@builder.io/morpho";
+    import { useStore } from "@builder.io/morpho";
     
     export default function MyComponent(props) {
       const state = useStore({
