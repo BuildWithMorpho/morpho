@@ -1,9 +1,9 @@
-import { useState } from '@builder.io/morpho';
+import { useStore } from '@builder.io/morpho';
 import MyBasicComponent from './basic.raw';
 import MyBasicOnMountUpdateComponent from './basic-onMount-update.raw';
 
 export default function MyBasicChildComponent() {
-  const state = useState({
+  const state = useStore({
     name: 'Steve',
     dev: 'PatrickJS',
   });

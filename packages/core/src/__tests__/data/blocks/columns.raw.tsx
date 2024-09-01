@@ -1,4 +1,4 @@
-import { useState, For } from '@builder.io/morpho';
+import { useStore, For } from '@builder.io/morpho';
 
 type Column = {
   content: any;
@@ -18,7 +18,7 @@ export interface ColumnProps {
 }
 
 export default function Column(props: ColumnProps) {
-  const state = useState({
+  const state = useStore({
     getColumns(): Column[] {
       return props.columns || [];
     },

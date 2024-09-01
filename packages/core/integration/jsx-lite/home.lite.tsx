@@ -1,7 +1,7 @@
-import { useState } from '@builder.io/morpho';
+import { useStore } from '@builder.io/morpho';
 
 export default function MyComponent(props) {
-  const state = useState({ name: 'Steve' });
+  const state = useStore({ name: 'Steve' });
 
   return (
     <div

@@ -131,7 +131,7 @@ Morpho uses a static subset of JSX, inspired by [Solid](https://github.com/ryans
 
 ```tsx
 export function MyComponent() {
-  const state = useState({
+  const state = useStore({
     name: 'Steve',
   });
 

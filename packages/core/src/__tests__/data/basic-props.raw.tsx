@@ -1,8 +1,8 @@
-import { useState } from '@builder.io/morpho';
+import { useStore } from '@builder.io/morpho';
 
 // @ts-ignore
 export default function MyBasicComponent(props) {
-  const state = useState({
+  const state = useStore({
     name: 'Decadef20',
   });
 

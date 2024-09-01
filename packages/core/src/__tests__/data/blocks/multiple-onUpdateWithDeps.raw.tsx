@@ -1,7 +1,7 @@
-import { onUpdate, useState } from '@builder.io/morpho';
+import { onUpdate, useStore } from '@builder.io/morpho';
 
 export default function MultipleOnUpdateWithDeps() {
-  const state = useState({
+  const state = useStore({
     a: 'a',
     b: 'b',
     c: 'c',
