@@ -1,7 +1,7 @@
 import { MorphoComponent } from '../types/morpho-component';
 import { Plugin } from '../types/plugins';
 
-export { Plugin };
+export type { Plugin };
 
 export const runPreJsonPlugins = (
   json: MorphoComponent,
