@@ -202,7 +202,7 @@ export const componentToMorpho =
     ${json.types ? json.types.join('\n') : ''}
     ${json.interfaces ? json.interfaces?.join('\n') : ''}
 
-    ${renderPreComponent(json, 'morpho')}
+    ${renderPreComponent({ component: json, target: 'morpho' })}
 
     ${
       stringifiedUseMetadata !== '{}'
