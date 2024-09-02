@@ -3,7 +3,6 @@ import {
   componentToReactNative,
   componentToSolid,
   componentToSwift,
-  componentToVue,
   componentToHtml,
   componentToCustomElement,
   MorphoComponent,
@@ -13,6 +12,8 @@ import {
   Transpiler,
   componentToSvelte,
   componentToAngular,
+  componentToVue2,
+  componentToVue3,
 } from '@builder.io/morpho';
 import debug from 'debug';
 import glob from 'fast-glob';
@@ -20,7 +21,6 @@ import { outputFile, pathExists, readFile, remove } from 'fs-extra';
 import { kebabCase } from 'lodash';
 import micromatch from 'micromatch';
 import { getFileExtensionForTarget } from './helpers/extensions';
-import { getSimpleId } from './helpers/get-simple-id';
 import { transpile } from './helpers/transpile';
 import { transpileOptionalChaining } from './helpers/transpile-optional-chaining';
 import { transpileSolidFile } from './helpers/transpile-solid-file';
@@ -28,18 +28,11 @@ import { buildContextFile } from './helpers/context';
 
 const cwd = process.cwd();
 
-const DEFAULT_CONFIG: MorphoConfig = {
+const DEFAULT_CONFIG: Partial<MorphoConfig> = {
   targets: [],
   dest: 'output',
   files: 'src/*',
   overridesDir: 'overrides',
-  options: {
-    vue: {
-      cssNamespace: () => getSimpleId(),
-      namePrefix: (path) => (path.includes('/blocks/') ? 'builder' : undefined),
-      vueVersion: { 2: true, 3: true },
-    },
-  },
 };
 
 const getOptions = (config?: MorphoConfig): MorphoConfig => ({
@@ -48,10 +41,6 @@ const getOptions = (config?: MorphoConfig): MorphoConfig => ({
   options: {
     ...DEFAULT_CONFIG.options,
     ...config?.options,
-    vue: {
-      ...DEFAULT_CONFIG.options?.vue,
-      ...config?.options?.vue,
-    },
   },
 });
 
@@ -81,62 +70,97 @@ const getMorphoComponentJSONs = async (options: MorphoConfig) => {
   );
 };
 
+interface TargetContext {
+  target: Target;
+  generator: Transpiler;
+  outputPath: string;
+}
+
+interface TargetContextWithConfig extends TargetContext {
+  options: MorphoConfig;
+}
+
+const getTargetContexts = (options: MorphoConfig) =>
+  options.targets.map(
+    (target): TargetContext => ({
+      target,
+      generator: getGeneratorForTarget({ target, options }),
+      outputPath: getTargetPath({ target }),
+    }),
+  );
+
+const buildAndOutputNonComponentFiles = async (targetContext: TargetContextWithConfig) => {
+  const jsFiles = await buildNonComponentFiles(targetContext);
+  await outputNonComponentFiles({ ...targetContext, files: jsFiles });
+};
+
 export async function build(config?: MorphoConfig) {
+  // merge default options
   const options = getOptions(config);
+
+  // clean output directory
   await clean(options);
 
+  // get all morpho component JSONs
   const morphoComponents = await getMorphoComponentJSONs(options);
 
+  const targetContexts = getTargetContexts(options);
+
   await Promise.all(
-    options.targets.map(async (target) => {
-      const jsFiles = await buildNonComponentFiles({ target, options });
+    targetContexts.map(async (targetContext) => {
+      const targetContextWithConfig: TargetContextWithConfig = { ...targetContext, options };
       await Promise.all([
-        outputNonComponentFiles(target, jsFiles, options),
-        buildAndOutputComponentFiles(target, morphoComponents, options),
+        buildAndOutputNonComponentFiles(targetContextWithConfig),
+        buildAndOutputComponentFiles({ ...targetContextWithConfig, files: morphoComponents }),
       ]);
-      await outputOverrides(target, options);
+      await outputOverrides(targetContextWithConfig);
     }),
   );
 
   console.info('Done!');
 }
 
-async function outputOverrides(target: Target, options: MorphoConfig) {
+/**
+ * TO-DO: can this be removed?
+ */
+async function outputOverrides({ target, options, outputPath }: TargetContextWithConfig) {
   const kebabTarget = kebabCase(target);
-  const outputDirPath = `${options.overridesDir}/${kebabTarget}`;
-  const files = await glob([`${outputDirPath}/**/*`, `!${outputDirPath}/node_modules/**/*`]);
-  await Promise.all(
-    files.map(async (file) => {
-      let contents = await readFile(file, 'utf8');
+  const targetOverrides = `${options.overridesDir}/${kebabTarget}`;
 
-      const esbuildTranspile = file.match(/\.tsx?$/);
+  // get all outputted files
+  const overrideFileNames = await glob([
+    `${targetOverrides}/**/*`,
+    `!${targetOverrides}/node_modules/**/*`,
+  ]);
+  await Promise.all(
+    overrideFileNames.map(async (overrideFileName) => {
+      let contents = await readFile(overrideFileName, 'utf8');
+
+      // transpile `.tsx` files to `.js`
+      const esbuildTranspile = overrideFileName.match(/\.tsx?$/);
       if (esbuildTranspile) {
-        contents = await transpile({ path: file, target, options });
+        contents = await transpile({ path: overrideFileName, target, options });
       }
 
-      const targetPaths = getTargetPaths(target);
+      const newFile = overrideFileName
+        // replace any reference to the overrides directory with the target directory
+        // e.g. `overrides/react/components/Button.tsx` -> `output/react/components/Button.tsx`
+        .replace(`${targetOverrides}`, `${options.dest}/${outputPath}`)
+        // replace `.tsx` references with `.js`
+        .replace(/\.tsx?$/, '.js');
 
-      await Promise.all(
-        targetPaths.map((targetPath) =>
-          outputFile(
-            file
-              .replace(`${outputDirPath}`, `${options.dest}/${targetPath}`)
-              .replace(/\.tsx?$/, '.js'),
-            contents,
-          ),
-        ),
-      );
+      await outputFile(newFile, contents);
     }),
   );
 }
 
-const getTranspilerForTarget = ({
+const getGeneratorForTarget = ({
   target,
   options,
 }: {
   target: Target;
   options: MorphoConfig;
-}): Transpiler => {
+}): TargetContext['generator'] => {
   switch (target) {
     case 'customElement':
       return componentToCustomElement(options.options.customElement);
@@ -144,9 +168,12 @@ const getTranspilerForTarget = ({
       return componentToHtml(options.options.html);
     case 'reactNative':
       return componentToReactNative({ stateType: 'useState' });
+    case 'vue2':
+      return componentToVue2(options.options.vue2);
     case 'vue':
-      const { vueVersion, ...vueOptions } = options.options.vue;
-      return componentToVue({ ...vueOptions, vueVersion: 2 });
+      console.log('Targetting Vue: defaulting to vue v3');
+    case 'vue3':
+      return componentToVue3(options.options.vue3);
     case 'angular':
       return componentToAngular(options.options.angular);
     case 'react':
@@ -170,21 +197,21 @@ const replaceFileExtensionForTarget = ({ target, path }: { target: Target; path:
 /**
  * Transpiles and outputs Morpho component files.
  */
-async function buildAndOutputComponentFiles(
-  target: Target,
-  files: { path: string; morphoJson: MorphoComponent }[],
-  options: MorphoConfig,
-) {
-  const kebabTarget = kebabCase(target);
+async function buildAndOutputComponentFiles({
+  target,
+  files,
+  options,
+  generator,
+  outputPath,
+}: TargetContextWithConfig & {
+  files: { path: string; morphoJson: MorphoComponent }[];
+}) {
   const debugTarget = debug(`morpho:${target}`);
-  const transpiler = getTranspilerForTarget({ options, target });
   const output = files.map(async ({ path, morphoJson }) => {
-    const outputFilePath = replaceFileExtensionForTarget({
-      target,
-      path,
-    });
+    const outputFilePath = replaceFileExtensionForTarget({ target, path });
 
     // try to find override file
+    const kebabTarget = kebabCase(target);
     const overrideFilePath = `${options.overridesDir}/${kebabTarget}/${outputFilePath}`;
     const overrideFile = (await pathExists(overrideFilePath))
       ? await readFile(overrideFilePath, 'utf8')
@@ -197,7 +224,7 @@ async function buildAndOutputComponentFiles(
       debugTarget(`override exists for ${path}: ${!!overrideFile}`);
     }
     try {
-      transpiled = overrideFile ?? transpiler({ path, component: morphoJson });
+      transpiled = overrideFile ?? generator({ path, component: morphoJson });
       debugTarget(`Success: transpiled ${path}. Output length: ${transpiled.length}`);
     } catch (error) {
       debugTarget(`Failure: transpiled ${path}.`);
@@ -227,75 +254,61 @@ async function buildAndOutputComponentFiles(
         });
         break;
       case 'vue':
+      case 'vue2':
+      case 'vue3':
         // TODO: transform to CJS (?)
         transpiled = transpileOptionalChaining(transpiled).replace(/\.lite(['"];)/g, '$1');
     }
 
-    const outputDir = `${options.dest}/${kebabTarget}`;
+    const outputDir = `${options.dest}/${outputPath}`;
 
-    // output files
-    switch (target) {
-      case 'vue':
-        // Nuxt
-        await outputFile(`${outputDir}/nuxt2/${outputFilePath}`, transpiled);
-        break;
-
-      default:
-        await Promise.all([
-          // this is the default output
-          outputFile(`${outputDir}/${outputFilePath}`, transpiled),
-          // output generated component file, before it is minified and transpiled into JS.
-          // we skip these targets because the files would be invalid.
-          ...(target === 'swift' || target === 'svelte'
-            ? []
-            : [outputFile(`${outputDir}/${path}`, original)]),
-        ]);
-        break;
-    }
+    await Promise.all([
+      // this is the default output
+      outputFile(`${outputDir}/${outputFilePath}`, transpiled),
+      // output generated component file, before it is minified and transpiled into JS.
+      // we skip these targets because the files would be invalid.
+      ...(target === 'swift' || target === 'svelte' || target === 'vue'
+        ? []
+        : [outputFile(`${outputDir}/${path}`, original)]),
+    ]);
   });
   await Promise.all(output);
 }
 
-function getTargetPaths(target: Target) {
-  const kebabTarget = kebabCase(target);
-  const targetPaths = target === 'vue' ? ['vue/nuxt2', 'vue/vue2', 'vue/vue3'] : [kebabTarget];
-
-  return targetPaths;
-}
+const getTargetPath = ({ target }: { target: Target }): string => {
+  switch (target) {
+    case 'vue2':
+      return 'vue/vue2';
+    case 'vue':
+    case 'vue3':
+      return 'vue/vue3';
+    default:
+      return kebabCase(target);
+  }
+};
 
 /**
  * Outputs non-component files to the destination directory, without modifying them.
  */
-async function outputNonComponentFiles(
-  target: Target,
-  files: { path: string; output: string }[],
-  options: MorphoConfig,
-) {
-  const targetPaths = getTargetPaths(target);
-  const output = [];
-  for (const targetPath of targetPaths) {
-    output.push(
-      ...files.map(({ path, output }) => {
-        return outputFile(
-          `${options.dest}/${targetPath}/${path.replace(/\.tsx?$/, '.js')}`,
-          output,
-        );
-      }),
-    );
-  }
-  await Promise.all(output);
+async function outputNonComponentFiles({
+  files,
+  options,
+  outputPath,
+}: TargetContext & {
+  files: { path: string; output: string }[];
+  options: MorphoConfig;
+}) {
+  await Promise.all(
+    files.map(({ path, output }) =>
+      outputFile(`${options.dest}/${outputPath}/${path.replace(/\.tsx?$/, '.js')}`, output),
+    ),
+  );
 }
 
 /**
  * Transpiles all non-component files, including Context files.
  */
-async function buildNonComponentFiles({
-  target,
-  options,
-}: {
-  target: Target;
-  options: MorphoConfig;
-}) {
+async function buildNonComponentFiles({ target, options }: TargetContextWithConfig) {
   const tsFiles = await glob(`src/**/*.ts`, { cwd });
 
   return await Promise.all(
