@@ -6,12 +6,7 @@ import {
   componentToVue,
   componentToHtml,
   componentToCustomElement,
-  contextToReact,
-  contextToSolid,
-  contextToVue,
-  contextToSvelte,
   MorphoComponent,
-  parseContext,
   parseJsx,
   MorphoConfig,
   Target,
@@ -20,32 +15,30 @@ import {
   componentToAngular,
 } from '@builder.io/morpho';
 import debug from 'debug';
-import dedent from 'dedent';
 import glob from 'fast-glob';
 import { outputFile, pathExists, readFile, remove } from 'fs-extra';
-import * as json5 from 'json5';
-import { camelCase, kebabCase, last, upperFirst } from 'lodash';
+import { kebabCase } from 'lodash';
 import micromatch from 'micromatch';
 import { getFileExtensionForTarget } from './helpers/extensions';
 import { getSimpleId } from './helpers/get-simple-id';
 import { transpile } from './helpers/transpile';
 import { transpileOptionalChaining } from './helpers/transpile-optional-chaining';
 import { transpileSolidFile } from './helpers/transpile-solid-file';
+import { buildContextFile } from './helpers/context';
 
 const cwd = process.cwd();
 
-const DEFAULT_CONFIG: Partial<MorphoConfig> = {
+const DEFAULT_CONFIG: MorphoConfig = {
   targets: [],
   dest: 'output',
   files: 'src/*',
   overridesDir: 'overrides',
-};
-
-const DEFAULT_OPTIONS: MorphoConfig['options'] = {
-  vue: {
-    cssNamespace: () => getSimpleId(),
-    namePrefix: (path) => (path.includes('/blocks/') ? 'builder' : undefined),
-    vueVersion: { 2: true, 3: true },
+  options: {
+    vue: {
+      cssNamespace: () => getSimpleId(),
+      namePrefix: (path) => (path.includes('/blocks/') ? 'builder' : undefined),
+      vueVersion: { 2: true, 3: true },
+    },
   },
 };
 
@@ -53,49 +46,14 @@ const getOptions = (config?: MorphoConfig): MorphoConfig => ({
   ...DEFAULT_CONFIG,
   ...config,
   options: {
-    ...DEFAULT_OPTIONS,
+    ...DEFAULT_CONFIG.options,
     ...config?.options,
     vue: {
-      ...DEFAULT_OPTIONS.vue,
+      ...DEFAULT_CONFIG.options?.vue,
       ...config?.options?.vue,
     },
   },
 });
-
-export async function build(config?: MorphoConfig) {
-  const options = getOptions(config);
-  await clean(options);
-
-  const tsLiteFiles = await Promise.all(
-    micromatch(await glob(options.files, { cwd }), `**/*.lite.tsx`).map(
-      async (path) => {
-        try {
-          const parsed = parseJsx(await readFile(path, 'utf8'));
-          return {
-            path,
-            morphoJson: parsed,
-          };
-        } catch (err) {
-          console.error('Could not parse file:', path);
-          throw err;
-        }
-      },
-    ),
-  );
-
-  await Promise.all(
-    options.targets.map(async (target) => {
-      const jsFiles = await buildNonComponentFiles({ target, options });
-      await Promise.all([
-        outputNonComponentFiles(target, jsFiles, options),
-        buildAndOutputComponentFiles(target, tsLiteFiles, options),
-      ]);
-      await outputOverrides(target, options);
-    }),
-  );
-
-  console.info('Done!');
-}
 
 async function clean(options: MorphoConfig) {
   const files = await glob(`${options.dest}/**/*/${options.files}`);
@@ -106,13 +64,47 @@ async function clean(options: MorphoConfig) {
   );
 }
 
+const getMorphoComponentJSONs = async (options: MorphoConfig) => {
+  return Promise.all(
+    micromatch(await glob(options.files, { cwd }), `**/*.lite.tsx`).map(async (path) => {
+      try {
+        const parsed = parseJsx(await readFile(path, 'utf8'));
+        return {
+          path,
+          morphoJson: parsed,
+        };
+      } catch (err) {
+        console.error('Could not parse file:', path);
+        throw err;
+      }
+    }),
+  );
+};
+
+export async function build(config?: MorphoConfig) {
+  const options = getOptions(config);
+  await clean(options);
+
+  const morphoComponents = await getMorphoComponentJSONs(options);
+
+  await Promise.all(
+    options.targets.map(async (target) => {
+      const jsFiles = await buildNonComponentFiles({ target, options });
+      await Promise.all([
+        outputNonComponentFiles(target, jsFiles, options),
+        buildAndOutputComponentFiles(target, morphoComponents, options),
+      ]);
+      await outputOverrides(target, options);
+    }),
+  );
+
+  console.info('Done!');
+}
+
 async function outputOverrides(target: Target, options: MorphoConfig) {
   const kebabTarget = kebabCase(target);
   const outputDirPath = `${options.overridesDir}/${kebabTarget}`;
-  const files = await glob([
-    `${outputDirPath}/**/*`,
-    `!${outputDirPath}/node_modules/**/*`,
-  ]);
+  const files = await glob([`${outputDirPath}/**/*`, `!${outputDirPath}/node_modules/**/*`]);
   await Promise.all(
     files.map(async (file) => {
       let contents = await readFile(file, 'utf8');
@@ -172,13 +164,8 @@ const getTranspilerForTarget = ({
   }
 };
 
-const replaceFileExtensionForTarget = ({
-  target,
-  path,
-}: {
-  target: Target;
-  path: string;
-}) => path.replace(/\.lite\.tsx$/, getFileExtensionForTarget(target));
+const replaceFileExtensionForTarget = ({ target, path }: { target: Target; path: string }) =>
+  path.replace(/\.lite\.tsx$/, getFileExtensionForTarget(target));
 
 /**
  * Transpiles and outputs Morpho component files.
@@ -211,9 +198,7 @@ async function buildAndOutputComponentFiles(
     }
     try {
       transpiled = overrideFile ?? transpiler({ path, component: morphoJson });
-      debugTarget(
-        `Success: transpiled ${path}. Output length: ${transpiled.length}`,
-      );
+      debugTarget(`Success: transpiled ${path}. Output length: ${transpiled.length}`);
     } catch (error) {
       debugTarget(`Failure: transpiled ${path}.`);
       debugTarget(error);
@@ -243,10 +228,7 @@ async function buildAndOutputComponentFiles(
         break;
       case 'vue':
         // TODO: transform to CJS (?)
-        transpiled = transpileOptionalChaining(transpiled).replace(
-          /\.lite(['"];)/g,
-          '$1',
-        );
+        transpiled = transpileOptionalChaining(transpiled).replace(/\.lite(['"];)/g, '$1');
     }
 
     const outputDir = `${options.dest}/${kebabTarget}`;
@@ -276,8 +258,7 @@ async function buildAndOutputComponentFiles(
 
 function getTargetPaths(target: Target) {
   const kebabTarget = kebabCase(target);
-  const targetPaths =
-    target === 'vue' ? ['vue/nuxt2', 'vue/vue2', 'vue/vue3'] : [kebabTarget];
+  const targetPaths = target === 'vue' ? ['vue/nuxt2', 'vue/vue2', 'vue/vue3'] : [kebabTarget];
 
   return targetPaths;
 }
@@ -305,40 +286,6 @@ async function outputNonComponentFiles(
   await Promise.all(output);
 }
 
-const buildContextFile = async ({
-  path,
-  options,
-  target,
-}: {
-  path: string;
-  options: MorphoConfig;
-  target: Target;
-}) => {
-  // 'foo/bar/my-thing.context.ts' -> 'MyThing'
-  const name = upperFirst(camelCase(last(path.split('/')).split('.')[0]));
-  const context = parseContext(await readFile(path, 'utf8'), { name });
-  if (!context) {
-    console.warn('Could not parse context from file', path);
-  } else {
-    switch (target) {
-      case 'svelte':
-        return contextToSvelte(options.options.svelte)({ context });
-      case 'vue':
-        return contextToVue(context);
-      case 'solid':
-        return contextToSolid()({ context });
-      case 'react':
-      case 'reactNative':
-        return contextToReact()({ context });
-      default:
-        console.warn(
-          'Context files are not supported for this target. Outputting no-op',
-        );
-        return contextToVue(context);
-    }
-  }
-};
-
 /**
  * Transpiles all non-component files, including Context files.
  */
@@ -349,9 +296,7 @@ async function buildNonComponentFiles({
   target: Target;
   options: MorphoConfig;
 }) {
-  const tsFiles = await glob(`src/**/*.ts`, {
-    cwd: cwd,
-  });
+  const tsFiles = await glob(`src/**/*.ts`, { cwd });
 
   return await Promise.all(
     tsFiles.map(async (path) => {

@@ -1,11 +1,4 @@
-import {
-  useRef,
-  onMount,
-  onUnMount,
-  Show,
-  useStore,
-  useState,
-} from '@builder.io/morpho';
+import { useRef, onMount, onUnMount, Show, useStore, useState } from '@builder.io/morpho';
 
 // TODO: AMP Support?
 
@@ -43,9 +36,7 @@ export default function Image(props: ImageProps) {
   });
 
   function isBrowser() {
-    return (
-      typeof window !== 'undefined' && window.navigator.product != 'ReactNative'
-    );
+    return typeof window !== 'undefined' && window.navigator.product != 'ReactNative';
   }
 
   const [load, setLoad] = useState(false);

@@ -11,10 +11,7 @@ type ParseContextOptions = {
   name: string;
 };
 
-export function parseContext(
-  code: string,
-  options: ParseContextOptions,
-): MorphoContext | null {
+export function parseContext(code: string, options: ParseContextOptions): MorphoContext | null {
   let found = false;
   const context = createMorphoContext({ name: options.name });
 

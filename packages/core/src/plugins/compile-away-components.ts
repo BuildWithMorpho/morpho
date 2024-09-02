@@ -13,10 +13,7 @@ export const getRenderOptions = (node: MorphoNode) => {
 
 type CompileAwayComponentsOptions = {
   components: {
-    [key: string]: (
-      node: MorphoNode,
-      context: TraverseContext,
-    ) => MorphoNode | void;
+    [key: string]: (node: MorphoNode, context: TraverseContext) => MorphoNode | void;
   };
 };
 
