@@ -1,4 +1,4 @@
-import { useStore, useMetadata, onMount } from '@builder.io/morpho';
+import { useStore, onMount } from '@builder.io/morpho';
 
 export default function MyBasicOutputsComponent(props: any) {
   const state = useStore({

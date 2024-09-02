@@ -1,10 +1,4 @@
-import {
-  Show,
-  onMount,
-  useStore,
-  For,
-  afterUnmount,
-} from '@builder.io/morpho';
+import { Show, onMount, useStore, For, afterUnmount } from '@builder.io/morpho';
 import { Builder, BuilderContent, GetContentOptions } from '@builder.io/sdk';
 import { applyPatchWithMinimalMutationChain } from '@builder.io/utils';
 import { useBuilderData } from '@builder.io/morpho';

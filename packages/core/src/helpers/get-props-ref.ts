@@ -2,10 +2,7 @@ import traverse from 'traverse';
 import { MorphoComponent } from '../types/morpho-component';
 import { isMorphoNode } from './is-morpho-node';
 
-export function getPropsRef(
-  json: MorphoComponent,
-  shouldRemove?: boolean,
-): [string, boolean] {
+export function getPropsRef(json: MorphoComponent, shouldRemove?: boolean): [string, boolean] {
   let has = false;
   let prop = '';
   traverse(json).forEach(function (item) {

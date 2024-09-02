@@ -1,5 +1,4 @@
-import { useStore, For, Show } from '@builder.io/morpho';
-import { Builder } from '@builder.io/sdk';
+import { useStore, For } from '@builder.io/morpho';
 
 export default function ImgStateComponent() {
   const state = useStore({
