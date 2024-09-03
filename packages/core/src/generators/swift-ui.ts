@@ -11,7 +11,7 @@ import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
-import { Transpiler } from '..';
+import { Transpiler } from '../types/transpiler';
 
 export type ToSwiftOptions = {
   prettier?: boolean;

@@ -1,7 +1,7 @@
 import { format } from 'prettier/standalone';
 import { getMemberObjectString } from '../../helpers/get-state-object-string';
 import { MorphoContext } from '../../types/morpho-context';
-import { BaseTranspilerOptions } from '../../types/config';
+import { BaseTranspilerOptions } from '../../types/transpiler';
 
 interface ContextToSvelteOptions extends Pick<BaseTranspilerOptions, 'prettier'> {}
 
