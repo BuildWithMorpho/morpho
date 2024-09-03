@@ -1,5 +1,6 @@
-logs
-*.log*
-dist
 dist-ssr
-*.local
+
+# Morpho input, copied in from elsewhere
+src
+# Morpho output
+react_src/lib

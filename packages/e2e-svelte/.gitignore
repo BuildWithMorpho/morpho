@@ -1,0 +1,4 @@
+# Morpho input, copied in from elsewhere
+src
+# Morpho output
+svelte_src/lib
