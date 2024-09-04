@@ -9,7 +9,7 @@ import { functionLiteralPrefix } from '../constants/function-literal-prefix';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
 import { babelTransformExpression } from '../helpers/babel-transform';
 import { capitalize } from '../helpers/capitalize';
-import { collectCss, collectStyledComponents, hasStyles } from '../helpers/collect-styles';
+import { collectCss } from '../helpers/styles/collect-css';
 import { createMorphoNode } from '../helpers/create-morpho-node';
 import { fastClone } from '../helpers/fast-clone';
 import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
@@ -41,6 +41,8 @@ import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { hasContext } from './helpers/context';
 import { collectReactNativeStyles } from './react-native';
+import { collectStyledComponents } from '../helpers/styles/collect-styled-components';
+import { hasStyles } from '../helpers/styles/helpers';
 
 export interface ToReactOptions extends BaseTranspilerOptions {
   stylesType?: 'emotion' | 'styled-components' | 'styled-jsx' | 'react-native';
