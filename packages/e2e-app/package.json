@@ -4,10 +4,46 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "build": "morpho build"
+    "morpho-angular": "morpho build angular",
+    "morpho-builder": "echo NOT SUPPORTED YET morpho build builder",
+    "morpho-customElement": "morpho build customElement",
+    "morpho-html": "morpho build html",
+    "morpho-liquid": "echo NOT SUPPORTED YET morpho build liquid",
+    "morpho-qwik": "echo NOT SUPPORTED YET morpho build qwik",
+    "morpho-react": "morpho build react",
+    "morpho-reactNative": "morpho build reactNative",
+    "morpho-solid": "morpho build solid",
+    "morpho-svelte": "morpho build svelte",
+    "morpho-swift": "morpho build swift",
+    "morpho-template": "echo NOT SUPPORTED YET morpho build template",
+    "morpho-vue2": "morpho build vue2",
+    "morpho-vue3": "morpho build vue3",
+    "build": "concurrently \"npm:morpho-*\" --max-processes 3 --group || echo continuing"
   },
   "dependencies": {
     "@builder.io/morpho": "workspace:*",
     "@builder.io/morpho-cli": "workspace:*"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.2",
+    "solid-js": "^1.4.2",
+    "solid-styled-components": "^0.28.1"
+  },
+  "exports": {
+    "./angular/*": "./output/angular/angular/src/*",
+    "./builder/*": "./output/builder/builder/src/*",
+    "./customElement/*": "./output/customElement/customElement/src/*",
+    "./html/*": "./output/html/html/src/*",
+    "./liquid/*": "./output/liquid/liquid/src/*",
+    "./qwik/*": "./output/qwik/qwik/src/*",
+    "./react/*": "./output/react/react/src/*",
+    "./reactNative/*": "./output/reactNative/reactNative/src/*",
+    "./solid/*": "./output/solid/solid/src/*",
+    "./svelte/*": "./output/svelte/svelte/src/*",
+    "./swift/*": "./output/swift/swift/src/*",
+    "./template/*": "./output/template/template/src/*",
+    "./vue2/*": "./output/vue2/vue/vue2/src/*",
+    "./vue3/*": "./output/vue3/vue/vue3/src/*",
+    "./shared.config": "./shared.config.ts"
   }
 }
