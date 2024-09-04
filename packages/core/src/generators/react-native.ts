@@ -2,7 +2,7 @@ import json5 from 'json5';
 import { camelCase, size } from 'lodash';
 import { fastClone } from '../helpers/fast-clone';
 import traverse from 'traverse';
-import { ClassStyleMap } from '../helpers/collect-styles';
+import { ClassStyleMap } from '../helpers/styles/helpers';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { componentToReact } from './react';
