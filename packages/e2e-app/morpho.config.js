@@ -1,3 +1,6 @@
+/**
+ * @type {import('@builder.io/morpho'.MorphoConfig)}
+ */
 module.exports = {
   files: 'src/**',
   // A real Morpho application usually has a set of targets to include here;
@@ -7,6 +10,7 @@ module.exports = {
   // Each run needs a separate output dest, as Morpho clears it first.
   dest: ['output/' + process.argv[3]],
   options: {
-    react: { transpiler: { format: 'esm' } },
+    react: { transpiler: { format: 'esm', languages: ['ts'] } },
+    solid: { transpiler: { languages: ['ts'] } },
   },
 };
