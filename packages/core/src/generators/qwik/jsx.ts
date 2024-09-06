@@ -1,4 +1,3 @@
-import { createMorphoNode } from '../../helpers/create-morpho-node';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
 import { MorphoNode } from '../../types/morpho-node';
 import { DIRECTIVES } from './directives';
