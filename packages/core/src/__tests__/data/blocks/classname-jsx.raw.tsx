@@ -1,4 +1,5 @@
 import { useStore } from '@builder.io/morpho';
+import type { JSX } from '../../../jsx-types';
 
 type Props = {
   [key: string]: string | JSX.Element;

@@ -14,7 +14,8 @@
     "baseUrl": ".",
     "paths": {
       "@builder.io/morpho": ["./src"]
-    }
+    },
+    "jsxImportSource": "@builder.io/morpho"
   },
   "include": ["./src", "./typings.d.ts"],
   "exclude": ["src/**/builder-*.raw.tsx"]
