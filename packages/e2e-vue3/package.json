@@ -3,23 +3,20 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "build": "yarn run morpho && vue-tsc --noEmit && vite build",
-    "dev": "yarn run morpho && vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "dev": "vue-tsc --noEmit && vite",
     "e2e": "../../node_modules/.bin/playwright test",
-    "morpho": "syncdir ../e2e-app/src src --deleteOrphaned --quiet && morpho build",
     "serve": "vite preview"
   },
   "dependencies": {
     "@builder.io/e2e-app": "workspace:*",
-    "@builder.io/morpho": "workspace:*",
-    "@builder.io/morpho-cli": "workspace:*",
-    "vue": "^3.2.25"
+    "@builder.io/e2e-app-vue3-output": "workspace:*",
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
-    "sync-directory": "^5.1.5",
     "typescript": "^4",
-    "vite": "^2.9.10",
-    "vue-tsc": "^0.37.3"
+    "vite": "^2.9.13",
+    "vue-tsc": "^0.38.2"
   }
 }
