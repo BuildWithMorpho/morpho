@@ -7,18 +7,39 @@ import json5 from 'json5';
 import { pickBy } from 'lodash';
 import { dashCase } from '../dash-case';
 
-export const nodeHasStyles = (node: MorphoNode) => {
+export const nodeHasCss = (node: MorphoNode) => {
   return Boolean(
     typeof node.bindings.css?.code === 'string' && node.bindings.css.code.trim().length > 6,
   );
 };
 
-export const hasStyles = (component: MorphoComponent) => {
+export const nodeHasStyle = (node: MorphoNode) => {
+  return (
+    Boolean(typeof node.bindings.style?.code === 'string') ||
+    Boolean(typeof node.properties.style === 'string')
+  );
+};
+
+export const hasCss = (component: MorphoComponent) => {
   let hasStyles = false;
 
   traverse(component).forEach(function (item) {
     if (isMorphoNode(item)) {
-      if (nodeHasStyles(item)) {
+      if (nodeHasCss(item)) {
+        hasStyles = true;
+        this.stop();
+      }
+    }
+  });
+  return hasStyles;
+};
+
+export const hasStyle = (component: MorphoComponent) => {
+  let hasStyles = false;
+
+  traverse(component).forEach(function (item) {
+    if (isMorphoNode(item)) {
+      if (nodeHasStyle(item)) {
         hasStyles = true;
         this.stop();
       }
