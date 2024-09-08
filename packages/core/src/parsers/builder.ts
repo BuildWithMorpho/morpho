@@ -12,6 +12,7 @@ import { createMorphoNode } from '../helpers/create-morpho-node';
 import { MorphoNode } from '../types/morpho-node';
 import { parseJsx, parseStateObject } from './jsx';
 import { parseCode, isExpression } from '../helpers/parsers';
+import { hashCodeAsString } from '..';
 
 // Omit some superflous styles that can come from Builder's web importer
 const styleOmitList: (keyof CSSStyleDeclaration | 'backgroundRepeatX' | 'backgroundRepeatY')[] = [
@@ -774,7 +775,7 @@ function extractSymbols(json: BuilderContent) {
 
 export const createBuilderElement = (options?: Partial<BuilderElement>): BuilderElement => ({
   '@type': '@builder.io/sdk:Element',
-  id: 'builder-' + Math.random().toString(36).split('.')[1],
+  id: 'builder-' + hashCodeAsString(options),
   ...options,
 });
 
