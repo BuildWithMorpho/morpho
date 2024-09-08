@@ -112,7 +112,7 @@ Once you're ready, checkout our [issues](https://github.com/BuilderIO/morpho/iss
 
 ## Community
 
-- [Morpho Discord](https://discord.gg/CQZt8hzZJR)
+- [Morpho Discord](https://discord.gg/SNusEyNGsx)
 - [@Builderio](https://twitter.com/builderio)
 
 ## ESLint rules
