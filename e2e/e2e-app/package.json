@@ -18,7 +18,10 @@
     "morpho-template": "echo NOT SUPPORTED YET morpho build template",
     "morpho-vue2": "morpho build vue2",
     "morpho-vue3": "morpho build vue3",
-    "build": "concurrently \"npm:morpho-*\" --max-processes 3 --group || echo continuing"
+    "morpho-webcomponent": "morpho build webcomponent",
+    "build": "concurrently \"npm:morpho-*\" --max-processes 3 --group || echo continuing",
+    "e2e": "../../node_modules/.bin/playwright test",
+    "report": "../../node_modules/.bin/playwright show-report"
   },
   "dependencies": {
     "@builder.io/morpho": "workspace:*",
