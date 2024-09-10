@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "scripts": {
     "build": "yarn run morpho && ng build",
-    "e2e": "../../node_modules/.bin/playwright test",
     "morpho": "syncdir ../e2e-app/src src --deleteOrphaned --quiet && morpho build",
     "ng": "ng",
     "start": "yarn run morpho && ng serve",
@@ -20,7 +19,6 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@builder.io/e2e-app": "workspace:*",
-    "@builder.io/morpho": "workspace:*",
     "@builder.io/morpho-cli": "workspace:*",
     "http-server": "^14.1.1",
     "rxjs": "~7.5.0",
