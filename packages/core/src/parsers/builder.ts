@@ -62,12 +62,15 @@ const verifyIsValid = (code: string): { valid: boolean; error: null | Error } =>
   return { valid: false, error: null };
 };
 
-const getActionBindingsFromBlock = (block: BuilderElement, options: BuilderToMorphoOptions) => {
+const getActionBindingsFromBlock = (
+  block: BuilderElement,
+  options: BuilderToMorphoOptions,
+): MorphoNode['bindings'] => {
   const actions = {
     ...block.actions,
     ...block.code?.actions,
   };
-  const bindings: any = {};
+  const bindings: MorphoNode['bindings'] = {};
   const actionKeys = Object.keys(actions);
   if (actionKeys.length) {
     for (const key of actionKeys) {
@@ -202,7 +205,9 @@ const getBlockNonActionBindings = (block: BuilderElement, options: BuilderToMorp
   return obj;
 };
 
-const wrapBinding = (value: string) => {
+function wrapBinding(value: string): string;
+function wrapBinding(value: undefined): undefined;
+function wrapBinding(value: string | undefined): string | undefined {
   if (!value) {
     return value;
   }
@@ -215,7 +220,7 @@ const wrapBinding = (value: string) => {
       console.warn('Builder code error', err);
     }
   })()`;
-};
+}
 
 const getBlockBindings = (block: BuilderElement, options: BuilderToMorphoOptions) => {
   const obj = {
@@ -343,9 +348,9 @@ const componentMappers: {
     const styleString = getStyleStringFromBlock(block, options);
     const actionBindings = getActionBindingsFromBlock(block, options);
 
-    const blockBindings = {
-      ...block.code?.bindings,
-      ...block.bindings,
+    const blockBindings: MorphoNode['bindings'] = {
+      ...mapBuilderBindingsToMorphoBindingWithCode(block.code?.bindings),
+      ...mapBuilderBindingsToMorphoBindingWithCode(block.bindings),
     };
 
     const bindings: any = {
@@ -374,11 +379,13 @@ const componentMappers: {
       properties.$name = block.layerName;
     }
 
-    const innerBindings = {
-      [options.preserveTextBlocks ? 'innerHTML' : '_text']: {
-        code: wrapBindingIfNeeded(blockBindings['component.options.text'], options),
-      },
-    };
+    const innerBindings: MorphoNode['bindings'] = {};
+    const componentOptionsText = blockBindings['component.options.text'];
+    if (componentOptionsText) {
+      innerBindings[options.preserveTextBlocks ? 'innerHTML' : '_text'] = {
+        code: wrapBindingIfNeeded(componentOptionsText.code, options),
+      };
+    }
     const innerProperties = {
       [options.preserveTextBlocks ? 'innerHTML' : '_text']: block.component!.options.text,
     };
@@ -872,3 +879,20 @@ export const builderContentToMorphoComponent = (
 
   return componentJson;
 };
+function mapBuilderBindingsToMorphoBindingWithCode(
+  bindings: { [key: string]: string } | undefined,
+): MorphoNode['bindings'] {
+  const result: MorphoNode['bindings'] = {};
+  bindings &&
+    Object.keys(bindings).forEach((key) => {
+      const value: string | { code: string } = bindings[key] as any;
+      if (typeof value === 'string') {
+        result[key] = { code: value };
+      } else if (value && typeof value === 'object' && value.code) {
+        result[key] = { code: value.code };
+      } else {
+        throw new Error('Unexpected binding value: ' + JSON.stringify(value));
+      }
+    });
+  return result;
+}
