@@ -28,3 +28,6 @@ Thumbs.db
 src
 # Morpho output
 angular_src/app/lib
+
+# Output likely to come from future Morpho
+morpho-component-list.ts
