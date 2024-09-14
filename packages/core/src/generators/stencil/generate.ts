@@ -1,10 +1,8 @@
 import dedent from 'dedent';
 import { format } from 'prettier/standalone';
-import { getRefs } from '../../helpers/get-refs';
 import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
 import { renderPreComponent } from '../../helpers/render-imports';
 import { selfClosingTags } from '../../parsers/jsx';
-import { MorphoComponent } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
 import {
   runPostCodePlugins,
@@ -95,16 +93,6 @@ const blockToStencil = (json: MorphoNode, options: ToStencilOptions = {}): strin
   }
 
   str += `</${json.name}>`;
-
-  return str;
-};
-
-const getRefsString = (json: MorphoComponent, refs = getRefs(json)) => {
-  let str = '';
-
-  for (const ref of Array.from(refs)) {
-    str += `\nconst ${ref} = useRef();`;
-  }
 
   return str;
 };
