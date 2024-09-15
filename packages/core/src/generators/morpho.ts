@@ -12,6 +12,7 @@ import { METADATA_HOOK_NAME, selfClosingTags } from '../parsers/jsx';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { blockToReact, componentToReact } from './react';
+import { checkHasState } from '../helpers/state';
 
 export interface ToMorphoOptions {
   prettier?: boolean;
@@ -162,7 +163,7 @@ export const componentToMorpho =
     const morphoComponents = components.filter((item) => morphoCoreComponents.includes(item));
     const otherComponents = components.filter((item) => !morphoCoreComponents.includes(item));
 
-    const hasState = Boolean(Object.keys(component.state).length);
+    const hasState = checkHasState(component);
 
     const needsMorphoCoreImport = Boolean(hasState || refs.length || morphoComponents.length);
 

@@ -1,9 +1,10 @@
+import { MorphoContext } from '../types/morpho-context';
 import json5 from 'json5';
-import { JSONObject, JSON } from '../types/json';
 import { functionLiteralPrefix } from '../constants/function-literal-prefix';
 import { methodLiteralPrefix } from '../constants/method-literal-prefix';
-import { MorphoComponent } from '../types/morpho-component';
+import { MorphoComponent, StateValue } from '../types/morpho-component';
 import { GETTER } from './patterns';
+import { mapJsonObjectToStateValue } from './state';
 
 interface GetStateObjectStringOptions {
   data?: boolean;
@@ -27,18 +28,20 @@ const DEFAULT_OPTIONS: RequiredOptions = {
 
 const convertStateMemberToString =
   ({ data, format, functions, getters, keyPrefix, valueMapper }: RequiredOptions) =>
-  ([key, value]: [string, JSON]) => {
+  ([key, state]: [string, StateValue | undefined]) => {
     const keyValueDelimiter = format === 'object' ? ':' : '=';
 
-    if (typeof value === 'string') {
-      if (value.startsWith(functionLiteralPrefix)) {
+    const code = state?.code;
+
+    if (typeof code === 'string') {
+      if (code.startsWith(functionLiteralPrefix)) {
         if (functions === false) {
           return undefined;
         }
-        const functionValue = value.replace(functionLiteralPrefix, '');
+        const functionValue = code.replace(functionLiteralPrefix, '');
         return `${keyPrefix} ${key} ${keyValueDelimiter} ${valueMapper(functionValue, 'function')}`;
-      } else if (value.startsWith(methodLiteralPrefix)) {
-        const methodValue = value.replace(methodLiteralPrefix, '');
+      } else if (code.startsWith(methodLiteralPrefix)) {
+        const methodValue = code.replace(methodLiteralPrefix, '');
         const isGet = Boolean(methodValue.match(GETTER));
         if (isGet && getters === false) {
           return undefined;
@@ -56,11 +59,11 @@ const convertStateMemberToString =
     if (data === false) {
       return undefined;
     }
-    return `${keyPrefix} ${key}${keyValueDelimiter} ${valueMapper(json5.stringify(value), 'data')}`;
+    return `${keyPrefix} ${key}${keyValueDelimiter} ${valueMapper(json5.stringify(code), 'data')}`;
   };
 
 export const getMemberObjectString = (
-  object: JSONObject,
+  object: MorphoComponent['state'],
   userOptions: GetStateObjectStringOptions = {},
 ) => {
   const options = { ...DEFAULT_OPTIONS, ...userOptions };
@@ -83,6 +86,11 @@ export const getMemberObjectString = (
 
   return `${prefix}${stringifiedProperties}${extraDelimiter}${suffix}`;
 };
+
+export const stringifyContextValue = (
+  object: MorphoContext['value'],
+  userOptions: GetStateObjectStringOptions = {},
+) => getMemberObjectString(mapJsonObjectToStateValue(object), userOptions);
 
 export const getStateObjectStringFromComponent = (
   component: MorphoComponent,

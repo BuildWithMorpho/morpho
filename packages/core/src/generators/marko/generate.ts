@@ -21,9 +21,6 @@ import { mapRefs } from '../../helpers/map-refs';
 import { dashCase } from '../../helpers/dash-case';
 import { hasProps } from '../../helpers/has-props';
 import { MorphoComponent } from '../../types/morpho-component';
-import { functionLiteralPrefix } from '../../constants/function-literal-prefix';
-import { methodLiteralPrefix } from '../../constants/method-literal-prefix';
-import { GETTER } from '../../helpers/patterns';
 import { getRefs } from '../../helpers/get-refs';
 
 export interface ToMarkoOptions extends BaseTranspilerOptions {}
@@ -35,29 +32,12 @@ interface InternalToMarkoOptions extends ToMarkoOptions {
 // Having issues with this, so off for now
 const USE_MARKO_PRETTIER = false;
 
-type StateType = 'method' | 'function' | 'getter' | 'property';
-function getStateTypeOfValue(value: any): StateType {
-  if (typeof value === 'string') {
-    if (value.startsWith(functionLiteralPrefix)) {
-      return 'function';
-    } else if (value.startsWith(methodLiteralPrefix)) {
-      const isGet = Boolean(value.replace(methodLiteralPrefix, '').match(GETTER));
-      if (isGet) {
-        return 'getter';
-      }
-      return 'method';
-    }
-  }
-  return 'property';
-}
-
 /**
  * Return the names of methods and functions on state
  */
 function getStateMethodNames(json: MorphoComponent) {
   return Object.keys(json.state).filter((key) => {
-    const value = json.state[key];
-    const type = getStateTypeOfValue(value);
+    const type = json.state[key]?.type;
     return type === 'function' || type === 'method';
   });
 }
@@ -65,16 +45,14 @@ function getStateMethodNames(json: MorphoComponent) {
  * Return the names of getter and functions on state
  */
 function getStateGetterNames(json: MorphoComponent) {
-  return Object.keys(json.state).filter((key) => getStateTypeOfValue(json.state[key]) === 'getter');
+  return Object.keys(json.state).filter((key) => json.state[key]?.type === 'getter');
 }
 
 /**
  * Return the names of properties (basic literal values) on state
  */
 function getStatePropertyNames(json: MorphoComponent) {
-  return Object.keys(json.state).filter(
-    (key) => getStateTypeOfValue(json.state[key]) === 'property',
-  );
+  return Object.keys(json.state).filter((key) => json.state[key]?.type === 'property');
 }
 
 const blockToMarko = (json: MorphoNode, options: InternalToMarkoOptions): string => {
