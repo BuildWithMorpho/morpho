@@ -44,7 +44,6 @@ npm install @builder.io/morpho-cli @builder.io/morpho
 
 ### Setup `morpho.config.js`
 
-
 ```js
 module.exports = {
   files: 'src/**',
@@ -61,7 +60,7 @@ Check [our configuration docs](/docs/configuration.md#typescript-configuration) 
 {
   "compilerOptions": {
     "jsx": "preserve",
-    "jsxImportSource": "@builder.io/morpho",
+    "jsxImportSource": "@builder.io/morpho"
   }
 }
 ```
@@ -154,7 +153,7 @@ Also similarly to LLVM, multiple syntaxes can compile to Mitotis. Our out-of-the
 | Target  | 01 one component   | 02 two components  |
 | ------- | ------------------ | ------------------ |
 | angular | :white_check_mark: | :white_check_mark: |
-| qwik    | :white_check_mark: | :x:                |
+| qwik    | :white_check_mark: | :white_check_mark: |
 | react   | :white_check_mark: | :white_check_mark: |
 | solid   | :white_check_mark: | :white_check_mark: |
 | svelte  | :white_check_mark: | :white_check_mark: |
