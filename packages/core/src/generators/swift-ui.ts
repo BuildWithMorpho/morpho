@@ -12,6 +12,7 @@ import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
 import { Transpiler } from '../types/transpiler';
+import { checkHasState } from '../helpers/state';
 
 export type ToSwiftOptions = {
   prettier?: boolean;
@@ -240,7 +241,7 @@ const processBinding = (str: string, options: ToSwiftOptions) => {
 };
 
 function componentHasDynamicData(json: MorphoComponent) {
-  const hasState = Object.keys(json.state).length > 0;
+  const hasState = checkHasState(json);
   if (hasState) {
     return true;
   }

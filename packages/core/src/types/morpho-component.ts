@@ -1,4 +1,5 @@
-import { JSONObject } from './json';
+import { Dictionary } from '../helpers/typescript';
+import { _JSON, JSONObject } from './json';
 import { MorphoNode } from './morpho-node';
 
 /**
@@ -57,6 +58,15 @@ export type MorphoExport = {
   };
 };
 
+type StateValueType = 'function' | 'getter' | 'method' | 'property';
+
+export type StateCode = _JSON;
+
+export interface StateValue {
+  code: StateCode;
+  type: StateValueType;
+}
+
 export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
@@ -66,7 +76,7 @@ export type MorphoComponent = {
     useMetadata?: JSONObject;
   };
   inputs: MorphoComponentInput[];
-  state: JSONObject;
+  state: Dictionary<StateValue | undefined>;
   context: {
     get: ContextGet;
     set: ContextSet;

@@ -1,5 +1,5 @@
 import { format } from 'prettier/standalone';
-import { getMemberObjectString } from '../../helpers/get-state-object-string';
+import { stringifyContextValue } from '../../helpers/get-state-object-string';
 import { MorphoContext } from '../../types/morpho-context';
 import { BaseTranspilerOptions } from '../../types/transpiler';
 
@@ -12,7 +12,7 @@ export const contextToSvelte =
   const key = Symbol();  
 
   export default {
-    ${context.name}: ${getMemberObjectString(context.value)}, 
+    ${context.name}: ${stringifyContextValue(context.value)}, 
     key 
   }
   `;
