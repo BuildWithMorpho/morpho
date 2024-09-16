@@ -255,7 +255,6 @@ function emitUseStore(file: File, stateInit: StateInit) {
 function emitTypes(file: File, component: MorphoComponent) {
   if (file.options.isTypeScript) {
     component.types?.forEach((t) => file.src.emit(t, '\n'));
-    component.interfaces?.forEach((i) => file.src.emit(i));
   }
 }
 
