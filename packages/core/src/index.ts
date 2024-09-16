@@ -59,6 +59,7 @@ export * from './generators/marko';
 export * from './generators/morpho';
 export * from './generators/template';
 export * from './generators/swift-ui';
+export * from './generators/lit';
 export * from './generators/react-native';
 export * from './helpers/parse-reactive-script';
 export * from './helpers/is-morpho-node';
