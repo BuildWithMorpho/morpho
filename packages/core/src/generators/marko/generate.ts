@@ -35,22 +35,6 @@ interface InternalToMarkoOptions extends ToMarkoOptions {
 const USE_MARKO_PRETTIER = false;
 
 /**
- * Return the names of methods and functions on state
- */
-function getStateMethodNames(json: MorphoComponent) {
-  return Object.keys(json.state).filter((key) => {
-    const type = json.state[key]?.type;
-    return type === 'function' || type === 'method';
-  });
-}
-/**
- * Return the names of getter and functions on state
- */
-function getStateGetterNames(json: MorphoComponent) {
-  return Object.keys(json.state).filter((key) => json.state[key]?.type === 'getter');
-}
-
-/**
  * Return the names of properties (basic literal values) on state
  */
 function getStatePropertyNames(json: MorphoComponent) {
@@ -115,7 +99,7 @@ const blockToMarko = (json: MorphoNode, options: InternalToMarkoOptions): string
         options.component,
         code as string,
       )}) `;
-    } else {
+    } else if (key !== 'innerHTML') {
       str += ` ${key}=(${processBinding(options.component, code as string)}) `;
     }
   }
@@ -123,6 +107,11 @@ const blockToMarko = (json: MorphoNode, options: InternalToMarkoOptions): string
     return str + ' />';
   }
   str += '>';
+
+  if (json.bindings.innerHTML?.code) {
+    str += `$!{${processBinding(options.component, json.bindings.innerHTML.code as string)}}`;
+  }
+
   if (json.children) {
     str += json.children.map((item) => blockToMarko(item, options)).join('\n');
   }
