@@ -8,6 +8,7 @@ import {
 import { componentToMorpho as morpho } from './generators/morpho';
 import { componentToLiquid as liquid } from './generators/liquid';
 import { componentToReact as react } from './generators/react';
+import { componentToPreact as preact } from './generators/react';
 import { componentToReactNative as reactNative } from './generators/react-native';
 import { componentToSolid as solid } from './generators/solid';
 import { componentToSvelte as svelte } from './generators/svelte';
@@ -38,4 +39,5 @@ export const targets = {
   stencil,
   qwik,
   marko,
+  preact,
 };
