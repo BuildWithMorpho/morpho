@@ -100,4 +100,5 @@ export type MorphoComponent = {
   subComponents: MorphoComponent[];
   types?: string[];
   propsTypeRef?: string;
+  defaultProps?: JSONObject;
 };
