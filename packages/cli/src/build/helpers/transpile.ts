@@ -40,6 +40,8 @@ export const transpile = async ({
     // Remove .lite extensions from imports without having to load a slow parser like babel
     // E.g. convert `import { foo } from './block.lite';` -> `import { foo } from './block';`
     const contents = output.code
+      // This Context replace is only needed for non-morpho components, i.e. plain `.js`/`.ts` files.
+      // Morpho components have logic that transform context import paths correctly.
       .replace(
         // we start by replacing all `context.lite` imports with `context`
         /\.context\.lite(['"][;\)])/g,
