@@ -1,5 +1,3 @@
-import '@builder.io/morpho/dist/src/jsx-types';
-
 export interface ItemListProps {
   list: string[];
 }
