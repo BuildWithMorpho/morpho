@@ -1,6 +1,13 @@
-import { useStore } from '@builder.io/morpho';
+import { useStore, useMetadata } from '@builder.io/morpho';
 
 import ItemList from './item-list.lite';
+
+// eslint-disable-next-line @builder.io/morpho/only-default-function-and-imports
+useMetadata({
+  qwik: {
+    mutable: ['state.list'],
+  },
+});
 
 export interface State {
   list: string[];
