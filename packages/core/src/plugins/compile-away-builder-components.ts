@@ -167,6 +167,10 @@ export const components: CompileAwayComponentsMap = {
     });
   },
   CustomCode(node: MorphoNode, context, components) {
+    const bindings: MorphoNode['bindings'] = {};
+    if (node?.bindings?.code) {
+      bindings.innerHTML = node.bindings.code;
+    }
     return wrapOutput(
       node,
       createMorphoNode({
@@ -174,6 +178,7 @@ export const components: CompileAwayComponentsMap = {
         properties: {
           innerHTML: node.properties.code || '',
         },
+        bindings: bindings,
       }),
       components,
     );

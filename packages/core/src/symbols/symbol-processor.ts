@@ -148,6 +148,9 @@ export function convertBuilderElementToMorphoComponent(
         name: componentName,
         options: symbolValue.data,
       },
+      properties: {
+        'builder-content-id': id,
+      },
     }),
   ];
 
