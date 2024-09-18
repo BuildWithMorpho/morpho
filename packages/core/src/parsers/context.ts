@@ -1,7 +1,7 @@
 import * as babel from '@babel/core';
 import { MorphoContext } from '../types/morpho-context';
 import { createMorphoContext } from '../helpers/create-morpho-context';
-import { parseStateObject } from './jsx';
+import { parseStateObjectToMorphoState } from './jsx/state';
 
 const { types } = babel;
 
@@ -35,7 +35,7 @@ export function parseContext(code: string, options: ParseContextOptions): Morpho
                     if (types.isObjectExpression(firstArg)) {
                       // TODO: support non object values by parsing any node type
                       // like the logic within each property value of parseStateObject
-                      context.value = parseStateObject(firstArg);
+                      context.value = parseStateObjectToMorphoState(firstArg);
                       found = true;
                     }
                   }

@@ -1,7 +1,7 @@
-import { JSONObject } from './json';
+import { MorphoState } from './morpho-component';
 
 export type MorphoContext = {
   '@type': '@builder.io/morpho/context';
   name: string;
-  value: JSONObject; // TODO: support non objects too
+  value: MorphoState;
 };

@@ -4,7 +4,7 @@ import traverse from 'traverse';
 import { createMorphoNode } from '../../helpers/create-morpho-node';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
 import { MorphoComponent } from '../../types/morpho-component';
-import { parseStateObject } from './state';
+import { parseStateObjectToMorphoState } from './state';
 
 const expressionToNode = (str: string) => {
   const code = `export default ${str}`;
@@ -27,7 +27,9 @@ export function extractContextComponents(json: MorphoComponent) {
         json.context.set[refPath] = {
           name,
           value: value
-            ? parseStateObject(expressionToNode(value) as babel.types.ObjectExpression)
+            ? parseStateObjectToMorphoState(
+                expressionToNode(value) as babel.types.ObjectExpression,
+              )
             : undefined,
         };
 
