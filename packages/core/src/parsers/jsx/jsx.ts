@@ -1,7 +1,6 @@
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
 import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
-import { functionLiteralPrefix } from '../../constants/function-literal-prefix';
 import { createMorphoComponent } from '../../helpers/create-morpho-component';
 import { createMorphoNode } from '../../helpers/create-morpho-node';
 import { getBindingsCode } from '../../helpers/get-bindings';
@@ -12,7 +11,7 @@ import { MorphoNode } from '../../types/morpho-node';
 import { tryParseJson } from '../../helpers/json';
 import { HOOKS } from '../../constants/hooks';
 import { jsonToAst } from './ast';
-import { mapReactIdentifiers, parseStateObject, parseStateObjectToMorphoState } from './state';
+import { mapReactIdentifiers, parseStateObjectToMorphoState } from './state';
 import { Context, ParseMorphoOptions } from './types';
 import { collectMetadata } from './metadata';
 import { extractContextComponents } from './context';
@@ -50,7 +49,7 @@ const componentFunctionToJson = (
               const valueNode = expression.arguments[1];
               if (valueNode) {
                 if (types.isObjectExpression(valueNode)) {
-                  const value = parseStateObject(valueNode);
+                  const value = parseStateObjectToMorphoState(valueNode);
                   setContext[keyPath] = {
                     name: keyNode.name,
                     value,
@@ -153,7 +152,7 @@ const componentFunctionToJson = (
     if (types.isFunctionDeclaration(item)) {
       if (types.isIdentifier(item.id)) {
         state[item.id.name] = {
-          code: `${functionLiteralPrefix}${generate(item).code!}`,
+          code: generate(item).code,
           type: 'function',
         };
       }
