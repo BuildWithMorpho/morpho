@@ -3,7 +3,7 @@ import { format } from 'prettier/standalone';
 import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
 import { renderPreComponent } from '../../helpers/render-imports';
 import { selfClosingTags } from '../../parsers/jsx';
-import { MorphoNode } from '../../types/morpho-node';
+import { checkIsForNode, MorphoNode } from '../../types/morpho-node';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
@@ -52,9 +52,9 @@ const blockToLit = (json: MorphoNode, options: ToLitOptions = {}): string => {
     return `\${${processBinding(json.bindings?._text.code as string)}}`;
   }
 
-  if (json.name === 'For') {
+  if (checkIsForNode(json)) {
     return `\${${processBinding(json.bindings.each?.code as string)}?.map((${
-      json.properties._forName
+      json.scope.forName
     }, index) => (
       html\`${json.children
         .filter(filterEmptyTextNodes)

@@ -1,10 +1,10 @@
 import { JSONObject } from './json';
 
-export type MorphoNode = {
+export type BaseNode = {
   '@type': '@builder.io/morpho/node';
-  name: string;
   meta: JSONObject;
-  scope: { [key: string]: Array<string> };
+  name: string;
+  scope: {};
   /**
    * Key-value store of string values for DOM attributes.
    * ```js
@@ -32,3 +32,18 @@ export type MorphoNode = {
   };
   children: MorphoNode[];
 };
+
+export type SpecialNodesNames = 'For' | 'Fragment' | 'Show' | 'Slot';
+
+export type ForNode = BaseNode & {
+  name: 'For';
+  scope: {
+    forName: string | undefined;
+    indexName: string | undefined;
+    collectionName: string | undefined;
+  };
+};
+
+export type MorphoNode = BaseNode | ForNode;
+
+export const checkIsForNode = (node: MorphoNode): node is ForNode => node.name === 'For';

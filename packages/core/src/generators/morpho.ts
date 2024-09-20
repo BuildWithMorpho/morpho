@@ -10,7 +10,7 @@ import { mapRefs } from '../helpers/map-refs';
 import { renderPreComponent } from '../helpers/render-imports';
 import { METADATA_HOOK_NAME, selfClosingTags } from '../parsers/jsx';
 import { MorphoComponent } from '../types/morpho-component';
-import { MorphoNode } from '../types/morpho-node';
+import { checkIsForNode, MorphoNode } from '../types/morpho-node';
 import { blockToReact, componentToReact } from './react';
 import { checkHasState } from '../helpers/state';
 
@@ -42,10 +42,10 @@ export const blockToMorpho = (
     });
   }
 
-  if (json.name === 'For') {
+  if (checkIsForNode(json)) {
     const needsWrapper = json.children.length !== 1;
     return `<For each={${json.bindings.each?.code}}>
-    {(${json.properties._forName}, index) =>
+    {(${json.scope.forName}, index) =>
       ${needsWrapper ? '<>' : ''}
         ${json.children.map((child) => blockToMorpho(child, options))}}
       ${needsWrapper ? '</>' : ''}

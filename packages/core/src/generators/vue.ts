@@ -14,7 +14,7 @@ import { stripStateAndPropsRefs } from '../helpers/strip-state-and-props-refs';
 import { getProps } from '../helpers/get-props';
 import { selfClosingTags } from '../parsers/jsx';
 import { extendedHook, MorphoComponent } from '../types/morpho-component';
-import { MorphoNode } from '../types/morpho-node';
+import { ForNode, MorphoNode } from '../types/morpho-node';
 import {
   Plugin,
   runPostCodePlugins,
@@ -128,9 +128,10 @@ const NODE_MAPPERS: {
   Fragment(json, options) {
     return json.children.map((item) => blockToVue(item, options)).join('\n');
   },
-  For(json, options) {
+  For(_json, options) {
+    const json = _json as ForNode;
     const keyValue = json.bindings.key || { code: 'index' };
-    const forValue = `(${json.properties._forName}, index) in ${stripStateAndPropsRefs(
+    const forValue = `(${json.scope.forName}, index) in ${stripStateAndPropsRefs(
       json.bindings.each?.code,
     )}`;
 

@@ -9,7 +9,7 @@ import { getStyles } from '../helpers/get-styles';
 import isChildren from '../helpers/is-children';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
-import { MorphoNode } from '../types/morpho-node';
+import { checkIsForNode, MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 import { checkHasState } from '../helpers/state';
@@ -115,11 +115,11 @@ const blockToSwift = (json: MorphoNode, options: ToSwiftOptions): string => {
     json.properties._ = placeholder || '';
   }
 
-  if (json.name === 'For') {
+  if (checkIsForNode(json)) {
     str += `ForEach(${processBinding(
       json.bindings.each?.code as string,
       options,
-    )}, id: \\.self) { ${json.properties._forName} in ${children
+    )}, id: \\.self) { ${json.scope.forName} in ${children
       .map((item) => blockToSwift(item, options))
       .join('\n')} }`;
   } else if (json.name === 'Show') {
