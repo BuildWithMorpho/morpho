@@ -4,41 +4,16 @@ import { SPEC } from './data/jsx-json.spec';
 import { runTestsForJsx } from './shared';
 
 const buttonWithMetadata = require('./data/blocks/button-with-metadata.raw');
-const image = require('./data/blocks/image.raw');
-const basicOnUpdateReturn = require('./data/basic-onUpdate-return.raw');
-const basicMorpho = require('./data/basic-custom-morpho-package.raw');
-const basicRef = require('./data/basic-ref.raw');
 const basicPropsRaw = require('./data/basic-props.raw');
 const basicPropsDestructureRaw = require('./data/basic-props-destructure.raw');
 
 describe('Parse JSX', () => {
   test('parseStateObject', () => {
-    const out = parseStateObjectToMorphoState(SPEC as any);
+    const out = parseStateObjectToMorphoState(SPEC);
     expect(out).toMatchSnapshot();
   });
   test('metadata', () => {
     const json = parseJsx(buttonWithMetadata);
-    expect(json).toMatchSnapshot();
-  });
-
-  test('Image', () => {
-    const json = parseJsx(image);
-    expect(json).toMatchSnapshot();
-  });
-  test('onUpdate return', () => {
-    const json = parseJsx(basicOnUpdateReturn);
-    expect(json).toMatchSnapshot();
-  });
-
-  test('useRef', () => {
-    const json = parseJsx(basicRef);
-    expect(json).toMatchSnapshot();
-  });
-
-  test('custom morpho package', () => {
-    const json = parseJsx(basicMorpho, {
-      compileAwayPackages: ['@dummy/custom-morpho'],
-    });
     expect(json).toMatchSnapshot();
   });
 

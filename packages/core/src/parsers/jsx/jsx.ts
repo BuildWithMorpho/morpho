@@ -5,7 +5,7 @@ import { stripNewlinesInStrings } from '../../helpers/replace-new-lines-in-strin
 import { MorphoComponent } from '../../types/morpho-component';
 import { tryParseJson } from '../../helpers/json';
 import { jsonToAst } from './ast';
-import { mapReactIdentifiers } from './state';
+import { mapStateIdentifiers } from './state';
 import { Context, ParseMorphoOptions } from './types';
 import { collectMetadata } from './metadata';
 import { extractContextComponents } from './context';
@@ -53,7 +53,19 @@ export function parseJsx(
     configFile: false,
     babelrc: false,
     comments: false,
-    presets: [[tsPreset, { isTSX: true, allExtensions: true }]],
+    presets: [
+      [
+        tsPreset,
+        {
+          isTSX: true,
+          allExtensions: true,
+          // If left to its default `false`, then this will strip away:
+          // - unused JS imports
+          // - types imports within regular JS import syntax
+          onlyRemoveTypeImports: true,
+        },
+      ],
+    ],
     plugins: [
       jsxPlugin,
       (): babel.PluginObj<Context> => ({
@@ -154,7 +166,7 @@ export function parseJsx(
   );
   const parsed = tryParseJson(toParse);
 
-  mapReactIdentifiers(parsed);
+  mapStateIdentifiers(parsed);
   extractContextComponents(parsed);
 
   parsed.subComponents = subComponentFunctions.map((item) => parseJsx(item, useOptions));
