@@ -1,7 +1,7 @@
 import dedent from 'dedent';
 import json5 from 'json5';
 import { format } from 'prettier/standalone';
-import { Transpiler } from '../types/transpiler';
+import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 import { fastClone } from '../helpers/fast-clone';
 import { getComponents } from '../helpers/get-components';
 import { getRefs } from '../helpers/get-refs';
@@ -14,8 +14,7 @@ import { MorphoNode } from '../types/morpho-node';
 import { blockToReact, componentToReact } from './react';
 import { checkHasState } from '../helpers/state';
 
-export interface ToMorphoOptions {
-  prettier?: boolean;
+export interface ToMorphoOptions extends BaseTranspilerOptions {
   format: 'react' | 'legacy';
 }
 
@@ -127,8 +126,8 @@ const getRefsString = (json: MorphoComponent, refs = Array.from(getRefs(json))) 
 
 const morphoCoreComponents = ['Show', 'For'];
 
-export const componentToMorpho =
-  (toMorphoOptions: Partial<ToMorphoOptions> = {}): Transpiler =>
+export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
+  (toMorphoOptions = {}) =>
   ({ component }) => {
     const options: ToMorphoOptions = {
       format: DEFAULT_FORMAT,

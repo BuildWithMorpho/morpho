@@ -11,12 +11,10 @@ import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
-import { Transpiler } from '../types/transpiler';
+import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 import { checkHasState } from '../helpers/state';
 
-export type ToSwiftOptions = {
-  prettier?: boolean;
-};
+export type ToSwiftOptions = BaseTranspilerOptions;
 
 const scrolls = (json: MorphoNode) => {
   return getStyles(json)?.overflow === 'auto';
@@ -290,8 +288,8 @@ function getInputBindings(json: MorphoComponent, options: ToSwiftOptions) {
   }
   return str;
 }
-export const componentToSwift =
-  (options: ToSwiftOptions = {}): Transpiler =>
+export const componentToSwift: TranspilerGenerator<ToSwiftOptions> =
+  (options = {}) =>
   ({ component }) => {
     const json = fastClone(component);
     mapDataForSwiftCompatability(json);
