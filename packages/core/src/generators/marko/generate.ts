@@ -3,7 +3,7 @@ import { format } from 'prettier/standalone';
 import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
 import { renderPreComponent } from '../../helpers/render-imports';
 import { selfClosingTags } from '../../parsers/jsx';
-import { MorphoNode } from '../../types/morpho-node';
+import { checkIsForNode, MorphoNode } from '../../types/morpho-node';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
@@ -24,6 +24,7 @@ import { MorphoComponent } from '../../types/morpho-component';
 import { getRefs } from '../../helpers/get-refs';
 import { camelCase } from 'lodash';
 import hash from 'hash-sum';
+import { getForArguments } from '../../helpers/nodes/for';
 
 export interface ToMarkoOptions extends BaseTranspilerOptions {}
 
@@ -53,8 +54,8 @@ const blockToMarko = (json: MorphoNode, options: InternalToMarkoOptions): string
     return json.children.map((child) => blockToMarko(child, options)).join('\n');
   }
 
-  if (json.name === 'For') {
-    const forArguments = (json?.scope?.For || []).join(',');
+  if (checkIsForNode(json)) {
+    const forArguments = getForArguments(json).join(',');
     return `<for|${forArguments}| of=(${processBinding(
       options.component,
       json.bindings.each?.code as string,

@@ -1,4 +1,5 @@
-import { MorphoNode } from '../../types/morpho-node';
+import { getForArguments } from '../../helpers/nodes/for';
+import { ForNode, MorphoNode } from '../../types/morpho-node';
 import { minify } from '../minify';
 import { SrcBuilder, iteratorProperty } from './src-generator';
 
@@ -21,15 +22,15 @@ export const DIRECTIVES: Record<
         }
       });
     },
-  For: (node: MorphoNode, blockFn: () => void) =>
+  For: (_node: MorphoNode, blockFn: () => void) =>
     function (this: SrcBuilder) {
+      const node = _node as ForNode;
       const expr = node.bindings.each?.code!;
       this.jsxExpression(() => {
-        const forName: string = node.properties._forName || '_';
-        const indexName: string | undefined = node.properties._indexName;
+        const forArgs = getForArguments(node);
+        const forName = forArgs[0];
         this.emit('(', expr, '||[]).map(');
-        this.isBuilder && this.emit('(('),
-          this.emit('function(', forName, indexName ? ',' : '', indexName ? indexName : '', '){');
+        this.isBuilder && this.emit('(('), this.emit('function(', forArgs, '){');
         if (this.isBuilder) {
           this.emit(
             'var state=Object.assign({},this,{',

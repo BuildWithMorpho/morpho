@@ -75,8 +75,8 @@ const angularTemplateNodeToMorphoNode = (
         bindings: {
           each: { code: transformBinding(expression, options) },
         },
-        properties: {
-          _forName: itemName,
+        scope: {
+          forName: itemName,
         },
         children: [angularTemplateNodeToMorphoNode(omit(node, 'templateAttrs'), options)],
       });
