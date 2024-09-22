@@ -30,6 +30,8 @@ const command: GluegunCommand = {
       return listTargets();
     }
 
+    // config file
+    const configRelPath = opts.config ?? opts.c;
     // Flags and aliases
     const from_ = strings.camelCase(opts.f ?? opts.from ?? 'morpho');
     const to = strings.camelCase(opts.t ?? opts.to);
@@ -46,7 +48,7 @@ const command: GluegunCommand = {
       plugins.push(compileAwayBuilderComponents());
     }
 
-    const morphoConfig = getMorphoConfig();
+    const morphoConfig = getMorphoConfig(configRelPath);
     const generatorOptions = morphoConfig?.options?.[to];
 
     const generatorOpts: Partial<{ [K in AllGeneratorOptionKeys]: any }> = {

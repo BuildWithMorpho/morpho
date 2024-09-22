@@ -6,7 +6,10 @@ const command: GluegunCommand = {
   name: 'build',
   alias: 'b',
   run: async (toolbox) => {
-    await build(getMorphoConfig());
+    const { parameters } = toolbox;
+    const opts = parameters.options;
+    const configRelPath = opts.config ?? opts.c;
+    await build(getMorphoConfig(configRelPath));
   },
 };
 
