@@ -62,5 +62,5 @@ export type MorphoConfig = {
    * Configure a custom parser function which takes a string and returns MorphoJSON
    * Defaults to the JSXParser of this project (src/parsers/jsx)
    */
-  parser?: (code: string) => MorphoComponent;
+  parser?: (code: string, path?: string) => MorphoComponent;
 };
