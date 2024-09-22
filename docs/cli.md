@@ -6,7 +6,7 @@ We currently have two CLI commands: `morpho build` and `morpho compile`.
 
 `morpho compile` is a relatively straightforward command. It:
 
-- Reads the config in `morpho.config.js`
+- Reads the config in `morpho.config.js` (also could specify config file by option: `--config=<file>`)
 - Receives 1 Morpho component file as input
 - Outputs it to 1 designated target.
 
@@ -14,7 +14,7 @@ We currently have two CLI commands: `morpho build` and `morpho compile`.
 
 `morpho build` is meant for entire project/folders, and is therefore more involved. It:
 
-- Reads the config in `morpho.config.js`
+- Reads the config in `morpho.config.js` (also could specify config file by option: `--config=<file>`)
 - Identifies a source folder
 - Reads _all_ Morpho files in the source folder, and
   - Outputs a component for each target in the config
