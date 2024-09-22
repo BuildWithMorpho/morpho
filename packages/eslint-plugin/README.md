@@ -7,7 +7,7 @@ A Morpho plugin containing rules that help you write valid and idiomatic Morpho 
 First, make sure you have [ESLint setup correctly](https://eslint.org/docs/user-guide/getting-started#installation-and-usage). Then, install this plugin by running:
 
 ```bash
-yarn add -D @builder.io/eslint-plugin-morpho@dev
+yarn add -D @builder.io/eslint-plugin-morpho
 ```
 
 Finally, add the plugin to the `plugins` array, and the rules you want to the `rules` array:
