@@ -64,7 +64,7 @@ const getMorphoComponentJSONs = async (options: MorphoConfig) => {
       async (path) => {
         try {
           const file = await readFile(path, 'utf8');
-          const parsed = await (options.parser ? options.parser(file) : parseJsx(file));
+          const parsed = await (options.parser ? options.parser(file, path) : parseJsx(file));
           return {
             path,
             morphoJson: parsed,
