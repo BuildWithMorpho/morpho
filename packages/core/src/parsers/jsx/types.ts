@@ -1,9 +1,9 @@
 import { MorphoComponent } from '../../types/morpho-component';
 
 export type ParseMorphoOptions = {
-  format: 'react' | 'simple';
   jsonHookNames?: string[];
   compileAwayPackages?: string[];
+  typescript: boolean;
 };
 
 export type Context = {

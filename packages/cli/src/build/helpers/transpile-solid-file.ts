@@ -1,12 +1,10 @@
 import * as babel from '@babel/core';
-import { MorphoComponent } from '@builder.io/morpho';
 
 const tsPreset = require('@babel/preset-typescript');
 
 export type TranspileSolidFileOptions = {
   path: string;
   contents: string;
-  morphoComponent: MorphoComponent;
 };
 
 // TO-DO: can this be replaced with esbuild `transpile` helper
