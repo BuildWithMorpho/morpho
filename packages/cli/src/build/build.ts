@@ -58,16 +58,68 @@ async function clean(options: MorphoConfig) {
   );
 }
 
-const getMorphoComponentJSONs = async (options: MorphoConfig) => {
+type ParsedMorphoJson = {
+  path: string;
+  typescriptMorphoJson: MorphoComponent;
+  javascriptMorphoJson: MorphoComponent;
+};
+
+const getRequiredParsers = (
+  options: MorphoConfig,
+): { javascript: boolean; typescript: boolean } => {
+  const targetsOptions = Object.values(options.options);
+
+  const targetsRequiringTypeScript = targetsOptions.filter((option) => option.typescript).length;
+  const needsTypeScript = targetsRequiringTypeScript > 0;
+
+  /**
+   * We use 2 ways to check if the user requires a JS output:
+   * - either there are fewer `options[target].typescript === true` than there are items in `targets`
+   * - either there are fewer `options[target].typescript === true` than there are items in `options.options`
+   *
+   * The reason for checking in multiple ways is if there is a mismatch between the number of targets in the `targets`
+   * array compared to the configurations in `options.options`.
+   */
+  const needsJavaScript =
+    options.targets.length > targetsRequiringTypeScript ||
+    targetsOptions.length > targetsRequiringTypeScript;
+
+  return {
+    typescript: needsTypeScript,
+    javascript: needsJavaScript,
+  };
+};
+
+const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMorphoJson[]> => {
+  const requiredParses = getRequiredParsers(options);
   return Promise.all(
     micromatch(await glob(options.files, { cwd }), `**/*.${options.extension ?? 'lite.tsx'}`).map(
-      async (path) => {
+      async (path): Promise<ParsedMorphoJson> => {
         try {
           const file = await readFile(path, 'utf8');
-          const parsed = await (options.parser ? options.parser(file, path) : parseJsx(file));
+          let typescriptMorphoJson: ParsedMorphoJson['typescriptMorphoJson'];
+          let javascriptMorphoJson: ParsedMorphoJson['javascriptMorphoJson'];
+          if (requiredParses.typescript && requiredParses.javascript) {
+            typescriptMorphoJson = options.parser
+              ? options.parser(file, path)
+              : parseJsx(file, { typescript: true });
+            javascriptMorphoJson = options.parser
+              ? options.parser(file, path)
+              : parseJsx(file, { typescript: false });
+          } else {
+            const singleParse = options.parser
+              ? options.parser(file, path)
+              : parseJsx(file, { typescript: requiredParses.typescript });
+
+            // technically only one of these will be used, but we set both to simplify things.
+            typescriptMorphoJson = singleParse;
+            javascriptMorphoJson = singleParse;
+          }
+
           return {
             path,
-            morphoJson: parsed,
+            typescriptMorphoJson,
+            javascriptMorphoJson,
           };
         } catch (err) {
           console.error('Could not parse file:', path);
@@ -93,7 +145,7 @@ const getTargetContexts = (options: MorphoConfig) =>
     (target): TargetContext => ({
       target,
       generator: getGeneratorForTarget({ target, options }),
-      outputPath: getTargetPath({ target }),
+      outputPath: options.getTargetPath?.(target) ?? getTargetPath({ target }),
     }),
   );
 
@@ -210,11 +262,9 @@ async function buildAndOutputComponentFiles({
   options,
   generator,
   outputPath,
-}: TargetContextWithConfig & {
-  files: { path: string; morphoJson: MorphoComponent }[];
-}) {
+}: TargetContextWithConfig & { files: ParsedMorphoJson[] }) {
   const debugTarget = debug(`morpho:${target}`);
-  const output = files.map(async ({ path, morphoJson }) => {
+  const output = files.map(async ({ path, typescriptMorphoJson, javascriptMorphoJson }) => {
     const outputFilePath = replaceFileExtensionForTarget({ target, path, options });
 
     // try to find override component file
@@ -230,7 +280,11 @@ async function buildAndOutputComponentFiles({
       debugTarget(`override exists for ${path}: ${!!overrideFile}`);
     }
     try {
-      transpiled = overrideFile ?? generator({ path, component: morphoJson });
+      const component = checkShouldOutputTypeScript({ options, target })
+        ? typescriptMorphoJson
+        : javascriptMorphoJson;
+
+      transpiled = overrideFile ?? generator({ path, component });
       debugTarget(`Success: transpiled ${path}. Output length: ${transpiled.length}`);
     } catch (error) {
       debugTarget(`Failure: transpiled ${path}.`);
@@ -247,7 +301,6 @@ async function buildAndOutputComponentFiles({
         transpiled = await transpileSolidFile({
           contents: transpiled,
           path,
-          morphoComponent: morphoJson,
         });
         break;
       case 'reactNative':
@@ -308,9 +361,10 @@ const outputNonComponentFiles = async ({
   options: MorphoConfig;
 }) => {
   const extension = getNonComponentFileExtension({ target, options });
+  const folderPath = `${options.dest}/${outputPath}`;
   await Promise.all(
     files.map(({ path, output }) =>
-      outputFile(`${options.dest}/${outputPath}/${path.replace(/\.tsx?$/, extension)}`, output),
+      outputFile(`${folderPath}/${path.replace(/\.tsx?$/, extension)}`, output),
     ),
   );
 };
