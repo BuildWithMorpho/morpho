@@ -111,7 +111,7 @@ const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMor
               ? options.parser(file, path)
               : parseJsx(file, { typescript: requiredParses.typescript });
 
-            // technically only one of these will be used, but we set both to simplify things.
+            // technically only one of these will be used, but we set both to simplify things types-wise.
             typescriptMorphoJson = singleParse;
             javascriptMorphoJson = singleParse;
           }
@@ -150,8 +150,8 @@ const getTargetContexts = (options: MorphoConfig) =>
   );
 
 const buildAndOutputNonComponentFiles = async (targetContext: TargetContextWithConfig) => {
-  const jsFiles = await buildNonComponentFiles(targetContext);
-  await outputNonComponentFiles({ ...targetContext, files: jsFiles });
+  const files = await buildNonComponentFiles(targetContext);
+  await outputNonComponentFiles({ ...targetContext, files });
 };
 
 export async function build(config?: MorphoConfig) {
