@@ -38,6 +38,7 @@ const DEFAULT_CONFIG: Partial<MorphoConfig> = {
   dest: 'output',
   files: 'src/*',
   overridesDir: 'overrides',
+  extension: 'lite.tsx',
 };
 
 const getOptions = (config?: MorphoConfig): MorphoConfig => ({
@@ -93,7 +94,7 @@ const getRequiredParsers = (
 const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMorphoJson[]> => {
   const requiredParses = getRequiredParsers(options);
   return Promise.all(
-    micromatch(await glob(options.files, { cwd }), `**/*.${options.extension ?? 'lite.tsx'}`).map(
+    micromatch(await glob(options.files, { cwd }), `**/*.${options.extension}`).map(
       async (path): Promise<ParsedMorphoJson> => {
         try {
           const file = await readFile(path, 'utf8');
@@ -250,8 +251,10 @@ const replaceFileExtensionForTarget = ({
   target: Target;
   path: string;
   options: MorphoConfig;
-}) =>
-  path.replace(/\.lite\.tsx$/, getFileExtensionForTarget({ type: 'filename', target, options }));
+}) => {
+  let regex = new RegExp(`.${options.extension}$`);
+  return path.replace(regex, getFileExtensionForTarget({ type: 'filename', target, options }));
+};
 
 /**
  * Transpiles and outputs Morpho component files.
