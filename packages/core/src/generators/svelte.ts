@@ -463,7 +463,7 @@ export const componentToSvelte: TranspilerGenerator<ToSvelteOptions> =
         hasStyle(json)
           ? `
         function morpho_styling (node, vars) {
-          Object.entries(vars).forEach(([ p, v ]) => { node.style[p] = v })
+          Object.entries(vars || {}).forEach(([ p, v ]) => { node.style[p] = v })
         }
       `
           : ''
