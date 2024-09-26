@@ -118,14 +118,14 @@ const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMor
           let javascriptMorphoJson: ParsedMorphoJson['javascriptMorphoJson'];
           if (requiredParses.typescript && requiredParses.javascript) {
             typescriptMorphoJson = options.parser
-              ? options.parser(file, path)
+              ? await options.parser(file, path)
               : parseJsx(file, { typescript: true });
             javascriptMorphoJson = options.parser
-              ? options.parser(file, path)
+              ? await options.parser(file, path)
               : parseJsx(file, { typescript: false });
           } else {
             const singleParse = options.parser
-              ? options.parser(file, path)
+              ? await options.parser(file, path)
               : parseJsx(file, { typescript: requiredParses.typescript });
 
             // technically only one of these will be used, but we set both to simplify things types-wise.
