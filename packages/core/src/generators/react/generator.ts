@@ -274,7 +274,7 @@ const getRefsString = (json: MorphoComponent, refs: string[], options: ToReactOp
 
 function addProviderComponents(json: MorphoComponent, options: ToReactOptions) {
   for (const key in json.context.set) {
-    const { name, value } = json.context.set[key];
+    const { name, ref, value } = json.context.set[key];
     if (value) {
       json.children = [
         createMorphoNode({
@@ -284,6 +284,20 @@ function addProviderComponents(json: MorphoComponent, options: ToReactOptions) {
             bindings: {
               value: {
                 code: stringifyContextValue(value),
+              },
+            },
+          }),
+        }),
+      ];
+    } else if (ref) {
+      json.children = [
+        createMorphoNode({
+          name: 'Context.Provider',
+          children: json.children,
+          ...(ref && {
+            bindings: {
+              value: {
+                code: ref,
               },
             },
           }),
