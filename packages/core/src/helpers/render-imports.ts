@@ -46,7 +46,7 @@ const getFileExtensionForTarget = (target: Target) => {
   }
 };
 
-const checkIsComponentImport = (theImport: MorphoImport) =>
+export const checkIsComponentImport = (theImport: MorphoImport) =>
   theImport.path.endsWith('.lite') && !theImport.path.endsWith('.context.lite');
 
 const transformImportPath = (theImport: MorphoImport, target: Target) => {
