@@ -186,7 +186,7 @@ export const renderPreComponent = ({
       excludeMorphoComponents,
     })}
     ${renderExportAndLocal(component)}
-    ${component.hooks.preComponent || ''}
+    ${component.hooks.preComponent?.code || ''}
   `;
 
 export const renderExportAndLocal = (component: MorphoComponent): string => {
