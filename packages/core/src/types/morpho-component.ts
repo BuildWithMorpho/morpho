@@ -120,4 +120,5 @@ export type MorphoComponent = {
   types?: string[];
   propsTypeRef?: string;
   defaultProps?: JSONObject;
+  style?: string;
 };
