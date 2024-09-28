@@ -21,7 +21,11 @@ export const nodeHasStyle = (node: MorphoNode) => {
 };
 
 export const hasCss = (component: MorphoComponent) => {
-  let hasStyles = false;
+  let hasStyles = !!component.style?.length;
+
+  if (hasStyles) {
+    return true;
+  }
 
   traverse(component).forEach(function (item) {
     if (isMorphoNode(item)) {
