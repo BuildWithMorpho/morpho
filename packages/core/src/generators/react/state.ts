@@ -81,6 +81,7 @@ export const updateStateSetters = (json: MorphoComponent, options: ToReactOption
           item.bindings[key] = {
             code: newValue,
             arguments: values?.arguments,
+            type: values?.type,
           };
         }
       }

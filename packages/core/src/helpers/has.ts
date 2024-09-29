@@ -7,7 +7,7 @@ import { isMorphoNode } from './is-morpho-node';
  * Test if the component has something
  *
  * e.g.
- *    const hasSpread = has(component, node => Boolean(node.bindings._spread));
+ *    const hasSpread = has(component, node => some(node.bindings, { type: 'spread' }));
  */
 export function has(json: MorphoComponent, test: (node: MorphoNode) => boolean) {
   let found = false;
