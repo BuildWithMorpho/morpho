@@ -84,9 +84,6 @@ const blockToMarko = (json: MorphoNode, options: InternalToMarkoOptions): string
   }
   for (const key in json.bindings) {
     const { code, arguments: cusArgs = ['event'], type } = json.bindings[key]!;
-    if (key === '_forName') {
-      continue;
-    }
 
     if (type === 'spread') {
       str += ` ...(${code}) `;
