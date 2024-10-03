@@ -1,12 +1,12 @@
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
-import { MorphoExport } from '../../types/morpho-component';
+import { MorphoExports } from '../../types/morpho-component';
 import { isTypeOrInterface } from './component-types';
 import { isImportOrDefaultExport } from './helpers';
 
 const { types } = babel;
 
-export const generateExports = (path: babel.NodePath<babel.types.Program>): MorphoExport => {
+export const generateExports = (path: babel.NodePath<babel.types.Program>): MorphoExports => {
   const exportsOrLocalVariables = path.node.body.filter(
     (statement) =>
       !isImportOrDefaultExport(statement) &&
@@ -14,7 +14,7 @@ export const generateExports = (path: babel.NodePath<babel.types.Program>): Morp
       !types.isExpressionStatement(statement),
   );
 
-  return exportsOrLocalVariables.reduce<MorphoExport>((pre, node) => {
+  return exportsOrLocalVariables.reduce<MorphoExports>((pre, node) => {
     let name, isFunction;
     if (babel.types.isExportNamedDeclaration(node)) {
       if (

@@ -50,13 +50,15 @@ export type MorphoComponentInput = {
   defaultValue: any;
 };
 
-export type MorphoExport = {
-  [name: string]: {
-    code: string;
-    usedInLocal?: boolean;
-    isFunction?: boolean;
-  };
+export type MorphoExports = {
+  [name: string]: MorphoExport;
 };
+
+export interface MorphoExport {
+  code: string;
+  usedInLocal?: boolean;
+  isFunction?: boolean;
+}
 
 export type StateValueType = 'function' | 'getter' | 'method' | 'property';
 
@@ -90,7 +92,7 @@ export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
   imports: MorphoImport[];
-  exports?: MorphoExport;
+  exports?: MorphoExports;
   meta: JSONObject & {
     useMetadata?: JSONObject;
   };
