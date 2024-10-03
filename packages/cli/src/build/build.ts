@@ -68,7 +68,10 @@ const getOptions = (config?: MorphoConfig): MorphoConfig => ({
 });
 
 async function clean(options: MorphoConfig) {
-  const files = await glob(`${options.dest}/**/*/${options.files}`);
+  const patterns = options.targets.map(
+    (target) => `${options.dest}/${options.getTargetPath({ target })}/${options.files}`,
+  );
+  const files = await glob(patterns);
   await Promise.all(
     files.map(async (file) => {
       await remove(file);
