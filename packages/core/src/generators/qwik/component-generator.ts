@@ -92,6 +92,7 @@ export const componentToQwik: TranspilerGenerator<ToQwikOptions> =
             emitUseRef(file, component);
             hasState && emitUseStore(file, state);
             emitUseContextProvider(file, component);
+            emitUseClientEffect(file, component);
             emitUseMount(file, component);
             emitUseWatch(file, component);
             emitUseCleanup(file, component);
@@ -149,7 +150,7 @@ function emitTagNameHack(file: File, component: MorphoComponent, metadataValue: 
   }
 }
 
-function emitUseMount(file: File, component: MorphoComponent) {
+function emitUseClientEffect(file: File, component: MorphoComponent) {
   if (component.hooks.onMount) {
     // This is called useMount, but in practice it is used as
     // useClientEffect. Not sure if this is correct, but for now.
@@ -162,6 +163,14 @@ function emitUseMount(file: File, component: MorphoComponent) {
     );
   }
 }
+
+function emitUseMount(file: File, component: MorphoComponent) {
+  if (component.hooks.onInit) {
+    const code = component.hooks.onInit.code;
+    file.src.emit(file.import(file.qwikModule, 'useMount$').localName, '(()=>{', code, '});');
+  }
+}
+
 function emitUseWatch(file: File, component: MorphoComponent) {
   if (component.hooks.onUpdate) {
     component.hooks.onUpdate.forEach((onUpdate) => {
