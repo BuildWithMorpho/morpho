@@ -6,7 +6,7 @@ import isChildren from './is-children';
 export const hasBindingsText = (json: MorphoComponent) => {
   let has = false;
   traverse(json).forEach(function (node) {
-    if (isMorphoNode(node) && !isChildren(node) && node.bindings._text?.code) {
+    if (isMorphoNode(node) && !isChildren({ node }) && node.bindings._text?.code) {
       has = true;
       this.stop();
     }
