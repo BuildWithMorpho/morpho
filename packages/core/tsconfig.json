@@ -15,7 +15,8 @@
     "paths": {
       "@builder.io/morpho": ["./src"]
     },
-    "jsxImportSource": "@builder.io/morpho"
+    "jsxImportSource": "@builder.io/morpho",
+    "types": ["vitest/globals"]
   },
   "include": ["./src", "./typings.d.ts", "./jsx-runtime.d.ts"],
   "exclude": ["src/**/*.raw.tsx"]
