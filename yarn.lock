@@ -2554,6 +2554,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@builder.io/morpho-fiddle@workspace:packages/fiddle"
   dependencies:
+    "@builder.io/eslint-plugin-morpho": "workspace:*"
     "@builder.io/morpho": "workspace:*"
     "@builder.io/sdk": ^1.1.20
     "@emotion/react": ^11.9.3
