@@ -4,6 +4,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
+    "morpho-alpine": "morpho build alpine",
     "morpho-angular": "morpho build angular",
     "morpho-builder": "echo NOT SUPPORTED YET morpho build builder",
     "morpho-customElement": "morpho build customElement",
@@ -50,6 +51,7 @@
     "vue": "^2.6.12"
   },
   "exports": {
+    "./alpine/*": "./output/alpine/alpine/src/*",
     "./angular/*": "./output/angular/angular/src/*",
     "./builder/*": "./output/builder/builder/src/*",
     "./customElement/*": "./output/customElement/customElement/src/*",
