@@ -3,7 +3,7 @@ import { MorphoNode } from '../types/morpho-node';
 import traverse, { TraverseContext } from 'traverse';
 import { isMorphoNode } from './is-morpho-node';
 
-export function tarverseNodes(
+export function traverseNodes(
   component: MorphoComponent | MorphoNode,
   cb: (node: MorphoNode, context: TraverseContext) => void,
 ) {
