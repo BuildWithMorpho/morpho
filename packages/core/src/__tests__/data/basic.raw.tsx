@@ -1,4 +1,4 @@
-import { useStore } from '@builder.io/morpho';
+import { useStore, useState } from '@builder.io/morpho';
 
 export const DEFAULT_VALUES = {
   name: 'Steve',
@@ -11,6 +11,9 @@ export default function MyBasicComponent(props: { id: string }) {
       return 'bar';
     },
   });
+
+  const [age, setAge] = useState<number>(1);
+  const [sports, setSports] = useState<Array<string>>(['']);
 
   return (
     <div

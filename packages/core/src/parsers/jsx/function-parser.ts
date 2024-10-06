@@ -4,7 +4,7 @@ import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-mod
 import { createMorphoComponent } from '../../helpers/create-morpho-component';
 import { getBindingsCode } from '../../helpers/get-bindings';
 import { JSONOrNode } from '../../types/json';
-import { MorphoComponent } from '../../types/morpho-component';
+import { MorphoComponent, StateValue } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
 import { HOOKS } from '../../constants/hooks';
 import { parseStateObjectToMorphoState } from './state';
@@ -202,6 +202,13 @@ export const componentFunctionToJson = (
                 code: parseCodeJson(value),
                 type: 'property',
               };
+            }
+
+            // Typescript Parameter
+            if (types.isTSTypeParameterInstantiation(init.typeParameters)) {
+              (state[varName] as StateValue).typeParameter = generate(
+                init.typeParameters.params[0],
+              ).code;
             }
           }
         }
