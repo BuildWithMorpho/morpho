@@ -2,7 +2,7 @@ import { Plugin } from '../../types/plugins';
 import { MorphoComponent } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
 import { checkIsDefined } from '../nullable';
-import { tarverseNodes } from '../traverse-nodes';
+import { traverseNodes } from '../traverse-nodes';
 
 type CodeType = 'hooks' | 'hooks-deps' | 'bindings' | 'properties' | 'state';
 
@@ -74,7 +74,7 @@ export const CODE_PROCESSOR_PLUGIN =
           }
         }
 
-        tarverseNodes(json, (node) => {
+        traverseNodes(json, (node) => {
           preProcessBlockCode({ json: node, codeProcessor });
         });
       },
