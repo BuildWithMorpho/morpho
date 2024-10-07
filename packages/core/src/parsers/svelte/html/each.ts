@@ -1,0 +1,19 @@
+import { createMorphoNode } from '../helpers/morpho-node';
+import { parseChildren } from '../helpers/children';
+
+import type { TemplateNode } from 'svelte/types/compiler/interfaces';
+import type { SveltosisComponent } from '../types';
+
+export function parseEach(json: SveltosisComponent, node: TemplateNode) {
+  return {
+    ...createMorphoNode(),
+    name: 'For',
+    scope: { forName: node.context.name },
+    bindings: {
+      each: {
+        code: node.expression.name,
+      },
+    },
+    children: parseChildren(json, node),
+  };
+}
