@@ -22,7 +22,7 @@ export const transformImports = (target: Target, options: MorphoConfig) => (code
       `${getFileExtensionForTarget({ type: 'import', target, options })}$1`,
     )
     .replace(
-      `.${options.extension}`,
+      new RegExp(`.${options.extension}['"]`, 'g'),
       `${getFileExtensionForTarget({ type: 'import', target, options })}`,
     );
 
