@@ -857,6 +857,14 @@ const builderContentPartToMorphoComponent = (
 
   const parsedState = parsed?.state || {};
 
+  const morphoState =
+    Object.keys(parsedState).length > 0
+      ? parsedState
+      : {
+          ...state,
+          ...mapBuilderContentStateToMorphoState(builderContent.data?.state || {}),
+        };
+
   const componentJson = createMorphoComponent({
     meta: {
       useMetadata: {
@@ -868,13 +876,7 @@ const builderContentPartToMorphoComponent = (
       name: input.name,
       defaultValue: input.defaultValue,
     })),
-    state:
-      Object.keys(parsedState).length > 0
-        ? parsedState
-        : {
-            ...state,
-            ...mapBuilderContentStateToMorphoState(builderContent.data?.state || {}),
-          },
+    state: morphoState,
     hooks: {
       ...((parsed?.hooks.onMount?.code || (customCode && { code: customCode })) && {
         onMount: parsed?.hooks.onMount || { code: customCode },
