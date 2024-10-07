@@ -23,7 +23,7 @@ const getDefaultImport = ({ theImport }: { theImport: MorphoImport }): string | 
   return null;
 };
 
-const getFileExtensionForTarget = (target: Target) => {
+const getFileExtensionForTarget = (target: Target): string => {
   switch (target) {
     case 'svelte':
       return '.svelte';
