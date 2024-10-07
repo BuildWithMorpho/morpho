@@ -39,16 +39,6 @@ export default () => {
         <meta property="og:url" content="https://morpho.builder.io" />
         <link rel="canonical" href="https://morpho.builder.io" />
         <title>Morpho Fiddle - compile to common frameworks, import from popular tools</title>
-
-        <Script>
-          {`
-          if (location.hostname === 'jsx-lite-fiddle.web.app') {
-            var url = new URL(location.href);
-            url.hostname = 'morpho.builder.io';
-            location.href = url.href;
-          }
-          `}
-        </Script>
       </Head>
       <noscript>You need to enable JavaScript to run this app.</noscript>
       <App />

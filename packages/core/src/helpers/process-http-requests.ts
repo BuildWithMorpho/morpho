@@ -1,7 +1,7 @@
 import { MorphoComponent } from '..';
 
 export function processHttpRequests(json: MorphoComponent) {
-  const httpRequests: Record<string, string> | undefined = (json.meta.useMetadata as any)
+  const httpRequests: Record<string, string> | undefined = (json?.meta?.useMetadata as any)
     ?.httpRequests;
 
   let onMount = json.hooks.onMount?.code ? json.hooks.onMount : { code: '' };
