@@ -20,16 +20,22 @@ import {
   parseJsx,
   Target,
   TranspilerGenerator,
+  parseSvelte,
 } from '@builder.io/morpho';
 import debug from 'debug';
 import glob from 'fast-glob';
 import { flow, pipe } from 'fp-ts/lib/function';
 import { outputFile, pathExists, readFile, remove } from 'fs-extra';
 import { kebabCase } from 'lodash';
-import micromatch from 'micromatch';
 import { fastClone } from '../helpers/fast-clone';
 import { generateContextFile } from './helpers/context';
 import { getFileExtensionForTarget } from './helpers/extensions';
+import {
+  checkIsMorphoComponentFilePath,
+  INPUT_EXTENSIONS,
+  INPUT_EXTENSIONS_ARRAY,
+  INPUT_EXTENSION_REGEX,
+} from './helpers/inputs-extensions';
 import { transformImports, transpile } from './helpers/transpile';
 import { transpileSolidFile } from './helpers/transpile-solid-file';
 
@@ -55,7 +61,6 @@ const DEFAULT_CONFIG: Partial<MorphoConfig> = {
   dest: 'output',
   files: 'src/*',
   overridesDir: 'overrides',
-  extension: 'lite.tsx',
   getTargetPath,
 };
 
@@ -112,43 +117,73 @@ const getRequiredParsers = (
   };
 };
 
-const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMorphoJson[]> => {
+const parseJsxComponent = async ({
+  options,
+  path,
+  file,
+}: {
+  options: MorphoConfig;
+  path: string;
+  file: string;
+}) => {
   const requiredParses = getRequiredParsers(options);
+  let typescriptMorphoJson: ParsedMorphoJson['typescriptMorphoJson'];
+  let javascriptMorphoJson: ParsedMorphoJson['javascriptMorphoJson'];
+  if (requiredParses.typescript && requiredParses.javascript) {
+    typescriptMorphoJson = options.parser
+      ? await options.parser(file, path)
+      : parseJsx(file, { typescript: true });
+    javascriptMorphoJson = options.parser
+      ? await options.parser(file, path)
+      : parseJsx(file, { typescript: false });
+  } else {
+    const singleParse = options.parser
+      ? await options.parser(file, path)
+      : parseJsx(file, { typescript: requiredParses.typescript });
+
+    // technically only one of these will be used, but we set both to simplify things types-wise.
+    typescriptMorphoJson = singleParse;
+    javascriptMorphoJson = singleParse;
+  }
+
+  const output: ParsedMorphoJson = {
+    path,
+    typescriptMorphoJson,
+    javascriptMorphoJson,
+  };
+  return output;
+};
+
+const parseSvelteComponent = async ({ path, file }: { path: string; file: string }) => {
+  const json = await parseSvelte(file, path);
+
+  const output: ParsedMorphoJson = {
+    path,
+    typescriptMorphoJson: json,
+    javascriptMorphoJson: json,
+  };
+
+  return output;
+};
+
+const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMorphoJson[]> => {
+  const pattern = `**/*(${INPUT_EXTENSIONS_ARRAY.join('|')})`;
+  console.log('pattern', pattern);
+  const paths = (await glob(options.files, { cwd })).filter(checkIsMorphoComponentFilePath);
   return Promise.all(
-    micromatch(await glob(options.files, { cwd }), `**/*.${options.extension}`).map(
-      async (path): Promise<ParsedMorphoJson> => {
-        try {
-          const file = await readFile(path, 'utf8');
-          let typescriptMorphoJson: ParsedMorphoJson['typescriptMorphoJson'];
-          let javascriptMorphoJson: ParsedMorphoJson['javascriptMorphoJson'];
-          if (requiredParses.typescript && requiredParses.javascript) {
-            typescriptMorphoJson = options.parser
-              ? await options.parser(file, path)
-              : parseJsx(file, { typescript: true });
-            javascriptMorphoJson = options.parser
-              ? await options.parser(file, path)
-              : parseJsx(file, { typescript: false });
-          } else {
-            const singleParse = options.parser
-              ? await options.parser(file, path)
-              : parseJsx(file, { typescript: requiredParses.typescript });
-
-            // technically only one of these will be used, but we set both to simplify things types-wise.
-            typescriptMorphoJson = singleParse;
-            javascriptMorphoJson = singleParse;
-          }
-
-          return {
-            path,
-            typescriptMorphoJson,
-            javascriptMorphoJson,
-          };
-        } catch (err) {
-          console.error('Could not parse file:', path);
-          throw err;
+    paths.map(async (path): Promise<ParsedMorphoJson> => {
+      try {
+        const file = await readFile(path, 'utf8');
+        if (INPUT_EXTENSIONS.svelte.some((x) => path.endsWith(x))) {
+          return await parseSvelteComponent({ path, file });
+        } else {
+          return await parseJsxComponent({ options, path, file });
         }
-      },
-    ),
+      } catch (err) {
+        console.error('Could not parse file:', path);
+        throw err;
+      }
+    }),
   );
 };
 
@@ -260,7 +295,7 @@ const checkShouldOutputTypeScript = ({
   return !!options.options[target]?.typescript;
 };
 
-const replaceFileExtensionForTarget = ({
+const getComponentOutputFileName = ({
   target,
   path,
   options,
@@ -269,8 +304,10 @@ const replaceFileExtensionForTarget = ({
   path: string;
   options: MorphoConfig;
 }) => {
-  let regex = new RegExp(`.${options.extension}$`);
-  return path.replace(regex, getFileExtensionForTarget({ type: 'filename', target, options }));
+  return path.replace(
+    INPUT_EXTENSION_REGEX,
+    getFileExtensionForTarget({ type: 'filename', target, options }),
+  );
 };
 
 /**
@@ -287,7 +324,7 @@ async function buildAndOutputComponentFiles({
   const shouldOutputTypescript = checkShouldOutputTypeScript({ options, target });
 
   const output = files.map(async ({ path, typescriptMorphoJson, javascriptMorphoJson }) => {
-    const outputFilePath = replaceFileExtensionForTarget({ target, path, options });
+    const outputFilePath = getComponentOutputFileName({ target, path, options });
 
     /**
      * Try to find override file.
