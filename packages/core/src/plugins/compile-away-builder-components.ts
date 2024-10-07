@@ -9,6 +9,7 @@ import { MorphoNode } from '../types/morpho-node';
 import * as JSON5 from 'json5';
 import { BuilderElement } from '@builder.io/sdk';
 import { builderElementToMorphoNode } from '../parsers/builder';
+import { Plugin } from '..';
 
 function getComponentInputNames(componentName: string): string[] {
   const componentInfo = Builder.components.find((item) => item.name === componentName);
@@ -574,7 +575,7 @@ export const compileAwayBuilderComponentsFromTree = (
 
 export const compileAwayBuilderComponents = (
   pluginOptions: CompileAwayBuilderComponentsOptions = {},
-) => {
+): Plugin => {
   let obj = components;
   if (pluginOptions.omit) {
     obj = omit(obj, pluginOptions.omit);
