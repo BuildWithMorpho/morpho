@@ -1,5 +1,4 @@
 import { MorphoContext } from '../types/morpho-context';
-import json5 from 'json5';
 import { MorphoComponent, StateValue } from '../types/morpho-component';
 
 interface GetStateObjectStringOptions {
@@ -65,7 +64,7 @@ const convertStateMemberToString =
           return undefined;
         }
         return `${keyPrefix} ${key}${keyValueDelimiter} ${valueMapper(
-          json5.stringify(code),
+          code,
           'data',
           typeParameter,
         )}`;
