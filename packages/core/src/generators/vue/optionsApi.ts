@@ -15,7 +15,7 @@ function getContextInjectString(component: MorphoComponent, options: ToVueOption
 
   for (const key in component.context.get) {
     str += `
-      ${key}: "${encodeQuotes(component.context.get[key].name)}",
+      ${key}: ${encodeQuotes(component.context.get[key].name)},
     `;
   }
 
