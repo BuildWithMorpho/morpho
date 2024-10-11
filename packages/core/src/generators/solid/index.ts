@@ -115,33 +115,6 @@ const collectClassString = (json: MorphoNode, options: ToSolidOptions): string |
   return null;
 };
 
-const preProcessBlockCode = ({
-  json,
-  options,
-  component,
-}: {
-  json: MorphoNode;
-  options: ToSolidOptions;
-  component: MorphoComponent;
-}) => {
-  for (const key in json.properties) {
-    const value = json.properties[key];
-    if (value) {
-      json.properties[key] = updateStateCode({ options, component, updateSetters: false })(value);
-    }
-  }
-  for (const key in json.bindings) {
-    const value = json.bindings[key];
-    if (value?.code) {
-      json.bindings[key] = {
-        arguments: value.arguments,
-        code: updateStateCode({ options, component, updateSetters: true })(value.code),
-        type: value?.type,
-      };
-    }
-  }
-};
-
 const blockToSolid = ({
   json,
   options,
