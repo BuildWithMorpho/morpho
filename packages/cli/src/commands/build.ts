@@ -25,7 +25,10 @@ const command: GluegunCommand = {
     const { parameters } = toolbox;
     const opts = parameters.options;
     const configRelPath = opts.config ?? opts.c;
-    const config: MorphoConfig = getMorphoConfig(configRelPath)!;
+    const config = getMorphoConfig(configRelPath);
+    if (!config) {
+      throw new Error(`No config file found for Morpho.`);
+    }
     const targets = getTargets(config, opts);
     await build({
       ...config,

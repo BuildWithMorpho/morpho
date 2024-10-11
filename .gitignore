@@ -21,6 +21,7 @@ packages/core/morpho-build
 !**/.yarn/versions
 
 examples/**/output
+!examples/**/output/package.json
 e2e/**/output
 packages/e2e-*/**
 **/test-results/

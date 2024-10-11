@@ -39,7 +39,9 @@ const processHookCode = (
     // AKA
     //  { console.log('hi') } -> console.log('hi')
     .replace(/^{/, '')
-    .replace(/}$/, '');
+    .replace(/}$/, '')
+    .trim();
+
 /**
  * Parses function declarations within the Morpho copmonent's body to JSON
  */
