@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "jsxImportSource": "@builder.io/morpho"
+  },
+  "include": [
+    "src"
+  ]
+}
