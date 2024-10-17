@@ -13,7 +13,7 @@
     "target": "ES5",
     "baseUrl": ".",
     "paths": {
-      "@builder.io/morpho": ["./src"]
+      "@builder.io/morpho": ["./src"],
     },
     "jsxImportSource": "@builder.io/morpho",
     "types": ["vitest/globals"]
