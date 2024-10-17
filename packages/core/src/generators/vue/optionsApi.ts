@@ -7,15 +7,29 @@ import { checkIsDefined } from '../../helpers/nullable';
 import { checkIsComponentImport } from '../../helpers/render-imports';
 import { MorphoComponent, extendedHook } from '../../types/morpho-component';
 import { PropsDefinition, DefaultProps } from 'vue/types/options';
-import { encodeQuotes, getContextProvideString, getOnUpdateHookName } from './helpers';
+import { encodeQuotes, getContextKey, getContextValue, getOnUpdateHookName } from './helpers';
 import { ToVueOptions } from './types';
+
+const getContextProvideString = (json: MorphoComponent, options: ToVueOptions) => {
+  return `{
+    ${Object.values(json.context.set)
+      .map((setVal) => {
+        const key = getContextKey(setVal);
+        return `[${key}]: ${getContextValue({ options, json, thisPrefix: '_this' })(setVal)}`;
+      })
+      .join(',')}
+  }`;
+};
 
 function getContextInjectString(component: MorphoComponent, options: ToVueOptions) {
   let str = '{';
 
-  for (const key in component.context.get) {
+  const contextGetters = component.context.get;
+
+  for (const key in contextGetters) {
+    const context = contextGetters[key];
     str += `
-      ${key}: ${encodeQuotes(component.context.get[key].name)},
+      ${key}: ${encodeQuotes(getContextKey(context))},
     `;
   }
 
@@ -187,6 +201,7 @@ export function generateOptionsApiScript(
         ${
           size(component.context.set)
             ? `provide() {
+                const _this = this;
                 return ${getContextProvideString(component, options)}
               },`
             : ''

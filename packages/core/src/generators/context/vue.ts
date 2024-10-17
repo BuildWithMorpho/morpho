@@ -1,14 +1,3 @@
-import { MorphoContext } from '../../types/morpho-context';
+import { getContextWithSymbolKey } from './helpers/context-with-symbol-key';
 
-type ContextToVueOptions = {
-  format?: boolean;
-};
-
-export function contextToVue(context: MorphoContext, options: ContextToVueOptions = {}): string {
-  let str = `
-    // Noop file
-    export default {};
-  `;
-
-  return str;
-}
+export const contextToVue = getContextWithSymbolKey;
