@@ -20,6 +20,7 @@ const recommendedRules: Record<RulesKeys, string> = {
   '@builder.io/morpho/use-state-var-declarator': 'error',
   '@builder.io/morpho/static-control-flow': 'error',
   '@builder.io/morpho/no-var-name-same-as-prop-name': 'error',
+  '@builder.io/morpho/no-map-function-in-jsx-return-body': 'warning',
 };
 
 export default {
