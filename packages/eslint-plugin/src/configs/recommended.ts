@@ -4,7 +4,7 @@ const PLUGIN_NAME = '@builder.io/morpho' as const;
 
 type RulesKeys = `${typeof PLUGIN_NAME}/${keyof typeof rules}`;
 
-const recommendedRules: Record<RulesKeys, string> = {
+const recommendedRules: Record<RulesKeys, 'error' | 'warn' | 'off' | 0 | 1 | 2> = {
   '@builder.io/morpho/css-no-vars': 'error',
   '@builder.io/morpho/jsx-callback-arg-name': 'error',
   '@builder.io/morpho/jsx-callback-arrow-function': 'error',
@@ -20,7 +20,7 @@ const recommendedRules: Record<RulesKeys, string> = {
   '@builder.io/morpho/use-state-var-declarator': 'error',
   '@builder.io/morpho/static-control-flow': 'error',
   '@builder.io/morpho/no-var-name-same-as-prop-name': 'error',
-  '@builder.io/morpho/no-map-function-in-jsx-return-body': 'warning',
+  '@builder.io/morpho/no-map-function-in-jsx-return-body': 'warn',
 };
 
 export default {
