@@ -8,6 +8,7 @@ import { parseAction } from './actions';
 import type { TemplateNode, Element, Text, MustacheTag } from 'svelte/types/compiler/interfaces';
 import type { Identifier, ArrowFunctionExpression, BaseCallExpression, Node } from 'estree';
 import type { SveltosisComponent } from '../types';
+import { createSingleBinding } from '../../../helpers/bindings';
 
 interface AttributeShorthand {
   type: 'AttributeShorthand';
@@ -25,9 +26,7 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
     if (!Object.keys(json.refs).includes(nodeReference)) {
       json.refs[nodeReference] = { argument: '', typeParameter: '' };
 
-      morphoNode.bindings.ref = {
-        code: nodeReference,
-      };
+      morphoNode.bindings.ref = createSingleBinding({ code: nodeReference });
     }
 
     return nodeReference;
@@ -84,9 +83,7 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
                   : '`${' + code + '}`';
               }
 
-              morphoNode.bindings[attribute.name] = {
-                code,
-              };
+              morphoNode.bindings[attribute.name] = createSingleBinding({ code });
 
               break;
             }
@@ -94,15 +91,15 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
               // e.g. <input {value}/>
               const value: AttributeShorthand = attribute.value[0];
               const code = value.expression.name;
-              morphoNode.bindings[code] = {
-                code,
-              };
+              morphoNode.bindings[code] = createSingleBinding({ code });
 
               break;
             }
             default: {
               const name = attribute.name;
-              morphoNode.bindings[name] = { code: attribute.value.toString() };
+              morphoNode.bindings[name] = createSingleBinding({
+                code: attribute.value.toString(),
+              });
             }
           }
 
@@ -113,6 +110,7 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
           morphoNode.bindings[expression.name] = {
             code: expression.name,
             type: 'spread',
+            spreadType: 'normal',
           };
 
           break;
@@ -173,7 +171,7 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
             };
           }
 
-          morphoNode.bindings[`on${upperFirst(attribute.name)}`] = object;
+          morphoNode.bindings[`on${upperFirst(attribute.name)}`] = createSingleBinding(object);
 
           // add event handlers as props (e.g. props.onClick)
           json.props = {
@@ -209,15 +207,15 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
 
           if (name !== 'ref' && name !== 'group' && name !== 'this') {
             const onChangeCode = `${binding} = event.target.value`;
-            morphoNode.bindings['onChange'] = {
+            morphoNode.bindings['onChange'] = createSingleBinding({
               code: onChangeCode,
               arguments: ['event'],
-            };
+            });
           }
 
-          morphoNode.bindings[name] = {
+          morphoNode.bindings[name] = createSingleBinding({
             code: binding,
-          };
+          });
 
           break;
         }
@@ -249,15 +247,11 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
               ' ${' + binding + '}',
               morphoNode.bindings.class.code.length - 1,
             );
-            morphoNode.bindings.class = {
-              code,
-            };
+            morphoNode.bindings.class = createSingleBinding({ code });
           } else {
             // otherwise just assign
             code = '`' + code + '${' + binding + '}`';
-            morphoNode.bindings.class = {
-              code,
-            };
+            morphoNode.bindings.class = createSingleBinding({ code });
           }
           break;
         }
@@ -280,9 +274,9 @@ export function parseElement(json: SveltosisComponent, node: TemplateNode) {
     const child = filteredChildren[0] as MustacheTag;
 
     morphoNode.children = [];
-    morphoNode.bindings.innerHTML = {
+    morphoNode.bindings.innerHTML = createSingleBinding({
       code: generate(child.expression),
-    };
+    });
   } else {
     morphoNode.children = parseChildren(json, node);
   }

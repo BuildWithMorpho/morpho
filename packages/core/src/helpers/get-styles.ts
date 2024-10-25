@@ -2,6 +2,7 @@ import json5 from 'json5';
 import { size } from 'lodash';
 import { MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
+import { createSingleBinding } from './bindings';
 
 export const getStyles = (json: MorphoNode) => {
   if (!json.bindings.css) {
@@ -21,6 +22,6 @@ export const setStyles = (json: MorphoNode, styles: MorphoStyles | null) => {
   if (!size(styles)) {
     delete json.bindings.css;
   } else {
-    json.bindings.css = { code: json5.stringify(styles) };
+    json.bindings.css = createSingleBinding({ code: json5.stringify(styles) });
   }
 };

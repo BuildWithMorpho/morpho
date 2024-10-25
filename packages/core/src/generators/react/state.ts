@@ -76,13 +76,12 @@ export const updateStateSetters = (json: MorphoComponent, options: ToReactOption
   traverse(json).forEach(function (item) {
     if (isMorphoNode(item)) {
       for (const key in item.bindings) {
-        let values = item.bindings[key];
+        let values = item.bindings[key]!;
         const newValue = updateStateSettersInCode(values?.code as string, options);
         if (newValue !== values?.code) {
           item.bindings[key] = {
+            ...values,
             code: newValue,
-            arguments: values?.arguments,
-            type: values?.type,
           };
         }
       }
