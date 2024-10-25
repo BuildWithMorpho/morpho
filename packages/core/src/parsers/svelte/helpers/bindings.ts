@@ -1,3 +1,4 @@
+import { createSingleBinding } from '../../../helpers/bindings';
 import type { MorphoNode } from '../../../types/morpho-node';
 import type { SveltosisComponent } from '../types';
 
@@ -19,9 +20,9 @@ function replaceGroupWithChecked(node: MorphoNode, isArray = false) {
         : `${groupBinding} === '${propertyValue}'`;
     }
 
-    node.bindings['checked'] = {
+    node.bindings['checked'] = createSingleBinding({
       code,
-    };
+    });
     delete node.bindings.group;
   }
 }
@@ -75,9 +76,9 @@ export function processBindings(json: SveltosisComponent, node: MorphoNode) {
   }
 
   if (name !== 'ref' && binding) {
-    node.bindings['onChange'] = {
+    node.bindings['onChange'] = createSingleBinding({
       code: onChangeCode,
       arguments: ['event'],
-    };
+    });
   }
 }
