@@ -1,5 +1,5 @@
 /**
- * @type {import('@builder.io/morpho'.MorphoConfig)}
+ * @type {import('@builder.io/morpho').MorphoConfig}
  */
 module.exports = {
   files: 'src/**',
