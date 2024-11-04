@@ -1,11 +1,9 @@
 {
   "name": "@builder.io/basic-example",
-  "version": "0.0.1",
   "scripts": {
     "morpho": "morpho build",
     "build": "yarn run morpho",
-    "start": "watch 'yarn run morpho' ./src ./overrides",
-    "test": "jest"
+    "start": "watch 'yarn run morpho' ./src ./overrides"
   },
   "dependencies": {
     "@builder.io/morpho": "workspace:*",
