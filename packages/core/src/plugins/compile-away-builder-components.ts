@@ -6,7 +6,7 @@ import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
-import * as JSON5 from 'json5';
+import json5, * as JSON5 from 'json5';
 import { BuilderElement } from '@builder.io/sdk';
 import { builderElementToMorphoNode } from '../parsers/builder';
 import { Plugin } from '..';
@@ -56,6 +56,16 @@ export const components: CompileAwayComponentsMap = {
     const properties: Record<string, string> = {};
     const bindings: Record<string, string> = {};
 
+    if (!node.properties.href && node.bindings.css) {
+      const css = json5.parse(node.bindings.css.code);
+      // When using button tag ensure we have all: unset and
+      // be sure that is the first style in the list
+      node.bindings.css.code = json5.stringify({
+        all: 'unset',
+        ...css,
+      });
+    }
+
     if ('link' in node.properties) {
       properties.href = node.properties.link!;
     }
@@ -63,10 +73,22 @@ export const components: CompileAwayComponentsMap = {
       bindings.href = node.properties.link!;
     }
     if ('text' in node.properties) {
-      properties.innerHTML = node.properties.text!;
+      node.children = [
+        createMorphoNode({
+          properties: {
+            _text: node.properties.text!,
+          },
+        }),
+      ];
     }
     if ('text' in node.bindings) {
-      bindings.innerHTML = node.properties.text!;
+      node.children = [
+        createMorphoNode({
+          bindings: {
+            _text: node.bindings.text!,
+          },
+        }),
+      ];
     }
     if ('openInNewTab' in node.bindings) {
       bindings.target = `${node.bindings.openInNewTab} ? '_blank' : '_self'`;
@@ -79,7 +101,7 @@ export const components: CompileAwayComponentsMap = {
     return createMorphoNode({
       ...node,
       // TODO: use 'button' tag for no link, and add `all: unset` to CSS string only then
-      name: hasLink ? 'a' : node.properties.$tagName || 'span',
+      name: hasLink ? 'a' : 'button',
       properties: {
         ...omit(node.properties, omitFields),
         ...properties,
