@@ -48,6 +48,7 @@ npm install @builder.io/morpho-cli @builder.io/morpho
 ### Setup `morpho.config.js`
 
 ```js
+/** @type {import('@builder.io/morpho').MorphoConfig} */
 module.exports = {
   files: 'src/**',
   targets: ['vue3', 'solid', 'svelte', 'react'],
