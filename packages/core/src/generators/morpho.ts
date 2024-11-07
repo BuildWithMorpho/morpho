@@ -13,6 +13,7 @@ import { MorphoComponent } from '../types/morpho-component';
 import { checkIsForNode, MorphoNode } from '../types/morpho-node';
 import { blockToReact, componentToReact } from './react';
 import { checkHasState } from '../helpers/state';
+import { isRootTextNode } from '../helpers/is-root-text-node';
 
 export interface ToMorphoOptions extends BaseTranspilerOptions {
   format: 'react' | 'legacy';
@@ -156,7 +157,7 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
       return `${refName}${domRefs.has(refName) ? `.current` : ''}`;
     });
 
-    const addWrapper = json.children.length !== 1;
+    const addWrapper = json.children.length !== 1 || isRootTextNode(json);
 
     const components = Array.from(getComponents(json));
 
