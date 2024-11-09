@@ -1,7 +1,7 @@
 import json5 from 'json5';
-import { MorphoNode } from '../..';
-import { dashCase } from '../../helpers/dash-case';
-import { SrcBuilder } from './src-generator';
+import { MorphoNode } from '../../..';
+import { dashCase } from '../../../helpers/dash-case';
+import { SrcBuilder } from '../src-generator';
 
 export type CssStyles = {
   CLASS_NAME: string;

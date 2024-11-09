@@ -2,7 +2,7 @@ import { isMorphoNode } from '../../helpers/is-morpho-node';
 import { Binding, MorphoNode } from '../../types/morpho-node';
 import { DIRECTIVES } from './directives';
 import { File, invoke, SrcBuilder, quote, lastProperty } from './src-generator';
-import { CssStyles } from './styles';
+import { CssStyles } from './helpers/styles';
 
 /**
  * Convert a Morpho nodes to a JSX nodes.

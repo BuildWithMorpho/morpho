@@ -1,10 +1,10 @@
-import { MorphoNode } from '../../types/morpho-node';
-import { renderUseLexicalScope } from './component';
-import { arrowFnBlock, EmitFn, File, SrcBuilder } from './src-generator';
+import { MorphoNode } from '../../../types/morpho-node';
+import { renderUseLexicalScope } from '../component';
+import { arrowFnBlock, EmitFn, File, SrcBuilder } from '../src-generator';
 
 const IIF_START = '(() => {';
 const IIF_END = '})()';
-export function extractJSBlock(binding: any): string | null {
+function extractJSBlock(binding: any): string | null {
   if (typeof binding == 'string') {
     if (
       binding.startsWith('{') &&

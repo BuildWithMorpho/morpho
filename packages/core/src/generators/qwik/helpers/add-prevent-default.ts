@@ -1,6 +1,6 @@
 import traverse from 'traverse';
-import { isMorphoNode } from '../../helpers/is-morpho-node';
-import { MorphoComponent } from '../../types/morpho-component';
+import { isMorphoNode } from '../../../helpers/is-morpho-node';
+import { MorphoComponent } from '../../../types/morpho-component';
 
 /**
  * Find event handlers that explicitly call .preventDefault() and
