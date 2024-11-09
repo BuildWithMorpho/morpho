@@ -1,5 +1,6 @@
 import traverse from 'traverse';
-import * as babel from '@babel/core';
+import type { NodePath } from '@babel/core';
+import { types } from '@babel/core';
 
 import { MorphoComponent } from '../types/morpho-component';
 import { getRefs } from './get-refs';
@@ -7,17 +8,15 @@ import { isMorphoNode } from './is-morpho-node';
 import { babelTransformExpression } from './babel-transform';
 import { SETTER } from './patterns';
 
-const tsPreset = require('@babel/preset-typescript');
-
 export type RefMapper = (refName: string) => string;
 
 const replaceRefsInString = (code: string, refs: string[], mapper: RefMapper) => {
   return babelTransformExpression(code, {
-    Identifier(path: babel.NodePath<babel.types.Identifier>) {
+    Identifier(path: NodePath<types.Identifier>) {
       const name = path.node.name;
       const isRef = refs.includes(name);
       if (isRef) {
-        path.replaceWith(babel.types.identifier(mapper(name)));
+        path.replaceWith(types.identifier(mapper(name)));
       }
     },
   });
