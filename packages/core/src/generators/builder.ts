@@ -2,7 +2,7 @@ import { ForNode, MorphoNode } from '../types/morpho-node';
 import { BuilderContent, BuilderElement } from '@builder.io/sdk';
 import { getStateObjectStringFromComponent } from '../helpers/get-state-object-string';
 import { fastClone } from '../helpers/fast-clone';
-import dedent from 'dedent';
+import { dedent } from '../helpers/dedent';
 import { format } from 'prettier/standalone';
 import json5 from 'json5';
 import { isUpperCase } from '../helpers/is-upper-case';
