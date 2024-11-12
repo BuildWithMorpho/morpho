@@ -1,11 +1,11 @@
 import * as CSS from 'csstype';
-import { MorphoNode } from '../../types/morpho-node';
-import traverse from 'traverse';
-import { MorphoComponent } from '../../types/morpho-component';
-import { isMorphoNode } from '../is-morpho-node';
 import json5 from 'json5';
 import { pickBy } from 'lodash';
+import traverse from 'traverse';
+import { MorphoComponent } from '../../types/morpho-component';
+import { MorphoNode } from '../../types/morpho-node';
 import { dashCase } from '../dash-case';
+import { isMorphoNode } from '../is-morpho-node';
 
 export const nodeHasCss = (node: MorphoNode) => {
   return Boolean(
@@ -88,9 +88,17 @@ export const parseCssObject = (css: string) => {
   }
 };
 
+const parseCSSKey = (key: string) => {
+  // Allow custom CSS properties
+  if (key.startsWith('--')) {
+    return key;
+  }
+  return dashCase(key);
+};
+
 export const styleMapToCss = (map: StyleMap): string => {
   return Object.entries(map)
     .filter(([key, value]) => typeof value === 'string')
-    .map(([key, value]) => `  ${dashCase(key)}: ${value};`)
+    .map(([key, value]) => `  ${parseCSSKey(key)}: ${value};`)
     .join('\n');
 };
