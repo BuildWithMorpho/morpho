@@ -1,7 +1,7 @@
 import { MorphoNode } from '../types/morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 
-export function isRootTextNode(json: MorphoComponent) {
+export function isRootTextNode(json: MorphoComponent | MorphoNode) {
   const firstChild = json.children[0];
   return Boolean(firstChild && isTextNode(firstChild));
 }
