@@ -1,8 +1,9 @@
+import hash from 'object-hash';
 import traverse from 'traverse';
 import { MorphoComponent } from '../../types/morpho-component';
+import { MorphoNode } from '../../types/morpho-node';
 import { dashCase } from '../dash-case';
 import { isMorphoNode } from '../is-morpho-node';
-import hash from 'object-hash';
 import {
   ClassStyleMap,
   getNestedSelectors,
@@ -11,7 +12,6 @@ import {
   parseCssObject,
   styleMapToCss,
 } from './helpers';
-import { MorphoNode } from '../../types/morpho-node';
 
 type CollectStyleOptions = {
   prefix?: string;
@@ -91,16 +91,27 @@ const classStyleMapToCss = (map: ClassStyleMap): string => {
   for (const key in map) {
     const styles = getStylesOnly(map[key]);
     str += `.${key} {\n${styleMapToCss(styles)}\n}`;
+
     const nestedSelectors = getNestedSelectors(map[key]);
     for (const nestedSelector in nestedSelectors) {
       const value = nestedSelectors[nestedSelector] as any;
+
       if (nestedSelector.startsWith('@')) {
         str += `${nestedSelector} { .${key} { ${styleMapToCss(value)} } }`;
       } else {
-        const useSelector = nestedSelector.includes('&')
-          ? nestedSelector.replace(/&/g, `.${key}`)
-          : `.${key} ${nestedSelector}`;
-        str += `${useSelector} {\n${styleMapToCss(value)}\n}`;
+        const getSelector = (nestedSelector: string) => {
+          if (nestedSelector.startsWith(':')) {
+            return `.${key}${nestedSelector}`;
+          }
+
+          if (nestedSelector.includes('&')) {
+            return nestedSelector.replace(/&/g, `.${key}`);
+          }
+
+          return `.${key} ${nestedSelector}`;
+        };
+
+        str += `${getSelector(nestedSelector)} {\n${styleMapToCss(value)}\n}`;
       }
     }
   }
