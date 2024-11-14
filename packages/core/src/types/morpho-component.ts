@@ -28,6 +28,7 @@ export interface MorphoImport {
   imports: {
     [key: string]: string | undefined;
   };
+  importKind?: 'type' | 'typeof' | 'value' | null;
 }
 
 export interface ContextGetInfo {
