@@ -1,6 +1,3 @@
-releases:
-  "@builder.io/eslint-plugin-morpho": patch
-
 undecided:
   - "@builder.io/morpho-repo"
   - "@builder.io/morpho-cli"
