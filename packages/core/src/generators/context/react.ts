@@ -4,14 +4,15 @@ import { MorphoContext } from '../../types/morpho-context';
 
 type ContextToReactOptions = {
   format?: boolean;
+  preact?: boolean;
   typescript?: boolean;
 };
 
 export const contextToReact =
-  (options: ContextToReactOptions = { typescript: false }) =>
+  (options: ContextToReactOptions = { typescript: false, preact: false }) =>
   ({ context }: { context: MorphoContext }): string => {
     let str = `
-  import { createContext } from 'react';
+  import { createContext } from '${options.preact ? 'preact' : 'react'}';
 
   export default createContext${options.typescript ? '<any>' : ''}(${stringifyContextValue(
       context.value,
