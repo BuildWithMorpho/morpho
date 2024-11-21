@@ -1,4 +1,4 @@
-import { useStore, useState } from '@builder.io/morpho';
+import { useState, useStore } from '@builder.io/morpho';
 
 export const DEFAULT_VALUES = {
   name: 'Steve',

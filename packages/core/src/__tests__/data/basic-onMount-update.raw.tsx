@@ -1,4 +1,4 @@
-import { useStore, onInit, onMount } from '@builder.io/morpho';
+import { onInit, onMount, useStore } from '@builder.io/morpho';
 
 export interface Props {
   hi: string;

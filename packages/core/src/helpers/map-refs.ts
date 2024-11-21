@@ -1,11 +1,11 @@
-import traverse from 'traverse';
 import type { NodePath } from '@babel/core';
 import { types } from '@babel/core';
+import traverse from 'traverse';
 
 import { MorphoComponent } from '../types/morpho-component';
+import { babelTransformExpression } from './babel-transform';
 import { getRefs } from './get-refs';
 import { isMorphoNode } from './is-morpho-node';
-import { babelTransformExpression } from './babel-transform';
 import { SETTER } from './patterns';
 
 export type RefMapper = (refName: string) => string;

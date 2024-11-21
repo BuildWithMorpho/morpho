@@ -1,4 +1,4 @@
-import { useStore, Show, For } from '@builder.io/morpho';
+import { For, Show, useStore } from '@builder.io/morpho';
 
 export interface SectionProps {
   maxWidth?: number;

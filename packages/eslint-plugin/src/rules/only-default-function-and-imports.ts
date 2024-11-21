@@ -1,7 +1,7 @@
-import { Rule } from 'eslint';
 import * as types from '@babel/types';
-import isMorphoPath from '../helpers/isMorphoPath';
+import { Rule } from 'eslint';
 import { HOOKS } from '../constants/hooks';
+import isMorphoPath from '../helpers/isMorphoPath';
 
 // ------------------------------------------------------------------------------
 // Rule Definition

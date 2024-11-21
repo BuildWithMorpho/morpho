@@ -1,10 +1,10 @@
 import { camelCase } from 'lodash';
+import hash from 'object-hash';
 import traverse from 'traverse';
 import { MorphoComponent } from '../../types/morpho-component';
 import { capitalize } from '../capitalize';
 import { isMorphoNode } from '../is-morpho-node';
 import { isUpperCase } from '../is-upper-case';
-import hash from 'object-hash';
 import {
   getNestedSelectors,
   getStylesOnly,

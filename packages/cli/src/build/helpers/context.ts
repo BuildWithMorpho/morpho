@@ -1,16 +1,16 @@
 import {
+  contextToQwik,
   contextToReact,
   contextToRsc,
   contextToSolid,
   contextToSvelte,
   contextToVue,
-  contextToQwik,
   MorphoConfig,
   parseContext,
   Target,
 } from '@builder.io/morpho';
 import { readFile } from 'fs-extra';
-import { upperFirst, camelCase, last } from 'lodash';
+import { camelCase, last, upperFirst } from 'lodash';
 import { checkShouldOutputTypeScript } from './options';
 
 export const generateContextFile = async ({

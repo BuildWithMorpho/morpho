@@ -1,5 +1,5 @@
 import * as types from '@babel/types';
-import { Rule, AST } from 'eslint';
+import { AST, Rule } from 'eslint';
 import isMorphoPath from '../helpers/isMorphoPath';
 
 const regex = new RegExp('^on[A-Z]');

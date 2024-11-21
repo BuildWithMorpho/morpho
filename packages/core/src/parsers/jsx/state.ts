@@ -1,14 +1,14 @@
 import * as babel from '@babel/core';
 
-import { MorphoComponent, MorphoState, StateValue } from '../../types/morpho-component';
+import { MorphoNode } from '@builder.io/morpho';
+import { pipe } from 'fp-ts/lib/function';
 import traverse from 'traverse';
 import { babelTransformExpression } from '../../helpers/babel-transform';
 import { capitalize } from '../../helpers/capitalize';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
 import { replaceIdentifiers } from '../../helpers/replace-identifiers';
+import { MorphoComponent, MorphoState, StateValue } from '../../types/morpho-component';
 import { parseCode, uncapitalize } from './helpers';
-import { pipe } from 'fp-ts/lib/function';
-import { MorphoNode } from '@builder.io/morpho';
 
 const { types } = babel;
 

@@ -1,5 +1,5 @@
-import { GluegunCommand, GluegunParameters } from 'gluegun';
 import { MorphoConfig, Target } from '@builder.io/morpho';
+import { GluegunCommand, GluegunParameters } from 'gluegun';
 import { build } from '../build/build';
 import { getMorphoConfig } from '../helpers/get-morpho-config';
 

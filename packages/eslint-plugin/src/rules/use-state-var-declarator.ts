@@ -1,6 +1,6 @@
 import { Rule } from 'eslint';
-import { HOOKS } from '../constants/hooks';
 import { match, not } from 'ts-pattern';
+import { HOOKS } from '../constants/hooks';
 import isMorphoPath from '../helpers/isMorphoPath';
 import noOp from '../helpers/noOp';
 

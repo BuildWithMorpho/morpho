@@ -1,9 +1,9 @@
-import { MorphoComponent } from '../../../types/morpho-component';
 import traverse from 'traverse';
+import { convertTypeScriptToJS } from '../../../helpers/babel-transform';
+import { MorphoComponent } from '../../../types/morpho-component';
 import { File } from '../src-generator';
 import { convertMethodToFunction } from './convert-method-to-function';
 import { stableInject } from './stable-inject';
-import { convertTypeScriptToJS } from '../../../helpers/babel-transform';
 
 /**
  * Stores getters and initialization map.

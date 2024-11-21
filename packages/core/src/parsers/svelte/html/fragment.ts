@@ -1,5 +1,5 @@
-import { createMorphoNode } from '../helpers/morpho-node';
 import { parseChildren } from '../helpers/children';
+import { createMorphoNode } from '../helpers/morpho-node';
 
 import type { TemplateNode } from 'svelte/types/compiler/interfaces';
 import type { SveltosisComponent } from '../types';

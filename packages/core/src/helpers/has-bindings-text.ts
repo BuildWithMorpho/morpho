@@ -1,7 +1,7 @@
 import traverse from 'traverse';
 import { MorphoComponent } from '../types/morpho-component';
-import { isMorphoNode } from './is-morpho-node';
 import isChildren from './is-children';
+import { isMorphoNode } from './is-morpho-node';
 
 export const hasBindingsText = (json: MorphoComponent) => {
   let has = false;

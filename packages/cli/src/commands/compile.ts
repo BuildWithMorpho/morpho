@@ -11,8 +11,8 @@ import {
 } from '@builder.io/morpho';
 import { GluegunCommand } from 'gluegun';
 import { join } from 'path';
-import { UnionToIntersection } from '../types';
 import { getMorphoConfig } from '../helpers/get-morpho-config';
+import { UnionToIntersection } from '../types';
 
 type GeneratorOpts = GeneratorOptions[Target];
 

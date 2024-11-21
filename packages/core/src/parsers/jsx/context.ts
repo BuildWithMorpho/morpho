@@ -1,8 +1,8 @@
 import * as babel from '@babel/core';
-import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
 import traverse from 'traverse';
 import { createMorphoNode } from '../../helpers/create-morpho-node';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
+import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
 import { MorphoComponent } from '../../types/morpho-component';
 import { parseStateObjectToMorphoState } from './state';
 

@@ -1,4 +1,4 @@
-import { useStore, For, onMount } from '@builder.io/morpho';
+import { For, onMount, useStore } from '@builder.io/morpho';
 
 export default function MyBasicForComponent() {
   const state = useStore({

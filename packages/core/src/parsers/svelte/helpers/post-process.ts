@@ -2,8 +2,8 @@ import generate from '@babel/generator';
 import * as parser from '@babel/parser';
 import * as types from '@babel/types';
 
-import type { MorphoNode } from '../../../types/morpho-node';
 import type { extendedHook, StateValue } from '../../../types/morpho-component';
+import type { MorphoNode } from '../../../types/morpho-node';
 import type { SveltosisComponent } from '../types';
 import { processBindings } from './bindings';
 

@@ -1,6 +1,6 @@
 import * as babel from '@babel/core';
-import { MorphoContext } from '../types/morpho-context';
 import { createMorphoContext } from '../helpers/create-morpho-context';
+import { MorphoContext } from '../types/morpho-context';
 import { parseStateObjectToMorphoState } from './jsx/state';
 
 const { types } = babel;

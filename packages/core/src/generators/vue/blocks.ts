@@ -1,21 +1,21 @@
-import { pipe, identity } from 'fp-ts/lib/function';
-import { Dictionary } from '../../helpers/typescript';
+import { identity, pipe } from 'fp-ts/lib/function';
 import { filterEmptyTextNodes } from '../../helpers/filter-empty-text-nodes';
 import isChildren from '../../helpers/is-children';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
+import { checkIsDefined } from '../../helpers/nullable';
 import { removeSurroundingBlock } from '../../helpers/remove-surrounding-block';
 import { replaceIdentifiers } from '../../helpers/replace-identifiers';
-import { stripSlotPrefix, isSlotProperty } from '../../helpers/slots';
+import { isSlotProperty, stripSlotPrefix } from '../../helpers/slots';
+import { Dictionary } from '../../helpers/typescript';
 import { selfClosingTags } from '../../parsers/jsx';
-import { MorphoNode, ForNode, Binding, SpreadType } from '../../types/morpho-node';
+import { Binding, ForNode, MorphoNode, SpreadType } from '../../types/morpho-node';
 import {
-  encodeQuotes,
   addBindingsToJson,
   addPropertiesToJson,
+  encodeQuotes,
   invertBooleanExpression,
 } from './helpers';
 import { ToVueOptions } from './types';
-import { checkIsDefined } from '../../helpers/nullable';
 
 const SPECIAL_PROPERTIES = {
   V_IF: 'v-if',

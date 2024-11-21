@@ -1,13 +1,13 @@
 import { camelCase, upperFirst } from 'lodash';
-import isChildren from '../../helpers/is-children';
-import { isSlotProperty } from '../../helpers/slots';
 import { filterEmptyTextNodes } from '../../helpers/filter-empty-text-nodes';
-import { isValidAttributeName } from '../../helpers/is-valid-attribute-name';
+import isChildren from '../../helpers/is-children';
 import { isRootTextNode } from '../../helpers/is-root-text-node';
+import { isValidAttributeName } from '../../helpers/is-valid-attribute-name';
 import { getForArguments } from '../../helpers/nodes/for';
+import { isSlotProperty } from '../../helpers/slots';
 import { selfClosingTags } from '../../parsers/jsx';
 import { MorphoComponent } from '../../types/morpho-component';
-import { MorphoNode, ForNode, checkIsForNode } from '../../types/morpho-node';
+import { checkIsForNode, ForNode, MorphoNode } from '../../types/morpho-node';
 import { closeFrag, getFragment, openFrag, processBinding, wrapInFragment } from './helpers';
 import { updateStateSettersInCode } from './state';
 import { ToReactOptions } from './types';

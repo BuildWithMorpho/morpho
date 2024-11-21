@@ -5,7 +5,7 @@ import { filterEmptyTextNodes } from '../../helpers/filter-empty-text-nodes';
 import { objectHasKey } from '../../helpers/typescript';
 import { selfClosingTags } from '../../parsers/jsx';
 import { MorphoComponent } from '../../types/morpho-component';
-import { MorphoNode, checkIsForNode } from '../../types/morpho-node';
+import { checkIsForNode, MorphoNode } from '../../types/morpho-node';
 import { collectClassString } from './helpers/styles';
 import { ToSolidOptions } from './types';
 

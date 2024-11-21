@@ -1,9 +1,9 @@
 import { upperFirst } from 'lodash';
 import traverse from 'traverse';
+import { isMorphoNode } from '../../helpers/is-morpho-node';
+import { stripStateAndPropsRefs } from '../../helpers/strip-state-and-props-refs';
 import { MorphoComponent } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
-import { stripStateAndPropsRefs } from '../../helpers/strip-state-and-props-refs';
-import { isMorphoNode } from '../../helpers/is-morpho-node';
 
 import { ToReactOptions } from './types';
 

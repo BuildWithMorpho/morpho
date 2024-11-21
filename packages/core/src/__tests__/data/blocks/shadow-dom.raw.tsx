@@ -1,4 +1,4 @@
-import { useMetadata, useStore, onMount, For, Show } from '@builder.io/morpho';
+import { For, onMount, Show, useMetadata, useStore } from '@builder.io/morpho';
 
 useMetadata({ isAttachedToShadowDom: true });
 

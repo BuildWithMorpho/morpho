@@ -1,4 +1,4 @@
-import { useStore, useRef, onMount } from '@builder.io/morpho';
+import { onMount, useRef, useStore } from '@builder.io/morpho';
 
 export interface EmbedProps {
   content: string;

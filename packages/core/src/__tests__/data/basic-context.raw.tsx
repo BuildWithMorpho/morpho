@@ -1,5 +1,5 @@
-import { useStore, useContext, onInit, setContext, onMount } from '@builder.io/morpho';
-import { Injector, createInjector, MyService } from '@dummy/injection-js';
+import { onInit, onMount, setContext, useContext, useStore } from '@builder.io/morpho';
+import { createInjector, Injector, MyService } from '@dummy/injection-js';
 
 export default function MyBasicComponent() {
   setContext(Injector, createInjector());

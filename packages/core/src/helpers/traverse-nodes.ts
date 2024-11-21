@@ -1,6 +1,6 @@
+import traverse, { TraverseContext } from 'traverse';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
-import traverse, { TraverseContext } from 'traverse';
 import { isMorphoNode } from './is-morpho-node';
 
 export function traverseNodes(

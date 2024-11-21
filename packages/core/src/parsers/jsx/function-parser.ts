@@ -1,18 +1,18 @@
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
-import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
+import { HOOKS } from '../../constants/hooks';
 import { createMorphoComponent } from '../../helpers/create-morpho-component';
 import { getBindingsCode } from '../../helpers/get-bindings';
+import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
 import { JSONOrNode } from '../../types/json';
 import { MorphoComponent } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
-import { HOOKS } from '../../constants/hooks';
-import { parseStateObjectToMorphoState } from './state';
-import { Context } from './types';
-import { parseCode, parseCodeJson } from './helpers';
 import { getPropsTypeRef } from './component-types';
 import { jsxElementToJson } from './element-parser';
+import { parseCode, parseCodeJson } from './helpers';
 import { METADATA_HOOK_NAME } from './hooks';
+import { parseStateObjectToMorphoState } from './state';
+import { Context } from './types';
 
 const { types } = babel;
 

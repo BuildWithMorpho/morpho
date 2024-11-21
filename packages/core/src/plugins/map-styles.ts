@@ -1,8 +1,8 @@
-import { getStyles, setStyles } from '../helpers/get-styles';
-import { MorphoComponent } from '../types/morpho-component';
 import { TraverseContext } from 'traverse';
-import { MorphoStyles } from '../types/morpho-styles';
+import { getStyles, setStyles } from '../helpers/get-styles';
 import { traverseNodes } from '../helpers/traverse-nodes';
+import { MorphoComponent } from '../types/morpho-component';
+import { MorphoStyles } from '../types/morpho-styles';
 
 type MapStylesOptions = {
   map: (styles: MorphoStyles, context: TraverseContext) => MorphoStyles;
