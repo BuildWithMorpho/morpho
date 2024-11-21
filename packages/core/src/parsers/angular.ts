@@ -1,17 +1,17 @@
-import ts from 'typescript';
 import { parseTemplate } from '@angular/compiler';
-import { Node, Element, Template, Text, BoundText } from '@angular/compiler/src/render3/r3_ast';
 import { ASTWithSource } from '@angular/compiler/src/expression_parser/ast';
+import { BoundText, Element, Node, Template, Text } from '@angular/compiler/src/render3/r3_ast';
+import { types } from '@babel/core';
+import { omit } from 'lodash';
+import ts from 'typescript';
+import { babelTransformCode } from '../helpers/babel-transform';
+import { createSingleBinding } from '../helpers/bindings';
+import { capitalize } from '../helpers/capitalize';
 import { createMorphoComponent } from '../helpers/create-morpho-component';
 import { createMorphoNode } from '../helpers/create-morpho-node';
-import { Binding, MorphoNode } from '../types/morpho-node';
-import { omit } from 'lodash';
-import { babelTransformCode } from '../helpers/babel-transform';
-import { types } from '@babel/core';
-import { MorphoComponent } from '../types/morpho-component';
-import { capitalize } from '../helpers/capitalize';
-import { createSingleBinding } from '../helpers/bindings';
 import { Dictionary } from '../helpers/typescript';
+import { MorphoComponent } from '../types/morpho-component';
+import { Binding, MorphoNode } from '../types/morpho-node';
 
 const getTsAST = (code: string) => {
   return ts.createSourceFile('code.ts', code, ts.ScriptTarget.Latest, true);

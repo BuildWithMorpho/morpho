@@ -1,5 +1,5 @@
-import { MorphoContext } from '../types/morpho-context';
 import { MorphoComponent, StateValue } from '../types/morpho-component';
+import { MorphoContext } from '../types/morpho-context';
 
 interface GetStateObjectStringOptions {
   data?: boolean;

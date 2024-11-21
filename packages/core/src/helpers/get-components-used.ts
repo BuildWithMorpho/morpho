@@ -1,5 +1,5 @@
-import { MorphoComponent } from '../types/morpho-component';
 import traverse from 'traverse';
+import { MorphoComponent } from '../types/morpho-component';
 import { isMorphoNode } from './is-morpho-node';
 
 export function getComponentsUsed(json: MorphoComponent) {

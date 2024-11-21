@@ -1,11 +1,11 @@
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
-import { checkIsDefined } from '../../helpers/nullable';
-import { createMorphoNode } from '../../helpers/create-morpho-node';
-import { ForNode, MorphoNode } from '../../types/morpho-node';
 import { pipe } from 'fp-ts/lib/function';
-import { transformAttributeName } from './helpers';
 import { createSingleBinding } from '../../helpers/bindings';
+import { createMorphoNode } from '../../helpers/create-morpho-node';
+import { checkIsDefined } from '../../helpers/nullable';
+import { ForNode, MorphoNode } from '../../types/morpho-node';
+import { transformAttributeName } from './helpers';
 
 const { types } = babel;
 

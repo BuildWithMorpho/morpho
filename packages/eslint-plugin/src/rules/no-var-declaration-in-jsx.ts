@@ -1,5 +1,5 @@
-import { Rule } from 'eslint';
 import * as types from '@babel/types';
+import { Rule } from 'eslint';
 import isMorphoPath from '../helpers/isMorphoPath';
 
 // ------------------------------------------------------------------------------

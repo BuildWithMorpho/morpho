@@ -1,5 +1,5 @@
-import * as esbuild from 'esbuild';
 import { MorphoConfig, Target } from '@builder.io/morpho';
+import * as esbuild from 'esbuild';
 import { getFileExtensionForTarget } from './extensions';
 import { checkIsMorphoComponentFilePath, INPUT_EXTENSION_IMPORT_REGEX } from './inputs-extensions';
 import { checkShouldOutputTypeScript } from './options';

@@ -1,4 +1,4 @@
-import { useStore, onUpdate } from '@builder.io/morpho';
+import { onUpdate, useStore } from '@builder.io/morpho';
 
 export default function MyBasicOnUpdateReturnComponent() {
   const state = useStore({

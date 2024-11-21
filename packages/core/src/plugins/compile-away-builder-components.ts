@@ -1,16 +1,16 @@
 import { Builder } from '@builder.io/react';
+import { BuilderElement } from '@builder.io/sdk';
+import json5, * as JSON5 from 'json5';
 import { omit, pick } from 'lodash';
 import traverse, { TraverseContext } from 'traverse';
+import { Plugin } from '..';
+import { createSingleBinding } from '../helpers/bindings';
 import { createMorphoNode } from '../helpers/create-morpho-node';
 import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
 import { isMorphoNode } from '../helpers/is-morpho-node';
+import { builderElementToMorphoNode } from '../parsers/builder';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
-import json5, * as JSON5 from 'json5';
-import { BuilderElement } from '@builder.io/sdk';
-import { builderElementToMorphoNode } from '../parsers/builder';
-import { Plugin } from '..';
-import { createSingleBinding } from '../helpers/bindings';
 
 function getComponentInputNames(componentName: string): string[] {
   const componentInfo = Builder.components.find((item) => item.name === componentName);

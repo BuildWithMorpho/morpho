@@ -3,14 +3,14 @@ import {
   compileAwayBuilderComponents,
   componentToBuilder,
   componentToMorpho,
+  componentToQwik,
   componentToReact,
   componentToSolid,
   componentToSvelte,
-  componentToQwik,
-  mapStyles,
-  parseJsx,
   componentToVue3,
+  mapStyles,
   MorphoComponent,
+  parseJsx,
 } from '@builder.io/morpho';
 import { Typography } from '@material-ui/core';
 import { useLocalObservable, useObserver } from 'mobx-react-lite';

@@ -1,4 +1,3 @@
-import { tryPrettierFormat } from '../helpers/try-prettier-format';
 import traverse from 'traverse';
 import { dedent } from '../helpers/dedent';
 import { fastClone } from '../helpers/fast-clone';
@@ -8,11 +7,12 @@ import { getStateObjectStringFromComponent } from '../helpers/get-state-object-s
 import { getStyles } from '../helpers/get-styles';
 import isChildren from '../helpers/is-children';
 import { isMorphoNode } from '../helpers/is-morpho-node';
+import { checkHasState } from '../helpers/state';
+import { tryPrettierFormat } from '../helpers/try-prettier-format';
 import { MorphoComponent } from '../types/morpho-component';
 import { checkIsForNode, MorphoNode } from '../types/morpho-node';
 import { MorphoStyles } from '../types/morpho-styles';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
-import { checkHasState } from '../helpers/state';
 
 export type ToSwiftOptions = BaseTranspilerOptions;
 

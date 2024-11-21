@@ -1,4 +1,4 @@
-import { useStore, useRef } from '@builder.io/morpho';
+import { useRef, useStore } from '@builder.io/morpho';
 
 export interface Props {
   showInput: boolean;

@@ -1,6 +1,6 @@
-import { Plugin } from '../../types/plugins';
 import { extendedHook, MorphoComponent } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
+import { Plugin } from '../../types/plugins';
 import { checkIsDefined } from '../nullable';
 import { traverseNodes } from '../traverse-nodes';
 

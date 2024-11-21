@@ -3,20 +3,20 @@ import generate from '@babel/generator';
 import { BuilderContent, BuilderElement } from '@builder.io/sdk';
 import json5 from 'json5';
 import { mapKeys, merge, omit, omitBy, sortBy, upperFirst } from 'lodash';
-import { fastClone } from '../../helpers/fast-clone';
 import traverse from 'traverse';
+import { hashCodeAsString, MorphoComponent, MorphoState } from '../..';
 import { Size, sizeNames, sizes } from '../../constants/media-sizes';
+import { createSingleBinding } from '../../helpers/bindings';
 import { capitalize } from '../../helpers/capitalize';
 import { createMorphoComponent } from '../../helpers/create-morpho-component';
 import { createMorphoNode } from '../../helpers/create-morpho-node';
+import { fastClone } from '../../helpers/fast-clone';
+import { isExpression, parseCode } from '../../helpers/parsers';
+import { Dictionary } from '../../helpers/typescript';
 import { Binding, MorphoNode } from '../../types/morpho-node';
 import { parseJsx } from '../jsx';
-import { parseCode, isExpression } from '../../helpers/parsers';
-import { hashCodeAsString, MorphoComponent, MorphoState } from '../..';
-import { mapBuilderContentStateToMorphoState } from './helpers';
 import { parseStateObjectToMorphoState } from '../jsx/state';
-import { createSingleBinding } from '../../helpers/bindings';
-import { Dictionary } from '../../helpers/typescript';
+import { mapBuilderContentStateToMorphoState } from './helpers';
 
 // Omit some superflous styles that can come from Builder's web importer
 const styleOmitList: (keyof CSSStyleDeclaration | 'backgroundRepeatX' | 'backgroundRepeatY')[] = [

@@ -1,12 +1,12 @@
-import { createSingleBinding } from '../helpers/bindings';
 import traverse from 'traverse';
 import { Plugin } from '..';
+import { createSingleBinding } from '../helpers/bindings';
 import { fastClone } from '../helpers/fast-clone';
 import { isMorphoNode } from '../helpers/is-morpho-node';
+import { mergeOptions } from '../helpers/merge-options';
 import { MorphoComponent } from '../types/morpho-component';
 import { TranspilerGenerator } from '../types/transpiler';
 import { componentToReact, contextPropDrillingKey, ToReactOptions } from './react';
-import { mergeOptions } from '../helpers/merge-options';
 
 export type ToRscOptions = ToReactOptions;
 

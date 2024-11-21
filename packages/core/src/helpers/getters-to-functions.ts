@@ -1,5 +1,5 @@
-import { MorphoComponent } from '../types/morpho-component';
 import traverse from 'traverse';
+import { MorphoComponent } from '../types/morpho-component';
 
 /**
  * Map getters like `useStore({ get foo() { ... }})` from `state.foo` to `foo()`

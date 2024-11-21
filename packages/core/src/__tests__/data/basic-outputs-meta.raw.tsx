@@ -1,4 +1,4 @@
-import { useStore, useMetadata, onMount } from '@builder.io/morpho';
+import { onMount, useMetadata, useStore } from '@builder.io/morpho';
 
 useMetadata({
   outputs: ['onMessage', 'onEvent'],

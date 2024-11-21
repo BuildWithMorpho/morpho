@@ -1,7 +1,7 @@
-import { GETTER } from '../../helpers/patterns';
-import { MorphoComponent, StateValue, StateValueType } from '../../types/morpho-component';
-import { JSONObject } from '../../types/json';
 import { mapValues } from 'lodash';
+import { GETTER } from '../../helpers/patterns';
+import { JSONObject } from '../../types/json';
+import { MorphoComponent, StateValue, StateValueType } from '../../types/morpho-component';
 
 const __DO_NOT_USE_FUNCTION_LITERAL_PREFIX = `@builder.io/morpho/function:`;
 const __DO_NOT_USE_METHOD_LITERAL_PREFIX = `@builder.io/morpho/method:`;
