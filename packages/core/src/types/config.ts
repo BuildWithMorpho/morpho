@@ -15,6 +15,7 @@ export type GeneratorOptions = {
 };
 
 export type MorphoConfig = {
+  commonOptions?: { typescript?: boolean };
   /**
    * List of targets to compile to.
    */
