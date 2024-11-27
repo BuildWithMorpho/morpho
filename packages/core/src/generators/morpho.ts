@@ -1,5 +1,7 @@
 import json5 from 'json5';
 import { format } from 'prettier/standalone';
+import { HOOKS } from '../constants/hooks';
+import { SELF_CLOSING_HTML_TAGS } from '../constants/html_tags';
 import { dedent } from '../helpers/dedent';
 import { fastClone } from '../helpers/fast-clone';
 import { getComponents } from '../helpers/get-components';
@@ -9,7 +11,6 @@ import { isRootTextNode } from '../helpers/is-root-text-node';
 import { mapRefs } from '../helpers/map-refs';
 import { renderPreComponent } from '../helpers/render-imports';
 import { checkHasState } from '../helpers/state';
-import { METADATA_HOOK_NAME, selfClosingTags } from '../parsers/jsx';
 import { MorphoComponent } from '../types/morpho-component';
 import { checkIsForNode, MorphoNode } from '../types/morpho-node';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
@@ -95,7 +96,7 @@ export const blockToMorpho = (
       }
     }
   }
-  if (selfClosingTags.has(json.name)) {
+  if (SELF_CLOSING_HTML_TAGS.has(json.name)) {
     return str + ' />';
   }
 
@@ -186,7 +187,7 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
 
     ${
       stringifiedUseMetadata && stringifiedUseMetadata !== '{}'
-        ? `${METADATA_HOOK_NAME}(${stringifiedUseMetadata})`
+        ? `${HOOKS.METADATA}(${stringifiedUseMetadata})`
         : ''
     }
 

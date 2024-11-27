@@ -1,4 +1,5 @@
 import { format } from 'prettier/standalone';
+import { SELF_CLOSING_HTML_TAGS } from '../constants/html_tags';
 import { dedent } from '../helpers/dedent';
 import { fastClone } from '../helpers/fast-clone';
 import { getStateObjectStringFromComponent } from '../helpers/get-state-object-string';
@@ -9,7 +10,6 @@ import {
   runPreCodePlugins,
   runPreJsonPlugins,
 } from '../modules/plugins';
-import { selfClosingTags } from '../parsers/jsx';
 import { checkIsForNode, MorphoNode } from '../types/morpho-node';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 
@@ -83,7 +83,7 @@ const blockToTemplate = (json: MorphoNode, options: ToTemplateOptions = {}) => {
         str += ` ${key}="\${${useValue}}" `;
       }
     }
-    if (selfClosingTags.has(json.name)) {
+    if (SELF_CLOSING_HTML_TAGS.has(json.name)) {
       return str + ' />';
     }
     str += '>';
