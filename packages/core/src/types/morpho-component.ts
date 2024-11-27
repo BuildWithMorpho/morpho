@@ -1,4 +1,5 @@
 import { Dictionary } from '../helpers/typescript';
+import { Target } from './config';
 import { JSONObject } from './json';
 import { MorphoNode } from './morpho-node';
 
@@ -68,6 +69,14 @@ export type StateValue = {
 
 export type MorphoState = Dictionary<StateValue | undefined>;
 
+export type TargetBlock<Return, Targets extends Target = Target> = Partial<{
+  [T in Targets | 'default']?: Return;
+}>;
+
+export type TargetBlockCode = TargetBlock<{
+  code: string;
+}>;
+
 export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
@@ -97,6 +106,7 @@ export type MorphoComponent = {
     postComponent?: extendedHook;
     onUpdate?: extendedHook[];
   };
+  targetBlocks?: Dictionary<TargetBlockCode>;
   children: MorphoNode[];
   subComponents: MorphoComponent[];
   types?: string[];
