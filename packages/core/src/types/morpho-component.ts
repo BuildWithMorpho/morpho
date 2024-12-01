@@ -1,6 +1,7 @@
 import { Dictionary } from '../helpers/typescript';
 import { Target } from './config';
 import { JSONObject } from './json';
+import { ComponentMetadata } from './metadata';
 import { MorphoNode } from './morpho-node';
 
 /**
@@ -32,11 +33,16 @@ export interface MorphoImport {
   importKind?: 'type' | 'typeof' | 'value' | null;
 }
 
-export interface ContextGetInfo {
+export type ReactivityType = 'normal' | 'reactive';
+
+export type ContextOptions = {
+  type?: ReactivityType;
+};
+export interface ContextGetInfo extends ContextOptions {
   name: string;
   path: string;
 }
-export interface ContextSetInfo {
+export interface ContextSetInfo extends ContextOptions {
   name: string;
   value?: MorphoState;
   ref?: string;
@@ -63,8 +69,9 @@ export type StateValueType = 'function' | 'getter' | 'method' | 'property';
 
 export type StateValue = {
   code: string;
-  type: StateValueType;
   typeParameter?: string;
+  type: StateValueType;
+  propertyType?: ReactivityType;
 };
 
 export type MorphoState = Dictionary<StateValue | undefined>;
@@ -83,13 +90,19 @@ export type MorphoComponent = {
   imports: MorphoImport[];
   exports?: MorphoExports;
   meta: JSONObject & {
-    useMetadata?: JSONObject;
+    useMetadata?: ComponentMetadata;
   };
   inputs: MorphoComponentInput[];
   state: MorphoState;
   context: {
     get: Dictionary<ContextGetInfo>;
     set: Dictionary<ContextSetInfo>;
+  };
+  signals?: {
+    signalTypeImportName?: string;
+  };
+  props?: {
+    [name: string]: { propertyType: ReactivityType };
   };
   refs: {
     [useRef: string]: {

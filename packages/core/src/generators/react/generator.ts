@@ -102,7 +102,7 @@ function provideContext(json: MorphoComponent, options: ToReactOptions): string 
       } else if (ref) {
         json.children = [
           createMorphoNode({
-            name: 'Context.Provider',
+            name: `${name}.Provider`,
             children: json.children,
             ...(ref && {
               bindings: {

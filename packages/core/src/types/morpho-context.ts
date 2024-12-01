@@ -1,6 +1,6 @@
-import { MorphoState } from './morpho-component';
+import { ContextOptions, MorphoState } from './morpho-component';
 
-export type MorphoContext = {
+export type MorphoContext = ContextOptions & {
   '@type': '@builder.io/morpho/context';
   name: string;
   value: MorphoState;
