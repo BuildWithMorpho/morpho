@@ -1,5 +1,6 @@
 import traverse from 'traverse';
 import { convertTypeScriptToJS } from '../../../helpers/babel-transform';
+import { ComponentMetadata } from '../../../types/metadata';
 import { MorphoComponent } from '../../../types/morpho-component';
 import { File } from '../src-generator';
 import { convertMethodToFunction } from './convert-method-to-function';
@@ -35,7 +36,7 @@ export function emitUseStore({
 }: {
   file: File;
   stateInit: StateInit;
-  isDeep: boolean;
+  isDeep?: boolean;
 }) {
   const state = stateInit[0];
   const hasState = state && Object.keys(state).length > 0;
@@ -96,12 +97,12 @@ function emitStateMethods(
 export function emitStateMethodsAndRewriteBindings(
   file: File,
   component: MorphoComponent,
-  metadata: Record<string, any>,
+  metadata?: ComponentMetadata,
 ): StateInit {
   const lexicalArgs = getLexicalScopeVars(component);
   const state: StateInit = emitStateMethods(file, component.state, lexicalArgs);
   const methodMap = getStateMethodsAndGetters(component.state);
-  rewriteCodeExpr(component, methodMap, lexicalArgs, metadata.qwik?.replace);
+  rewriteCodeExpr(component, methodMap, lexicalArgs, metadata?.qwik?.replace);
   return state;
 }
 
