@@ -70,16 +70,19 @@ const getRefsString = (json: MorphoComponent, options: ToSolidOptions) =>
 
 function addProviderComponents(json: MorphoComponent, options: ToSolidOptions) {
   for (const key in json.context.set) {
-    const { name, value } = json.context.set[key];
+    const { name, value, ref } = json.context.set[key];
+
+    const bindingValue = value
+      ? createSingleBinding({ code: stringifyContextValue(value) })
+      : ref
+      ? createSingleBinding({ code: ref })
+      : undefined;
+
     json.children = [
       createMorphoNode({
         name: `${name}.Provider`,
         children: json.children,
-        ...(value && {
-          bindings: {
-            value: createSingleBinding({ code: stringifyContextValue(value) }),
-          },
-        }),
+        ...(bindingValue && { bindings: { value: bindingValue } }),
       }),
     ];
   }
@@ -102,7 +105,9 @@ export const componentToSolid: TranspilerGenerator<Partial<ToSolidOptions>> =
       CODE_PROCESSOR_PLUGIN((codeType) => {
         switch (codeType) {
           case 'state':
+          case 'context-set':
           case 'dynamic-jsx-elements':
+          case 'types':
             return (c) => c;
           case 'bindings':
           case 'hooks':

@@ -5,7 +5,7 @@ import { createMorphoComponent } from '../../helpers/create-morpho-component';
 import { getBindingsCode } from '../../helpers/get-bindings';
 import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
 import { JSONOrNode } from '../../types/json';
-import { MorphoComponent } from '../../types/morpho-component';
+import { MorphoComponent, ReactivityType } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
 import { getPropsTypeRef } from './component-types';
 import { jsxElementToJson } from './element-parser';
@@ -157,11 +157,27 @@ export const componentFunctionToJson = (
                 type: 'function',
               };
             } else {
+              const stateOptions = init.arguments[1];
+
+              let propertyType: ReactivityType = 'normal';
+
+              if (types.isObjectExpression(stateOptions)) {
+                for (const prop of stateOptions.properties) {
+                  if (!types.isProperty(prop) || !types.isIdentifier(prop.key)) continue;
+                  const isReactive = prop.key.name === 'reactive';
+
+                  if (isReactive && types.isBooleanLiteral(prop.value) && prop.value.value) {
+                    propertyType = 'reactive';
+                  }
+                }
+              }
+
               // Value as init, like:
               // useState(true)
               state[varName] = {
                 code: parseCode(value),
                 type: 'property',
+                propertyType,
               };
             }
 

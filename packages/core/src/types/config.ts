@@ -1,4 +1,5 @@
-import { MorphoComponent } from './morpho-component';
+import type { ParseMorphoOptions } from '../parsers/jsx/types';
+import type { MorphoComponent } from './morpho-component';
 
 export type Format = 'esm' | 'cjs';
 export type Language = 'js' | 'ts';
@@ -70,4 +71,16 @@ export type MorphoConfig = {
    * If you provide this function, you must provide a value for every target yourself.
    */
   getTargetPath: ({ target }: { target: Target }) => string;
+
+  /**
+   * Provide options to the parser.
+   */
+  parserOptions?: {
+    jsx: Partial<ParseMorphoOptions> & {
+      /**
+       * Path to your project's `tsconfig.json` file. Needed for advanced types parsing (e.g. signals).
+       */
+      tsConfigFilePath?: string;
+    };
+  };
 };
