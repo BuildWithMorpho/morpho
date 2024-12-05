@@ -7,7 +7,13 @@ import { getStateObjectStringFromComponent } from '../../helpers/get-state-objec
 import { checkIsDefined } from '../../helpers/nullable';
 import { checkIsComponentImport } from '../../helpers/render-imports';
 import { extendedHook, MorphoComponent } from '../../types/morpho-component';
-import { encodeQuotes, getContextKey, getContextValue, getOnUpdateHookName } from './helpers';
+import {
+  encodeQuotes,
+  getContextKey,
+  getContextValue,
+  getOnUpdateHookName,
+  mapMorphoComponentToKebabCase,
+} from './helpers';
 import { ToVueOptions } from './types';
 
 const getContextProvideString = (json: MorphoComponent, options: ToVueOptions) => {
@@ -42,6 +48,8 @@ const generateComponentImport =
   (componentName: string): string => {
     if (options.vueVersion >= 3 && options.asyncComponentImports) {
       return `'${componentName}': defineAsyncComponent(${componentName})`;
+    } else if (options.vueVersion === 2) {
+      return `'${mapMorphoComponentToKebabCase(componentName)}': ${componentName}`;
     } else {
       return `'${componentName}': ${componentName}`;
     }
