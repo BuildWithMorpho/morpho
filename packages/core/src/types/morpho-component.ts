@@ -84,6 +84,12 @@ export type TargetBlockCode = TargetBlock<{
   code: string;
 }>;
 
+export type TargetBlockDefinition = TargetBlockCode & {
+  settings: {
+    requiresDefault: boolean;
+  };
+};
+
 export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
@@ -119,7 +125,7 @@ export type MorphoComponent = {
     postComponent?: extendedHook;
     onUpdate?: extendedHook[];
   };
-  targetBlocks?: Dictionary<TargetBlockCode>;
+  targetBlocks?: Dictionary<TargetBlockDefinition>;
   children: MorphoNode[];
   subComponents: MorphoComponent[];
   types?: string[];
