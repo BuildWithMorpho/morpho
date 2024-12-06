@@ -1,4 +1,5 @@
 import { MorphoComponent } from '../../../types/morpho-component';
+import { MorphoNode } from '../../../types/morpho-node';
 
 export type CodeType =
   | 'hooks'
@@ -18,6 +19,7 @@ export type CodeType =
 declare function codeProcessor(
   codeType: CodeType,
   json: MorphoComponent,
-): (code: string, hookType: string) => string;
+  node?: MorphoNode,
+): (code: string, hookType: string) => string | (() => void);
 
 export type CodeProcessor = typeof codeProcessor;
