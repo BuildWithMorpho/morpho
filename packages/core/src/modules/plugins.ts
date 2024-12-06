@@ -3,7 +3,15 @@ import { Plugin } from '../types/plugins';
 
 export type { Plugin };
 
-export const runPreJsonPlugins = (json: MorphoComponent, plugins: Plugin[], options?: any) => {
+export const runPreJsonPlugins = ({
+  json,
+  plugins,
+  options,
+}: {
+  json: MorphoComponent;
+  plugins: Plugin[];
+  options?: any;
+}) => {
   let useJson = json;
   for (const plugin of plugins) {
     const preFunction = plugin(options).json?.pre;
@@ -14,7 +22,15 @@ export const runPreJsonPlugins = (json: MorphoComponent, plugins: Plugin[], opti
   return useJson;
 };
 
-export const runPostJsonPlugins = (json: MorphoComponent, plugins: Plugin[], options?: any) => {
+export const runPostJsonPlugins = ({
+  json,
+  plugins,
+  options,
+}: {
+  json: MorphoComponent;
+  plugins: Plugin[];
+  options?: any;
+}) => {
   let useJson = json;
   for (const plugin of plugins) {
     const postFunction = plugin(options).json?.post;
@@ -25,23 +41,43 @@ export const runPostJsonPlugins = (json: MorphoComponent, plugins: Plugin[], opt
   return useJson;
 };
 
-export const runPreCodePlugins = (code: string, plugins: Plugin[], options?: any) => {
+export const runPreCodePlugins = ({
+  code,
+  plugins,
+  options,
+  json,
+}: {
+  json: MorphoComponent;
+  code: string;
+  plugins: Plugin[];
+  options?: any;
+}) => {
   let string = code;
   for (const plugin of plugins) {
     const preFunction = plugin(options).code?.pre;
     if (preFunction) {
-      string = preFunction(string);
+      string = preFunction(string, json);
     }
   }
   return string;
 };
 
-export const runPostCodePlugins = (code: string, plugins: Plugin[], options?: any) => {
+export const runPostCodePlugins = ({
+  code,
+  plugins,
+  options,
+  json,
+}: {
+  json: MorphoComponent;
+  code: string;
+  plugins: Plugin[];
+  options?: any;
+}) => {
   let string = code;
   for (const plugin of plugins) {
     const postFunction = plugin(options).code?.post;
     if (postFunction) {
-      string = postFunction(string);
+      string = postFunction(string, json);
     }
   }
   return string;

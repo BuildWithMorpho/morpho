@@ -9,8 +9,8 @@ export type Plugin = (options?: any) => {
   };
   code?: {
     // Happens before formatting
-    pre?: (code: string) => string;
+    pre?: (code: string, json: MorphoComponent) => string;
     // Happens after formatting
-    post?: (code: string) => string;
+    post?: (code: string, json: MorphoComponent) => string;
   };
 };
