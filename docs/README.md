@@ -48,6 +48,7 @@ becomes:
       "children": [
         {
           "@type": "@builder.io/morpho/node",
+          "name": "input",
           "bindings": {
             "value": "state.name",
             "onChange": "state.name = event.target.value"
