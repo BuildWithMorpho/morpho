@@ -26,6 +26,7 @@ import {
   MorphoConfig,
   parseJsx,
   parseSvelte,
+  removeMorphoImport,
   Target,
   TranspilerGenerator,
 } from '@builder.io/morpho';
@@ -499,6 +500,7 @@ async function buildNonComponentFiles(args: TargetContextWithConfig) {
         await transpileIfNecessary({ path, target, options, content: file }),
         transformImports({ target, options }),
         (code) => mapSignalTypeInTSFile({ code, target }),
+        removeMorphoImport,
       );
 
       return { output, path };
