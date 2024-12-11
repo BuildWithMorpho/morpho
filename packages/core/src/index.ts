@@ -2,7 +2,6 @@ import { JSX } from '@builder.io/morpho/jsx-runtime';
 import { Dictionary } from './helpers/typescript';
 import { ComponentMetadata } from './types/metadata';
 import { ReactivityType, TargetBlock } from './types/morpho-component';
-
 export * from './flow';
 export * from './generators/alpine';
 export * from './generators/angular';
@@ -29,7 +28,16 @@ export * from './generators/swift-ui';
 export * from './generators/taro';
 export * from './generators/template';
 export * from './generators/vue';
+export {
+  checkIsLiteComponentFilePath,
+  checkIsMorphoComponentFilePath,
+  checkIsSvelteComponentFilePath,
+  getComponentFileExtensionForTarget,
+  renameComponentFile,
+  renameImport,
+} from './helpers/component-file-extensions';
 export * from './helpers/is-morpho-node';
+export { checkShouldOutputTypeScript } from './helpers/output';
 export * from './helpers/signals';
 export * from './helpers/typescript-project';
 export * from './parsers/angular';
