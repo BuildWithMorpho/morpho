@@ -20,6 +20,7 @@ import { collectModuleScopeHooks } from './hooks';
 import { getMagicString, getTargetId, getUseTargetStatements } from './hooks/use-target';
 import { handleImportDeclaration } from './imports';
 import { undoPropsDestructure } from './props';
+import { findOptionalProps } from './props-types';
 import { findSignals } from './signals';
 import { mapStateIdentifiers } from './state';
 import { Context, ParseMorphoOptions } from './types';
@@ -208,6 +209,22 @@ export function parseJsx(
   }
 
   if (options.tsProject && options.filePath) {
+    // identify optional props.
+    const optionalProps = findOptionalProps({
+      project: options.tsProject.project,
+      filePath: options.filePath,
+    });
+
+    optionalProps.forEach((prop) => {
+      morphoComponent.props = {
+        ...morphoComponent.props,
+        [prop]: {
+          ...morphoComponent.props?.[prop]!,
+          optional: true,
+        },
+      };
+    });
+
     const reactiveValues = findSignals({
       filePath: options.filePath,
       project: options.tsProject.project,
@@ -217,7 +234,10 @@ export function parseJsx(
     reactiveValues.props.forEach((prop) => {
       morphoComponent.props = {
         ...morphoComponent.props,
-        [prop]: { propertyType: 'reactive' },
+        [prop]: {
+          ...morphoComponent.props?.[prop]!,
+          propertyType: 'reactive',
+        },
       };
     });
 
