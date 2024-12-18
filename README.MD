@@ -20,7 +20,7 @@
   <a href="https://www.npmjs.com/package/@builder.io/morpho" rel="nofollow"><img src="https://img.shields.io/npm/v/@builder.io/morpho.svg?sanitize=true"></a>
 </p>
 
-_PS: We are actively looking for folks interested in becoming contributors to Morpho. Given its large surface area, there is a ton of room for any engineer to make a large and sustained impact on the project. We invest a ton of time in helping newcomers get onboarded, and teach them how to make changes to the codebase (see the following examples: [#847](https://github.com/BuilderIO/morpho/issues/847#issuecomment-1307439504), [#372](https://github.com/BuilderIO/morpho/issues/372#issuecomment-1133471614), [#734](https://github.com/BuilderIO/morpho/issues/734#issuecomment-1255453702)). If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or reach out on our [Discord](https://discord.gg/SNusEyNGsx)_
+_PS: We are actively looking for folks interested in becoming contributors to Morpho. If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or reach out on our [Discord](https://discord.gg/SNusEyNGsx)_
 
 
 ## Table of contents
