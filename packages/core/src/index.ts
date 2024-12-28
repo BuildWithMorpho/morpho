@@ -36,6 +36,7 @@ export {
   renameComponentFile,
   renameImport,
 } from './helpers/component-file-extensions';
+export { createMorphoNode } from './helpers/create-morpho-node';
 export * from './helpers/is-morpho-node';
 export { checkShouldOutputTypeScript } from './helpers/output';
 export * from './helpers/signals';
