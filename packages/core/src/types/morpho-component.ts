@@ -90,6 +90,14 @@ export type TargetBlockDefinition = TargetBlockCode & {
   };
 };
 
+export type OnEventHook = {
+  code: string;
+  refName: string;
+  eventName: string;
+  isRoot: boolean;
+  deps?: never;
+};
+
 export type MorphoComponent = {
   '@type': '@builder.io/morpho/component';
   name: string;
@@ -127,6 +135,7 @@ export type MorphoComponent = {
     preComponent?: extendedHook;
     postComponent?: extendedHook;
     onUpdate?: extendedHook[];
+    onEvent?: OnEventHook[];
   };
   targetBlocks?: Dictionary<TargetBlockDefinition>;
   children: MorphoNode[];
