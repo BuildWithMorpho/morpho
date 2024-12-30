@@ -9,7 +9,9 @@ export const createMorphoComponent = (options?: Partial<MorphoComponent>): Morph
   refs: {},
   state: {},
   children: [],
-  hooks: {},
+  hooks: {
+    onMount: [],
+  },
   context: { get: {}, set: {} },
   name: options?.name || 'MyComponent',
   subComponents: [],

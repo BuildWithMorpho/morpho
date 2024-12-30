@@ -1,5 +1,5 @@
 import { flow } from 'fp-ts/lib/function';
-import { extendedHook, MorphoComponent } from '../../../types/morpho-component';
+import { BaseHook, MorphoComponent } from '../../../types/morpho-component';
 import { Plugin } from '../../../types/plugins';
 import { checkIsDefined } from '../../nullable';
 import { traverseNodes } from '../../traverse-nodes';
@@ -11,7 +11,7 @@ export const createCodeProcessorPlugin =
     { processProperties }: { processProperties?: boolean } = { processProperties: false },
   ) =>
   (json: MorphoComponent): void => {
-    function processHook(key: keyof typeof json.hooks, hook: extendedHook) {
+    function processHook(key: keyof typeof json.hooks, hook: BaseHook) {
       const result = codeProcessor('hooks', json)(hook.code, key);
 
       if (typeof result === 'string') {

@@ -1,8 +1,8 @@
 import { curry } from 'lodash';
-import { extendedHook, MorphoComponent } from '../../types/morpho-component';
+import { BaseHook, MorphoComponent } from '../../types/morpho-component';
 
-const extractCode = (hook: extendedHook) => hook.code;
-function renderRootUpdateHook(hooks: extendedHook[], output: string) {
+const extractCode = (hook: BaseHook) => hook.code;
+function renderRootUpdateHook(hooks: BaseHook[], output: string) {
   if (hooks.length === 0) {
     return output;
   }
@@ -33,7 +33,7 @@ export const hasWatchHooks = (json: MorphoComponent): boolean => {
   return getWatchHooks(json).length > 0;
 };
 
-function renderWatchHook(hook: extendedHook): string {
+function renderWatchHook(hook: BaseHook): string {
   const deps = (hook.deps ?? '')
     ?.slice(1)
     .slice(0, -1)
