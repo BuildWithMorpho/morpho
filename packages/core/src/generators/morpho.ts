@@ -195,7 +195,7 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
       ${!hasState ? '' : `const state = useStore(${getStateObjectStringFromComponent(json)});`}
       ${getRefsString(json, refs)}
 
-      ${!json.hooks.onMount?.code ? '' : `onMount(() => { ${json.hooks.onMount.code} })`}
+      ${json.hooks.onMount.map((hook) => `onMount(() => { ${hook.code} })`)}
 
       ${!json.hooks.onUnMount?.code ? '' : `onUnMount(() => { ${json.hooks.onUnMount.code} })`}
 

@@ -24,7 +24,9 @@ export const componentFunctionToJson = (
   node: babel.types.FunctionDeclaration,
   context: Context,
 ): JSONOrNode => {
-  const hooks: MorphoComponent['hooks'] = {};
+  const hooks: MorphoComponent['hooks'] = {
+    onMount: [],
+  };
   const state: MorphoComponent['state'] = {};
   const accessedContext: MorphoComponent['context']['get'] = {};
   const setContext: MorphoComponent['context']['set'] = {};
@@ -67,9 +69,28 @@ export const componentFunctionToJson = (
           }
           case HOOKS.MOUNT: {
             const firstArg = expression.arguments[0];
+            const hookOptions = expression.arguments[1];
             if (types.isFunctionExpression(firstArg) || types.isArrowFunctionExpression(firstArg)) {
               const code = processHookCode(firstArg);
-              hooks.onMount = { code };
+              let onSSR = false;
+
+              if (types.isObjectExpression(hookOptions)) {
+                const onSSRProp = hookOptions.properties.find(
+                  (property) =>
+                    types.isProperty(property) &&
+                    types.isIdentifier(property.key) &&
+                    property.key.name === 'onSSR',
+                );
+
+                if (types.isObjectProperty(onSSRProp) && types.isBooleanLiteral(onSSRProp.value)) {
+                  onSSR = onSSRProp.value.value;
+                }
+              }
+
+              hooks.onMount.push({
+                code,
+                onSSR,
+              });
             }
             break;
           }
