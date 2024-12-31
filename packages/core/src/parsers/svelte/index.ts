@@ -27,6 +27,7 @@ function mapAstToMorphoJson(
     refs: {},
     hooks: {
       onMount: [],
+      onEvent: [],
     },
     imports: [],
     children: [],

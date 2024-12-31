@@ -1,12 +1,19 @@
-import { onEvent, onMount, useRef } from '@builder.io/morpho';
+import { onEvent, onMount, useRef, useStore } from '@builder.io/morpho';
 
 export default function Embed() {
   const elem = useRef<HTMLDivElement>(null);
 
+  const state = useStore({
+    foo(event) {
+      console.log('test2');
+    },
+  });
+
   onEvent(
     'initEditingBldr',
-    () => {
+    (event) => {
       console.log('test');
+      state.foo(event);
     },
     elem,
     true,
