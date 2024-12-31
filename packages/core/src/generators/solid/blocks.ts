@@ -1,11 +1,11 @@
+import { babelTransformExpression } from '@/helpers/babel-transform';
+import { filterEmptyTextNodes } from '@/helpers/filter-empty-text-nodes';
+import { objectHasKey } from '@/helpers/typescript';
+import { MorphoComponent } from '@/types/morpho-component';
+import { checkIsForNode, MorphoNode } from '@/types/morpho-node';
 import { types } from '@babel/core';
 import { kebabCase } from 'lodash';
 import { SELF_CLOSING_HTML_TAGS } from '../../constants/html_tags';
-import { babelTransformExpression } from '../../helpers/babel-transform';
-import { filterEmptyTextNodes } from '../../helpers/filter-empty-text-nodes';
-import { objectHasKey } from '../../helpers/typescript';
-import { MorphoComponent } from '../../types/morpho-component';
-import { checkIsForNode, MorphoNode } from '../../types/morpho-node';
 import { collectClassString } from './helpers/styles';
 import { ToSolidOptions } from './types';
 

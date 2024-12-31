@@ -1,5 +1,5 @@
+import { MorphoComponent } from '@/types/morpho-component';
 import { curry } from 'lodash';
-import { MorphoComponent } from '../../types/morpho-component';
 import { stringifySingleScopeOnMount } from '../helpers/on-mount';
 import { hasWatchHooks, renderWatchHooks } from './render-update-hooks';
 

@@ -1,6 +1,6 @@
+import { stringifyContextValue } from '@/helpers/get-state-object-string';
+import { MorphoContext } from '@/types/morpho-context';
 import { format } from 'prettier/standalone';
-import { stringifyContextValue } from '../../helpers/get-state-object-string';
-import { MorphoContext } from '../../types/morpho-context';
 
 type ContextToSolidOptions = {
   format?: boolean;

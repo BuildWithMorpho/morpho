@@ -3,7 +3,7 @@ import {
   ContextSetInfo,
   MorphoComponent,
   ReactivityType,
-} from '../../types/morpho-component';
+} from '@/types/morpho-component';
 
 export const hasContext = (component: MorphoComponent) =>
   hasSetContext(component) || hasGetContext(component);

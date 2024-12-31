@@ -1,6 +1,6 @@
-import { isSlotProperty, replaceSlotsInString } from '../../helpers/slots';
-import { stripStateAndPropsRefs } from '../../helpers/strip-state-and-props-refs';
-import { MorphoComponent } from '../../types/morpho-component';
+import { isSlotProperty, replaceSlotsInString } from '@/helpers/slots';
+import { stripStateAndPropsRefs } from '@/helpers/strip-state-and-props-refs';
+import { MorphoComponent } from '@/types/morpho-component';
 import { ToSvelteOptions } from './types';
 
 export const stripStateAndProps =
