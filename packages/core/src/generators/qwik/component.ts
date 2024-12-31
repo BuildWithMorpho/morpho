@@ -1,9 +1,9 @@
+import { MorphoComponent } from '@/types/morpho-component';
+import { MorphoNode } from '@/types/morpho-node';
 import {
   compileAwayBuilderComponentsFromTree,
   components as compileAwayComponents,
 } from '../../plugins/compile-away-builder-components';
-import { MorphoComponent } from '../../types/morpho-component';
-import { MorphoNode } from '../../types/morpho-node';
 import { stringifySingleScopeOnMount } from '../helpers/on-mount';
 import { DIRECTIVES } from './directives';
 import { renderHandlers } from './helpers/handlers';

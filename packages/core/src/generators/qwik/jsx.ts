@@ -1,5 +1,5 @@
-import { isMorphoNode } from '../../helpers/is-morpho-node';
-import { Binding, MorphoNode } from '../../types/morpho-node';
+import { isMorphoNode } from '@/helpers/is-morpho-node';
+import { Binding, MorphoNode } from '@/types/morpho-node';
 import { DIRECTIVES } from './directives';
 import { CssStyles } from './helpers/styles';
 import { File, invoke, lastProperty, quote, SrcBuilder } from './src-generator';

@@ -1,17 +1,17 @@
+import { createSingleBinding } from '@/helpers/bindings';
+import { fastClone } from '@/helpers/fast-clone';
+import isChildren from '@/helpers/is-children';
+import { isMorphoNode } from '@/helpers/is-morpho-node';
+import { mergeOptions } from '@/helpers/merge-options';
+import { ClassStyleMap } from '@/helpers/styles/helpers';
+import { Dictionary } from '@/helpers/typescript';
+import { MorphoComponent } from '@/types/morpho-component';
+import { BaseTranspilerOptions, TranspilerGenerator } from '@/types/transpiler';
 import json5 from 'json5';
 import { camelCase, size } from 'lodash';
 import traverse from 'traverse';
 import { MorphoNode, Plugin } from '../..';
 import { VALID_HTML_TAGS } from '../../constants/html_tags';
-import { createSingleBinding } from '../../helpers/bindings';
-import { fastClone } from '../../helpers/fast-clone';
-import isChildren from '../../helpers/is-children';
-import { isMorphoNode } from '../../helpers/is-morpho-node';
-import { mergeOptions } from '../../helpers/merge-options';
-import { ClassStyleMap } from '../../helpers/styles/helpers';
-import { Dictionary } from '../../helpers/typescript';
-import { MorphoComponent } from '../../types/morpho-component';
-import { BaseTranspilerOptions, TranspilerGenerator } from '../../types/transpiler';
 import { componentToReact } from '../react';
 import { sanitizeReactNativeBlockStyles } from './sanitize-react-native-block-styles';
 

@@ -1,5 +1,5 @@
-import { getForArguments } from '../../helpers/nodes/for';
-import { ForNode, MorphoNode } from '../../types/morpho-node';
+import { getForArguments } from '@/helpers/nodes/for';
+import { ForNode, MorphoNode } from '@/types/morpho-node';
 import { minify } from '../minify';
 import { iteratorProperty, SrcBuilder } from './src-generator';
 

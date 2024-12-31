@@ -1,19 +1,19 @@
-import { types } from '@babel/core';
-import { flow, identity, pipe } from 'fp-ts/lib/function';
-import { pickBy } from 'lodash';
-import { VALID_HTML_TAGS } from '../../constants/html_tags';
-import { babelTransformExpression } from '../../helpers/babel-transform';
-import { stringifyContextValue } from '../../helpers/get-state-object-string';
-import { Nullable } from '../../helpers/nullable';
-import { stripGetter } from '../../helpers/patterns';
+import { babelTransformExpression } from '@/helpers/babel-transform';
+import { stringifyContextValue } from '@/helpers/get-state-object-string';
+import { Nullable } from '@/helpers/nullable';
+import { stripGetter } from '@/helpers/patterns';
 import {
   replaceIdentifiers,
   replacePropsIdentifier,
   replaceStateIdentifier,
-} from '../../helpers/replace-identifiers';
-import { isSlotProperty, replaceSlotsInString } from '../../helpers/slots';
-import { ContextGetInfo, ContextSetInfo, MorphoComponent } from '../../types/morpho-component';
-import { MorphoNode } from '../../types/morpho-node';
+} from '@/helpers/replace-identifiers';
+import { isSlotProperty, replaceSlotsInString } from '@/helpers/slots';
+import { ContextGetInfo, ContextSetInfo, MorphoComponent } from '@/types/morpho-component';
+import { MorphoNode } from '@/types/morpho-node';
+import { types } from '@babel/core';
+import { flow, identity, pipe } from 'fp-ts/lib/function';
+import { pickBy } from 'lodash';
+import { VALID_HTML_TAGS } from '../../constants/html_tags';
 import { ToVueOptions } from './types';
 
 export const addPropertiesToJson =

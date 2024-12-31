@@ -1,5 +1,5 @@
+import { BaseHook, MorphoComponent } from '@/types/morpho-component';
 import { curry } from 'lodash';
-import { BaseHook, MorphoComponent } from '../../types/morpho-component';
 
 const extractCode = (hook: BaseHook) => hook.code;
 function renderRootUpdateHook(hooks: BaseHook[], output: string) {

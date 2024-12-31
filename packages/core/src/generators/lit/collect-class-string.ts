@@ -1,4 +1,4 @@
-import { MorphoNode } from '../../types/morpho-node';
+import { MorphoNode } from '@/types/morpho-node';
 
 // This should really be a preprocessor mapping the `class` attribute binding based on what other values have
 // to make this more pluggable

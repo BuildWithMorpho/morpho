@@ -1,4 +1,4 @@
-import { MorphoComponent } from '../../types/morpho-component';
+import { MorphoComponent } from '@/types/morpho-component';
 
 /**
  * Helper for frameworks where all `onMount()`s must share a single scope.

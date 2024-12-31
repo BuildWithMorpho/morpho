@@ -14,21 +14,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": "./",
-    "rootDir": "./src",
-    "jsxImportSource": "@builder.io/morpho",
-    "paths": {
-      "@builder.io/morpho": ["../core/src"]
-    }
+    "jsxImportSource": "@builder.io/morpho"
   },
-  "references": [
-    {
-      "path": "../core"
-    }
-  ],
-  "ts-node": {
-    "typeCheck": false
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"]
 }

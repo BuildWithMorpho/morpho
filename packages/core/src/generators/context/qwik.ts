@@ -1,5 +1,5 @@
+import { MorphoContext } from '@/types/morpho-context';
 import { format } from 'prettier/standalone';
-import { MorphoContext } from '../../types/morpho-context';
 
 type ContextToQwikOptions = {
   format?: boolean;

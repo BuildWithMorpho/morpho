@@ -1,9 +1,9 @@
+import { dedent } from '@/helpers/dedent';
+import { getStateObjectStringFromComponent } from '@/helpers/get-state-object-string';
+import { stripStateAndPropsRefs } from '@/helpers/strip-state-and-props-refs';
+import { BaseHook, MorphoComponent } from '@/types/morpho-component';
 import json5 from 'json5';
 import { pickBy } from 'lodash';
-import { dedent } from '../../helpers/dedent';
-import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
-import { stripStateAndPropsRefs } from '../../helpers/strip-state-and-props-refs';
-import { BaseHook, MorphoComponent } from '../../types/morpho-component';
 import { getContextKey, getContextValue, processBinding } from './helpers';
 import { ToVueOptions } from './types';
 

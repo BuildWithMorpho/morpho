@@ -1,7 +1,7 @@
+import { isMorphoNode } from '@/helpers/is-morpho-node';
+import type { MorphoComponent } from '@/types/morpho-component';
+import type { MorphoNode } from '@/types/morpho-node';
 import traverse from 'traverse';
-import { isMorphoNode } from '../../helpers/is-morpho-node';
-import type { MorphoComponent } from '../../types/morpho-component';
-import type { MorphoNode } from '../../types/morpho-node';
 
 const checkIsNodeAMorphoComponent = (node: MorphoNode) =>
   node.name[0] === node.name[0].toUpperCase();

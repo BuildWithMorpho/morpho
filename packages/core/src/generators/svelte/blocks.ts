@@ -1,12 +1,12 @@
+import { createSingleBinding } from '@/helpers/bindings';
+import isChildren from '@/helpers/is-children';
+import { isUpperCase } from '@/helpers/is-upper-case';
+import { getForArguments } from '@/helpers/nodes/for';
+import { removeSurroundingBlock } from '@/helpers/remove-surrounding-block';
+import { isSlotProperty, stripSlotPrefix } from '@/helpers/slots';
+import { MorphoComponent } from '@/types/morpho-component';
+import { BaseNode, Binding, ForNode, MorphoNode } from '@/types/morpho-node';
 import { SELF_CLOSING_HTML_TAGS, VALID_HTML_TAGS } from '../../constants/html_tags';
-import { createSingleBinding } from '../../helpers/bindings';
-import isChildren from '../../helpers/is-children';
-import { isUpperCase } from '../../helpers/is-upper-case';
-import { getForArguments } from '../../helpers/nodes/for';
-import { removeSurroundingBlock } from '../../helpers/remove-surrounding-block';
-import { isSlotProperty, stripSlotPrefix } from '../../helpers/slots';
-import { MorphoComponent } from '../../types/morpho-component';
-import { BaseNode, Binding, ForNode, MorphoNode } from '../../types/morpho-node';
 import { stripStateAndProps } from './helpers';
 import { ToSvelteOptions } from './types';
 
