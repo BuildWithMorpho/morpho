@@ -1,19 +1,35 @@
 import { MorphoComponent } from '../types/morpho-component';
+import { Overwrite, Prettify } from './typescript';
 
-export const createMorphoComponent = (options?: Partial<MorphoComponent>): MorphoComponent => ({
-  '@type': '@builder.io/morpho/component',
-  imports: [],
-  exports: {},
-  inputs: [],
-  meta: {},
-  refs: {},
-  state: {},
-  children: [],
-  hooks: {
-    onMount: [],
-  },
-  context: { get: {}, set: {} },
-  name: options?.name || 'MyComponent',
-  subComponents: [],
-  ...options,
-});
+type PartialMorphoComponent = Prettify<
+  Overwrite<
+    Partial<MorphoComponent>,
+    {
+      hooks: Partial<MorphoComponent['hooks']>;
+    }
+  >
+>;
+
+export const createMorphoComponent = (options?: PartialMorphoComponent): MorphoComponent => {
+  const { name, hooks, ...remainingOpts } = options || {};
+  const { onEvent = [], onMount = [], ...remainingHooks } = hooks || {};
+  return {
+    '@type': '@builder.io/morpho/component',
+    imports: [],
+    exports: {},
+    inputs: [],
+    meta: {},
+    refs: {},
+    state: {},
+    children: [],
+    context: { get: {}, set: {} },
+    subComponents: [],
+    name: name || 'MyComponent',
+    hooks: {
+      onMount,
+      onEvent,
+      ...remainingHooks,
+    },
+    ...remainingOpts,
+  };
+};
