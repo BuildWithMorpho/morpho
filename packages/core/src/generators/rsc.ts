@@ -5,6 +5,7 @@ import { mergeOptions } from '../helpers/merge-options';
 import { checkIsDefined } from '../helpers/nullable';
 import { MorphoComponent } from '../types/morpho-component';
 import { TranspilerGenerator } from '../types/transpiler';
+import { checkIfIsClientComponent } from './helpers/rsc';
 import { componentToReact, ToReactOptions } from './react';
 
 export type ToRscOptions = ToReactOptions;
@@ -52,28 +53,6 @@ const RSC_TRANSFORM_PLUGIN: Plugin = () => ({
     },
   },
 });
-
-export const checkIfIsClientComponent = (json: MorphoComponent) => {
-  if (json.hooks.onMount.length) return true;
-  if (json.hooks.onUnMount?.code) return true;
-  if (json.hooks.onUpdate?.length) return true;
-  if (Object.keys(json.refs).length) return true;
-  if (Object.keys(json.context.set).length) return true;
-  if (Object.keys(json.context.get).length) return true;
-  if (Object.values(json.state).filter((s) => s?.type === 'property').length) return true;
-
-  let foundEventListener = false;
-  traverse(json).forEach(function (node) {
-    if (isMorphoNode(node)) {
-      if (Object.keys(node.bindings).filter((item) => item.startsWith('on')).length) {
-        foundEventListener = true;
-        this.stop();
-      }
-    }
-  });
-
-  return foundEventListener;
-};
 
 const RscOptions: Partial<ToRscOptions> = {
   plugins: [RSC_TRANSFORM_PLUGIN],

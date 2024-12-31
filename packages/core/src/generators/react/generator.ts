@@ -37,8 +37,8 @@ import {
 import { MorphoComponent } from '../../types/morpho-component';
 import { TranspilerGenerator } from '../../types/transpiler';
 import { hasContext } from '../helpers/context';
+import { checkIfIsClientComponent } from '../helpers/rsc';
 import { collectReactNativeStyles } from '../react-native';
-import { checkIfIsClientComponent } from '../rsc';
 import { blockToReact } from './blocks';
 import { closeFrag, getCode, openFrag, processTagReferences, wrapInFragment } from './helpers';
 import { getUseStateCode, processHookCode, updateStateSetters } from './state';
