@@ -49,30 +49,6 @@ export const getContextSymbols = (ast: SourceFile) => {
   return contextSymbols;
 };
 
-const getSignalSymbol = (project: Project) => {
-  const morphoRootExportFile = project.getSourceFiles().find((file) => {
-    const filePath = file.getFilePath();
-
-    return (
-      filePath.includes('morpho/packages/core/dist/src/index') ||
-      // should only be needed for tests to work.
-      filePath.includes('morpho/packages/core/src/index')
-    );
-  });
-
-  const signalSymbol = morphoRootExportFile
-    ?.getExportSymbols()
-    .find((Symbol) => Symbol.getName() === 'Signal');
-
-  if (signalSymbol === undefined) {
-    throw new Error(
-      'Could not find the Morpho Signal symbol in your TS project. Is `@builder.io/morpho` installed correctly?',
-    );
-  }
-
-  return signalSymbol;
-};
-
 const getProject = (tsConfigFilePath: string) => {
   try {
     return new Project({ tsConfigFilePath });
@@ -85,6 +61,5 @@ const getProject = (tsConfigFilePath: string) => {
 
 export const createTypescriptProject = (tsConfigFilePath: string) => {
   const project = getProject(tsConfigFilePath);
-  const signalSymbol = getSignalSymbol(project);
-  return { project, signalSymbol };
+  return { project };
 };
