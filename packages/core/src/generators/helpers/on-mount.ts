@@ -16,7 +16,7 @@ export const stringifySingleScopeOnMount = (json: MorphoComponent) => {
     .map((hook, i) => {
       const hookFnName = `onMountHook_${i}`;
       return `
-    function ${hookFnName}() {
+    const ${hookFnName} = () => {
       ${hook.code}
     }
     ${hookFnName}();`;
