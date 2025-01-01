@@ -1,4 +1,4 @@
-import { Project, Symbol } from 'ts-morph';
+import { Project } from 'ts-morph';
 import { MorphoComponent } from '../../types/morpho-component';
 
 export type ParseMorphoOptions = {
@@ -7,7 +7,6 @@ export type ParseMorphoOptions = {
   typescript: boolean;
   tsProject?: {
     project: Project;
-    signalSymbol: Symbol;
   };
   filePath?: string;
 };
