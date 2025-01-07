@@ -1,5 +1,6 @@
 import type { ParseMorphoOptions } from '../parsers/jsx/types';
 import type { MorphoComponent } from './morpho-component';
+import { BaseTranspilerOptions } from './transpiler';
 
 export type Format = 'esm' | 'cjs';
 export type Language = 'js' | 'ts';
@@ -16,7 +17,7 @@ export type GeneratorOptions = {
 };
 
 export type MorphoConfig = {
-  commonOptions?: { typescript?: boolean };
+  commonOptions?: Omit<BaseTranspilerOptions, 'experimental'>;
   /**
    * List of targets to compile to.
    */

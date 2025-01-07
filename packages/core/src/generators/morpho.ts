@@ -18,7 +18,7 @@ import { mapRefs } from '../helpers/map-refs';
 import { renderPreComponent } from '../helpers/render-imports';
 import { checkHasState } from '../helpers/state';
 import { MorphoComponent } from '../types/morpho-component';
-import { checkIsForNode, MorphoNode } from '../types/morpho-node';
+import { MorphoNode, checkIsForNode } from '../types/morpho-node';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 import { blockToReact, componentToReact } from './react';
 
@@ -197,7 +197,11 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
     ${!otherComponents.length ? '' : `import { ${otherComponents.join(',')} } from '@components';`}
     ${json.types ? json.types.join('\n') : ''}
 
-    ${renderPreComponent({ component: json, target: 'morpho' })}
+    ${renderPreComponent({
+      explicitImportFileExtension: options.explicitImportFileExtension,
+      component: json,
+      target: 'morpho',
+    })}
 
     ${
       stringifiedUseMetadata && stringifiedUseMetadata !== '{}'

@@ -1,4 +1,4 @@
-import { useStore, useMetadata } from '@builder.io/morpho';
+import { useMetadata, useStore } from '@builder.io/morpho';
 
 import ItemList from './item-list.lite';
 

@@ -12,7 +12,7 @@ import { collectCss } from '@/helpers/styles/collect-css';
 import { MorphoComponent } from '@/types/morpho-component';
 import { checkIsForNode, ForNode, MorphoNode } from '@/types/morpho-node';
 import { BaseTranspilerOptions, TranspilerGenerator } from '@/types/transpiler';
-import { camelCase, curry, flow, flowRight as compose } from 'lodash';
+import { camelCase, flowRight as compose, curry, flow } from 'lodash';
 import { format } from 'prettier/standalone';
 import { SELF_CLOSING_HTML_TAGS } from '../../constants/html_tags';
 import {
