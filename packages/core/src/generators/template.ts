@@ -10,7 +10,7 @@ import {
   runPreCodePlugins,
   runPreJsonPlugins,
 } from '../modules/plugins';
-import { checkIsForNode, MorphoNode } from '../types/morpho-node';
+import { MorphoNode, checkIsForNode } from '../types/morpho-node';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 
 export interface ToTemplateOptions extends BaseTranspilerOptions {}

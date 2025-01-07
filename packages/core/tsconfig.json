@@ -14,7 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "@builder.io/morpho": ["./src"],
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "jsxImportSource": "@builder.io/morpho",
     "types": ["vitest/globals"]

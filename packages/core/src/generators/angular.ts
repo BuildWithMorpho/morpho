@@ -31,7 +31,7 @@ import {
   runPreCodePlugins,
   runPreJsonPlugins,
 } from '../modules/plugins';
-import { checkIsForNode, MorphoNode } from '../types/morpho-node';
+import { MorphoNode, checkIsForNode } from '../types/morpho-node';
 import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
 
 import { MorphoComponent } from '..';
@@ -469,6 +469,7 @@ export const componentToAngular: TranspilerGenerator<ToAngularOptions> =
     ${json.types ? json.types.join('\n') : ''}
     ${getPropsDefinition({ json })}
     ${renderPreComponent({
+      explicitImportFileExtension: options.explicitImportFileExtension,
       component: json,
       target: 'angular',
       excludeMorphoComponents: !options.standalone && !options.preserveImports,

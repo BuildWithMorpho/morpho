@@ -28,6 +28,7 @@ import {
   MorphoComponent,
   MorphoConfig,
   parseJsx,
+  ParseMorphoOptions,
   parseSvelte,
   removeMorphoImport,
   renameComponentFile,
@@ -36,12 +37,11 @@ import {
 } from '@builder.io/morpho';
 import debug from 'debug';
 import { flow, pipe } from 'fp-ts/lib/function';
-import { outputFile, pathExists, readFile, remove } from 'fs-extra';
+import { outputFile, pathExists, pathExistsSync, readFile, remove } from 'fs-extra';
 import { kebabCase } from 'lodash';
 import { fastClone } from '../helpers/fast-clone';
 import { generateContextFile } from './helpers/context';
 import { getFiles } from './helpers/files';
-import { checkIsDefined } from './helpers/nullable';
 import { getOverrideFile } from './helpers/overrides';
 import { transformImports, transpile, transpileIfNecessary } from './helpers/transpile';
 
@@ -62,16 +62,17 @@ const getTargetPath = ({ target }: { target: Target }): string => {
   }
 };
 
-const DEFAULT_CONFIG: Partial<MorphoConfig> = {
+const DEFAULT_CONFIG = {
   targets: [],
   dest: 'output',
   files: 'src/*',
   overridesDir: 'overrides',
   getTargetPath,
-};
+  options: {},
+} satisfies Partial<MorphoConfig>;
 
 const getOptions = (config?: MorphoConfig): MorphoConfig => {
-  const newConfig = {
+  const newConfig: MorphoConfig = {
     ...DEFAULT_CONFIG,
     ...config,
     options: {
@@ -80,11 +81,19 @@ const getOptions = (config?: MorphoConfig): MorphoConfig => {
     },
   };
 
-  if (checkIsDefined(newConfig.commonOptions?.typescript)) {
-    for (const target of newConfig.targets) {
-      if (!checkIsDefined(newConfig.options[target]?.typescript)) {
-        newConfig.options[target].typescript = newConfig.commonOptions.typescript;
-      }
+  /**
+   * Apply common options to all targets
+   */
+  if (newConfig.commonOptions) {
+    for (const target of newConfig.targets || []) {
+      newConfig.options[target] = {
+        ...newConfig.commonOptions,
+        ...newConfig.options[target],
+        plugins: [
+          ...(newConfig.commonOptions?.plugins || []),
+          ...(newConfig.options[target]?.plugins || []),
+        ],
+      } as any;
     }
   }
 
@@ -103,7 +112,7 @@ async function clean(options: MorphoConfig, target: Target) {
         ? getNonComponentOutputFileName({ target, path, options })
         : undefined,
     )
-    .filter(Boolean);
+    .filter((x): x is string => Boolean(x));
 
   await Promise.all(
     oldFiles.map(async (oldFile) => {
@@ -161,16 +170,17 @@ const parseJsxComponent = async ({
   options: MorphoConfig;
   path: string;
   file: string;
-  tsProject: Parameters<typeof parseJsx>[1]['tsProject'];
+  tsProject: ParseMorphoOptions['tsProject'];
 }) => {
   const requiredParses = getRequiredParsers(options);
   let typescriptMorphoJson: ParsedMorphoJson['typescriptMorphoJson'];
   let javascriptMorphoJson: ParsedMorphoJson['javascriptMorphoJson'];
 
-  const jsxArgs: Parameters<typeof parseJsx>[1] = {
+  const jsxArgs: ParseMorphoOptions = {
     ...options.parserOptions?.jsx,
     tsProject,
     filePath: path,
+    typescript: false,
   };
   if (requiredParses.typescript && requiredParses.javascript) {
     typescriptMorphoJson = options.parser
@@ -212,13 +222,13 @@ const parseSvelteComponent = async ({ path, file }: { path: string; file: string
 const findTsConfigFile = (options: MorphoConfig) => {
   const optionPath = options.parserOptions?.jsx?.tsConfigFilePath;
 
-  if (optionPath && pathExists(optionPath)) {
+  if (optionPath && pathExistsSync(optionPath)) {
     return optionPath;
   }
 
   const defaultPath = [cwd, 'tsconfig.json'].join('/');
 
-  if (pathExists(defaultPath)) {
+  if (pathExistsSync(defaultPath)) {
     return defaultPath;
   }
 
@@ -253,7 +263,7 @@ const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMor
 
 interface TargetContext {
   target: Target;
-  generator: TranspilerGenerator<MorphoConfig['options'][Target]>;
+  generator: TranspilerGenerator<Required<MorphoConfig['options']>[Target]>;
   outputPath: string;
 }
 
@@ -265,7 +275,7 @@ const getTargetContexts = (options: MorphoConfig) =>
   options.targets.map(
     (target): TargetContext => ({
       target,
-      generator: getGeneratorForTarget({ target }),
+      generator: getGeneratorForTarget({ target }) as any,
       outputPath: options.getTargetPath({ target }),
     }),
   );
@@ -306,7 +316,7 @@ export async function build(config?: MorphoConfig) {
   console.info('Morpho: generation completed.');
 }
 
-const getGeneratorForTarget = ({ target }: { target: Target }): TargetContext['generator'] => {
+const getGeneratorForTarget = ({ target }: { target: Target }) => {
   switch (target) {
     case 'alpine':
       return componentToAlpine;
@@ -457,7 +467,7 @@ async function buildContextFile({
   options,
   path,
 }: TargetContextWithConfig & { path: string }) {
-  let output = await generateContextFile({ path, options, target });
+  let output = (await generateContextFile({ path, options, target })) || '';
 
   // transpile to JS if necessary
   if (!checkShouldOutputTypeScript({ target, options })) {
