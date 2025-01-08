@@ -7,7 +7,7 @@ import { builderContentToMorphoComponent, extractStateHook } from '../parsers/bu
 import { parseJsx } from '../parsers/jsx';
 import { compileAwayBuilderComponents } from '../plugins/compile-away-builder-components';
 
-import { BuilderComponent } from '@builder.io/react';
+import { BuilderContent } from '@builder.io/sdk';
 import columns from './data/blocks/columns.raw.tsx?raw';
 import customCode from './data/blocks/custom-code.raw.tsx?raw';
 import embed from './data/blocks/embed.raw.tsx?raw';
@@ -196,7 +196,7 @@ describe('Builder', () => {
   });
 
   test('Regenerate loop with Text node when using CSS', () => {
-    const builderJson: BuilderComponent = {
+    const builderJson: BuilderContent = {
       data: {
         blocks: [
           {
@@ -221,7 +221,7 @@ describe('Builder', () => {
           },
         ],
       },
-    } as BuilderComponent;
+    } as BuilderContent;
     const backToMorpho = builderContentToMorphoComponent(builderJson);
     const morpho = componentToMorpho(morphoOptions)({
       component: backToMorpho,
@@ -230,7 +230,7 @@ describe('Builder', () => {
   });
 
   test('No srcset for SVG', async () => {
-    const builderJson: BuilderComponent = {
+    const builderJson: BuilderContent = {
       data: {
         blocks: [
           {
@@ -245,7 +245,7 @@ describe('Builder', () => {
           },
         ],
       },
-    } as BuilderComponent;
+    } as BuilderContent;
     const component = builderContentToMorphoComponent(builderJson);
     const html = await componentToHtml({
       plugins: [compileAwayBuilderComponents()],
