@@ -65,7 +65,7 @@ export const collectStyledComponents = (json: MorphoComponent): string => {
         item.name = className;
 
         styledComponentsCode += `
-          const ${className} = ${prefix}${str}\`
+          const ${className} = ${prefix}${str}\`;
         `;
       }
       delete item.bindings.css;
