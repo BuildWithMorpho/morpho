@@ -577,6 +577,7 @@ export const builderElementToMorphoNode = (
   }
 
   const bindings: any = {};
+  const children: MorphoNode[] = [];
 
   if (blockBindings) {
     for (const key in blockBindings) {
@@ -617,8 +618,28 @@ export const builderElementToMorphoNode = (
   if (block.component?.options) {
     for (const key in block.component.options) {
       const value = block.component.options[key];
+      const valueIsArrayOfBuilderElements = Array.isArray(value) && value.every(isBuilderElement);
+
       if (typeof value === 'string') {
         properties[key] = value;
+      } else if (valueIsArrayOfBuilderElements) {
+        const childrenElements = value
+          .filter((item) => {
+            if (item.properties?.src?.includes('/api/v1/pixel')) {
+              return false;
+            }
+            return true;
+          })
+          .map((item) => builderElementToMorphoNode(item, options));
+        children.push({
+          '@type': '@builder.io/morpho/node',
+          name: 'Slot',
+          meta: {},
+          scope: {},
+          bindings: {},
+          properties: { name: key },
+          children: childrenElements,
+        });
       } else {
         bindings[key] = { code: json5.stringify(value) };
       }
@@ -695,7 +716,9 @@ export const builderElementToMorphoNode = (
     }
   }
 
-  node.children = (block.children || []).map((item) => builderElementToMorphoNode(item, options));
+  node.children = children.concat(
+    (block.children || []).map((item) => builderElementToMorphoNode(item, options)),
+  );
 
   return node;
 };
