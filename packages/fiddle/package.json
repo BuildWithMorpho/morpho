@@ -1,10 +1,6 @@
 {
   "name": "@builder.io/morpho-fiddle",
-  "version": "0.1.0",
   "private": true,
-  "engines": {
-    "npm": "99999999.9.9"
-  },
   "dependencies": {
     "@builder.io/eslint-plugin-morpho": "workspace:*",
     "@builder.io/morpho": "workspace:*",
