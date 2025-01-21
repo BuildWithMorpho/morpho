@@ -3,9 +3,18 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [["@builder.io/morpho", "@builder.io/morpho-cli"]],
+  "linked": [
+    [
+      "@builder.io/morpho",
+      "@builder.io/morpho-cli"
+    ]
+  ],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@builder.io/morpho-fiddle"]
+  "ignore": [
+    "@builder.io/morpho-fiddle",
+    "@builder.io/e2e-*",
+    "@builder.io/*example*"
+  ]
 }
