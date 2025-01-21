@@ -1,5 +1,6 @@
 {
   "name": "@builder.io/basic-example",
+  "private": true,
   "scripts": {
     "morpho": "morpho build",
     "build": "yarn run morpho",

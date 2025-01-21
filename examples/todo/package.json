@@ -1,5 +1,6 @@
 {
   "name": "@builder.io/todo-example",
+  "private": true,
   "scripts": {
     "build": "morpho build",
     "lint": "eslint"
