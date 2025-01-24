@@ -1,3 +1,5 @@
+import { filterEmptyTextNodes } from '@/helpers/filter-empty-text-nodes';
+import { traverseNodes } from '@/helpers/traverse-nodes';
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
 import tsPlugin from '@babel/plugin-syntax-typescript';
@@ -250,6 +252,10 @@ export function parseJsx(
       morphoComponent.context.get[context].type = 'reactive';
     });
   }
+
+  traverseNodes(morphoComponent, (node) => {
+    node.children = node.children.filter(filterEmptyTextNodes);
+  });
 
   return morphoComponent;
 }
