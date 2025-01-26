@@ -14,6 +14,7 @@ import embed from './data/blocks/embed.raw.tsx?raw';
 import image from './data/blocks/image.raw.tsx?raw';
 import stamped from './data/blocks/stamped-io.raw.tsx?raw';
 import lazyLoadSection from './data/builder/lazy-load-section.json?raw';
+import slotsContent from './data/builder/slots.json?raw';
 
 const morphoOptions: ToMorphoOptions = {
   format: 'legacy',
@@ -349,5 +350,16 @@ describe('Builder', () => {
       component: backToMorpho,
     });
     expect(morpho.trim()).toEqual(code.trim());
+  });
+
+  test('slots', async () => {
+    const component = builderContentToMorphoComponent(JSON.parse(slotsContent));
+
+    const out = await componentToReact({
+      plugins: [compileAwayBuilderComponents()],
+    })({ component });
+
+    expect(component).toMatchSnapshot();
+    expect(out).toMatchSnapshot();
   });
 });
