@@ -8,13 +8,7 @@ import json5 from 'json5';
 import { kebabCase, size, uniq } from 'lodash';
 import { DefaultProps, PropsDefinition } from 'vue/types/options';
 import { stringifySingleScopeOnMount } from '../helpers/on-mount';
-import {
-  encodeQuotes,
-  getContextKey,
-  getContextValue,
-  getOnUpdateHookName,
-  mapMorphoComponentToKebabCase,
-} from './helpers';
+import { encodeQuotes, getContextKey, getContextValue, getOnUpdateHookName } from './helpers';
 import { ToVueOptions } from './types';
 
 const getContextProvideString = (json: MorphoComponent, options: ToVueOptions) => {
@@ -47,10 +41,8 @@ function getContextInjectString(component: MorphoComponent, options: ToVueOption
 const generateComponentImport =
   (options: ToVueOptions) =>
   (componentName: string): string => {
-    if (options.vueVersion >= 3 && options.asyncComponentImports) {
+    if (options.asyncComponentImports) {
       return `'${componentName}': defineAsyncComponent(${componentName})`;
-    } else if (options.vueVersion === 2) {
-      return `'${mapMorphoComponentToKebabCase(componentName)}': ${componentName}`;
     } else {
       return `'${componentName}': ${componentName}`;
     }

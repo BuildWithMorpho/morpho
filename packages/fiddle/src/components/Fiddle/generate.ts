@@ -3,11 +3,9 @@ type Transpiler = import('@builder.io/morpho').Transpiler<string>;
 export const generateCode = async ({
   output,
   options,
-  vueVersion,
 }: {
   output: string;
   options: any;
-  vueVersion: '2' | '3';
 }): Promise<Transpiler> => {
   const morphoCore = await import('@builder.io/morpho');
 
@@ -33,8 +31,7 @@ export const generateCode = async ({
     componentToSvelte,
     componentToMorpho,
     componentToBuilder,
-    componentToVue2,
-    componentToVue3,
+    componentToVue,
   } = morphoCore;
 
   const plugins = [
@@ -91,7 +88,7 @@ export const generateCode = async ({
     case 'builder':
       return (args) => JSON.stringify(componentToBuilder()(args), null, 2);
     case 'vue':
-      return vueVersion === '2' ? componentToVue2(allOptions) : componentToVue3(allOptions);
+      return componentToVue(allOptions);
     default:
       throw new Error('unexpected Output ' + output);
   }
