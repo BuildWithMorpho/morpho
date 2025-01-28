@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.1.1
+
+### Patch Changes
+
+- 9d6e019: Fix: simplify React true bindings.
+- 9d6e019: Fix: Builder->Morpho single node slot
+
 ## 0.1.0
 
 ### Minor Changes
