@@ -1,10 +1,12 @@
+import { blockToMorpho } from '@/generators/morpho';
+import { hashCodeAsString } from '@/symbols/symbol-processor';
+import { MorphoComponent, MorphoState } from '@/types/morpho-component';
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
 import { BuilderContent, BuilderElement } from '@builder.io/sdk';
 import json5 from 'json5';
 import { mapKeys, merge, omit, omitBy, sortBy, upperFirst } from 'lodash';
 import traverse from 'traverse';
-import { MorphoComponent, MorphoState, blockToMorpho, hashCodeAsString } from '../..';
 import { Size, sizeNames, sizes } from '../../constants/media-sizes';
 import { createSingleBinding } from '../../helpers/bindings';
 import { capitalize } from '../../helpers/capitalize';

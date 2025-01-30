@@ -1,4 +1,5 @@
-import { checkShouldOutputTypeScript, MorphoConfig, Target } from '@builder.io/morpho';
+import { MorphoConfig, Target } from '@/types/config';
+import { checkShouldOutputTypeScript } from './output';
 
 const COMPONENT_EXTENSIONS = {
   jsx: ['.lite.tsx', '.lite.jsx'],
