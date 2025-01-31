@@ -1,4 +1,3 @@
-import { blockToMorpho } from '@/generators/morpho';
 import { hashCodeAsString } from '@/symbols/symbol-processor';
 import { MorphoComponent, MorphoState } from '@/types/morpho-component';
 import * as babel from '@babel/core';
@@ -583,6 +582,7 @@ export const builderElementToMorphoNode = (
 
   const bindings: MorphoNode['bindings'] = {};
   const children: MorphoNode[] = [];
+  const slots: MorphoNode['slots'] = {};
 
   if (blockBindings) {
     for (const key in blockBindings) {
@@ -625,20 +625,17 @@ export const builderElementToMorphoNode = (
       const value = block.component.options[key];
       const valueIsArrayOfBuilderElements = Array.isArray(value) && value.every(isBuilderElement);
 
-      const transformBldrElementToBinding = (item: BuilderElement) => {
+      const transformBldrElementToMorphoNode = (item: BuilderElement) => {
         const node = builderElementToMorphoNode(item, {
           ...options,
           includeSpecialBindings: false,
         });
 
-        // For now, stringify to Morpho nodes even though that only really works in React, due to syntax overlap.
-        // the correct long term solution is to hold on to the Morpho Node, and have a plugin for each framework
-        // which processes any Morpho nodes set into the attribute and moves them as slots when relevant (Svelte/Vue)
-        return blockToMorpho(node, {}, null as any);
+        return node;
       };
 
       if (isBuilderElement(value)) {
-        bindings[key] = createSingleBinding({ code: transformBldrElementToBinding(value) });
+        slots[key] = [transformBldrElementToMorphoNode(value)];
       } else if (typeof value === 'string') {
         properties[key] = value;
       } else if (valueIsArrayOfBuilderElements) {
@@ -649,12 +646,9 @@ export const builderElementToMorphoNode = (
             }
             return true;
           })
-          .map(transformBldrElementToBinding);
+          .map(transformBldrElementToMorphoNode);
 
-        const strVal =
-          childrenElements.length === 1 ? childrenElements[0] : `<>${childrenElements.join('')}</>`;
-
-        bindings[key] = createSingleBinding({ code: strVal });
+        slots[key] = childrenElements;
       } else {
         bindings[key] = createSingleBinding({ code: json5.stringify(value) });
       }
@@ -696,6 +690,9 @@ export const builderElementToMorphoNode = (
         Object.keys(css).length && {
           css: createSingleBinding({ code: JSON.stringify(css) }),
         }),
+    },
+    slots: {
+      ...slots,
     },
   });
 
