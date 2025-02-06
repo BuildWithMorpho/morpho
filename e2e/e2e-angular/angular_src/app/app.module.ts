@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { MorphoModule } from './morpho.module';
+import { HomepageModule } from './src/homepage';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, MorphoModule],
+  imports: [BrowserModule, HomepageModule],
   providers: [],
   bootstrap: [AppComponent],
 })
