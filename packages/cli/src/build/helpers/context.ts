@@ -1,13 +1,14 @@
 import {
+  MorphoConfig,
+  Target,
   checkShouldOutputTypeScript,
+  contextToAngular,
   contextToQwik,
   contextToReact,
   contextToSolid,
   contextToSvelte,
   contextToVue,
-  MorphoConfig,
   parseContext,
-  Target,
 } from '@builder.io/morpho';
 import { readFile } from 'fs-extra';
 import { camelCase, last, upperFirst } from 'lodash';
@@ -49,12 +50,13 @@ export const generateContextFile = async ({
         });
       case 'qwik':
         return contextToQwik()({ context });
+      case 'angular':
+        return contextToAngular()({ context });
       default:
         console.warn('Context files are not supported for this target. Outputting no-op');
-        return `
-        // Noop file
-        export default {};
-      `;
+        return `// No op
+          export default {};
+        `;
     }
   }
 };
