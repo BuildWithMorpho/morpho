@@ -20,10 +20,10 @@
 
 _PS: We are actively looking for folks interested in becoming contributors to Morpho. If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or reach out on our [Discord](https://discord.gg/SNusEyNGsx)_
 
-
 ## Table of contents
 
-- [Quick Start Guide](#quick-start-guide)
+- [Quick Start](#quick-start)
+- [Manual Setup](#manual-setup)
 - [Examples](#examples)
 - [What is Morpho](#what-is-morpho)
 - [In-depth Docs](#docs)
@@ -35,9 +35,33 @@ _PS: We are actively looking for folks interested in becoming contributors to Mo
 - [Community](#community)
 - [Related Projects](#related-projects)
 
-## Quick Start Guide
+## Quick Start
 
-### Install
+To create a new Morpho project from scratch, run the following `create` command:
+
+```bash
+npm create @builder.io/morpho@latest
+```
+
+It will prompt you for a project name, and create a new directory with a basic monorepo project structure that includes:
+
+- npm workspaces
+- multiple generated outputs, along with build steps for each
+- multiple test servers that import the outputs for convenient debugging/testing
+
+Once completed, make sure to read the `README.md` generated in your new project. It will explain the structure of your project, and provide a walkthrough on how to build/test your components.
+
+## Manual Setup
+
+If you would like to install Morpho manually, you can do so with the following steps below. These generally follow the same steps as the `create` command.
+
+### Note on Monorepo structure
+
+Given that Morpho generates code for multiple frameworks, it is highly recommend to treat each output as its own npm package for building/publishing purposes. This means that you will most likely need a monorepo solution (such as npm/pnpm/yarn workspaces, or Nx, or Turborepo). While we provide this out-of-the-box in the `create` command, we will leave it up to the user to implement it however they see fit in the Manual setup guide.
+
+### Installation
+
+First, in a new npm project, install the Morpho CLI and the Morpho packages:
 
 ```bash
 npm install @builder.io/morpho-cli @builder.io/morpho
@@ -45,17 +69,21 @@ npm install @builder.io/morpho-cli @builder.io/morpho
 
 ### Setup `morpho.config.js`
 
+Then, create a `morpho.config.js` file in the root of your project, and add the following configuration:
+
 ```js
 /** @type {import('@builder.io/morpho').MorphoConfig} */
 module.exports = {
   files: 'src/**',
-  targets: ['vue3', 'solid', 'svelte', 'react'],
+  targets: ['svelte', 'react', 'qwik', 'vue'], //define your desired outputs here
 };
 ```
 
-Check [our configuration docs](/docs/configuration.md#typescript-configuration) for how to setup the Morpho config file.
+Check [our configuration docs](/docs/configuration.md) for how to setup the Morpho config file.
 
 ### Setup TypeScript
+
+To setup TypeScript, add the following to your `tsconfig.json`:
 
 ```jsonc
 // tsconfig.json
@@ -67,13 +95,9 @@ Check [our configuration docs](/docs/configuration.md#typescript-configuration) 
 }
 ```
 
-### Install ESLint Rules
-
-Install our [ESLint plugin](./packages/eslint-plugin) to have highly useful rules that guide you as you build your Morpho components.
-
-⚠️ _NOTE_: We highly recommend you setup all of the ESLint rules, because they will point out some of Morpho' limitations and avoid confusion.
-
 ### Create a Component
+
+Now, create a `MyComponent.lite.tsx` file in the `src/components` directory:
 
 ```tsx
 // src/components/MyComponent.lite.tsx
@@ -90,11 +114,14 @@ export default function MyBasicComponent(props: Props) {
 
   return (
     <div>
-      {props.message || 'Hello'} {state.name}! I can run in React, Vue, Solid or Svelte!
+      {props.message || 'Hello'} {state.name}! I can run in React, Vue, Solid, Svelte, Qwik
+      andeverything else!
     </div>
   );
 }
 ```
+
+For a deeper look at the Morpho JSX syntax, check out [our Component docs](/docs/components.md) and overall [Morpho Documentation](/docs/README.md).
 
 ### Build
 
@@ -102,7 +129,18 @@ export default function MyBasicComponent(props: Props) {
 npm exec morpho build
 ```
 
-🎉 You should now have an `output` directory with your compiled components in all 4 frameworks!
+🎉 You should now have an `output` directory with your compiled components in all frameworks!
+
+### Recommended: Install ESLint Rules
+
+We recommend you install our [ESLint plugin](./packages/eslint-plugin) to have highly useful rules that guide you as you build your Morpho components.
+
+### Next up
+
+Our recommended next steps are to:
+
+- add a build step for each generated output (e.g. a Svelte library will need to be build using Sveltekit's [`svelte-package`](https://kit.svelte.dev/docs/packaging) command)
+- add a `test-servers/` folder containing web apps that import your outputs, so that you can test them (either manually or programatically).
 
 ## Examples
 
@@ -117,7 +155,7 @@ Here are some helpful resources on trying out Morpho:
 - [this talk](https://portal.gitnation.org/contents/its-time-to-de-fragment-the-web) by Sami Jaber at React Day Berlin is a great intro to Morpho. It gives a good overview of the impetus behind Morpho, and a high-level understanding of its different pieces.
 
 - The below video is a brief introduction by Steve Sewell.
-[![Morpho Video](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Ffa5c422309ce4fbea9eaa133fa471877)](https://www.youtube.com/watch?v=XQIuv34-K_8 'Morpho Video')
+  [![Morpho Video](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Ffa5c422309ce4fbea9eaa133fa471877)](https://www.youtube.com/watch?v=XQIuv34-K_8 'Morpho Video')
 
 ## Docs
 
