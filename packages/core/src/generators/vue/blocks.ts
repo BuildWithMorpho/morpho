@@ -4,7 +4,7 @@ import { isMorphoNode } from '@/helpers/is-morpho-node';
 import { checkIsDefined } from '@/helpers/nullable';
 import { removeSurroundingBlock } from '@/helpers/remove-surrounding-block';
 import { replaceIdentifiers } from '@/helpers/replace-identifiers';
-import { isSlotProperty, stripSlotPrefix } from '@/helpers/slots';
+import { isSlotProperty, stripSlotPrefix, toKebabSlot } from '@/helpers/slots';
 import { Dictionary } from '@/helpers/typescript';
 import { Binding, ForNode, MorphoNode, SpreadType } from '@/types/morpho-node';
 import { identity, pipe } from 'fp-ts/lib/function';
@@ -106,10 +106,7 @@ const NODE_MAPPERS: {
       return `<slot>${renderChildren()}</slot>`;
     }
 
-    return `<slot name="${stripSlotPrefix(
-      slotName,
-      SLOT_PREFIX,
-    ).toLowerCase()}">${renderChildren()}</slot>`;
+    return `<slot name="${toKebabSlot(slotName, SLOT_PREFIX)}">${renderChildren()}</slot>`;
   },
 };
 

@@ -3,7 +3,7 @@ import isChildren from '@/helpers/is-children';
 import { isUpperCase } from '@/helpers/is-upper-case';
 import { getForArguments } from '@/helpers/nodes/for';
 import { removeSurroundingBlock } from '@/helpers/remove-surrounding-block';
-import { isSlotProperty, stripSlotPrefix } from '@/helpers/slots';
+import { isSlotProperty, stripSlotPrefix, toKebabSlot } from '@/helpers/slots';
 import { MorphoComponent } from '@/types/morpho-component';
 import { BaseNode, Binding, ForNode, MorphoNode } from '@/types/morpho-node';
 import { SELF_CLOSING_HTML_TAGS, VALID_HTML_TAGS } from '../../constants/html_tags';
@@ -139,10 +139,7 @@ ${json.children.map((item) => blockToSvelte({ json: item, options, parentCompone
       `;
     }
 
-    return `<slot name="${stripSlotPrefix(
-      slotName,
-      SLOT_PREFIX,
-    ).toLowerCase()}">${renderChildren()}</slot>`;
+    return `<slot name="${toKebabSlot(slotName, SLOT_PREFIX)}">${renderChildren()}</slot>`;
   },
 };
 
