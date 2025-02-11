@@ -1,5 +1,13 @@
 # @builder.io/morpho-cli
 
+## 0.2.5
+
+### Patch Changes
+
+- 2e56b76: Fix: Qwik methods using computed variables
+- Updated dependencies [2e56b76]
+  - @builder.io/morpho@0.2.5
+
 ## 0.2.4
 
 ### Patch Changes
