@@ -6,7 +6,5 @@
     "moduleResolution": "node",
     "jsxImportSource": "@builder.io/morpho"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
