@@ -91,7 +91,7 @@ export const templates: { [key: string]: string } = {
     import { useStore, useRef } from "@builder.io/morpho";
     
     export default function MyComponent(props) {
-      const inputRef = useRef();
+      const inputRef = useRef<HTMLInputElement>();
 
       const state = useStore({
         name: "Steve",
