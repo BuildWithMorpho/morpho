@@ -1,11 +1,12 @@
+import { MorphoComponent } from '@builder.io/morpho';
 import { $, component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, server$, useLocation } from '@builder.io/qwik-city';
 import { ContentLoaderCode } from 'qwik-content-loader';
 import { CodeEditor } from '~/components/code-editor';
 import Select from '~/components/select';
 
-export type OutputFramework = 'react' | 'svelte' | 'vue' | 'qwik' | 'angular' | 'morpho';
-const outputs: OutputFramework[] = ['react', 'svelte', 'vue', 'qwik', 'angular', 'morpho'];
+export type OutputFramework = 'react' | 'svelte' | 'vue' | 'qwik' | 'angular' | 'morpho' | 'json';
+const outputs: OutputFramework[] = ['react', 'svelte', 'vue', 'qwik', 'angular', 'morpho', 'json'];
 
 export type InputSyntax = 'jsx' | 'svelte';
 const inputs: InputSyntax[] = ['jsx', 'svelte'];
@@ -21,6 +22,41 @@ const languageByFramework: Record<OutputFramework, string> = {
   qwik: 'typescript',
   angular: 'typescript',
   morpho: 'typescript',
+  json: 'json',
+};
+
+const getOutputGenerator = async ({ output }: { output: OutputFramework }) => {
+  const {
+    parseJsx,
+    componentToSvelte,
+    componentToVue,
+    componentToReact,
+    componentToQwik,
+    componentToAngular,
+    componentToMorpho,
+    parseSvelte,
+  } = await import('@builder.io/morpho');
+
+  const options = {};
+
+  switch (output) {
+    case 'qwik':
+      return componentToQwik(options);
+    case 'react':
+      return componentToReact(options);
+    case 'angular':
+      return componentToAngular(options);
+    case 'svelte':
+      return componentToSvelte(options);
+    case 'morpho':
+      return componentToMorpho();
+    case 'json':
+      return ({ component }: { component: MorphoComponent }) => JSON.stringify(component, null, 2);
+    case 'vue':
+      return componentToVue({ api: 'composition' });
+    default:
+      throw new Error('unexpected Output ' + output);
+  }
 };
 
 export const compile = server$(
@@ -36,20 +72,10 @@ export const compile = server$(
       parseSvelte,
     } = await import('@builder.io/morpho');
     const parsed = inputSyntax === 'svelte' ? await parseSvelte(code) : parseJsx(code);
-    const outputCode =
-      output === 'svelte'
-        ? componentToSvelte()({ component: parsed })
-        : output === 'react'
-        ? componentToReact()({ component: parsed })
-        : output === 'qwik'
-        ? componentToQwik()({ component: parsed })
-        : output === 'angular'
-        ? componentToAngular()({ component: parsed })
-        : output === 'morpho'
-        ? componentToMorpho()({ component: parsed })
-        : componentToVue({
-            api: 'composition',
-          })({ component: parsed });
+
+    const outputGenerator = await getOutputGenerator({ output });
+
+    const outputCode = outputGenerator({ component: parsed });
 
     return outputCode;
   },
@@ -265,6 +291,7 @@ export default component$(() => {
               language={languageByFramework[outputOneFramework.value]}
               value={output.value}
               class="absolute inset-0 h-full w-full"
+              readOnly
             />
           )}
         </div>
@@ -288,6 +315,7 @@ export default component$(() => {
               language={languageByFramework[outputTwoFramework.value]}
               value={output2.value}
               class="absolute inset-0 h-full w-full"
+              readOnly
             />
           )}
         </div>
