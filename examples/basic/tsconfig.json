@@ -8,7 +8,5 @@
     "forceConsistentCasingInFileNames": true,
     "jsxImportSource": "@builder.io/morpho"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
