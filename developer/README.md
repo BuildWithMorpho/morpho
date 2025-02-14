@@ -9,7 +9,7 @@ live under `packages/` and `examples/`:
 
 - `core` (`@builder.io/morpho`): contains the Morpho engine
 - `cli` (`@builder.io/morpho-cli`): contains the Morpho CLI, and _depends_ on `core`
-- `fiddle`: contains the code for the interactive Morpho fiddle, which is hosted at morpho.builder.io
+- `site`: contains the Morpho site hosted at morpho.builder.io
 - `eslint-plugin` (`@builder.io/eslint-plugin-morpho`): contains the Morpho eslint rules to enforce valid Morpho component syntax. Yet to be released.
 
 ## Installation
@@ -32,7 +32,7 @@ We need your help! If you found a bug, it's best to [create an issue](https://gi
 
 ## Developing for Core & Testing
 
-In `core`, we use vitest snapshots & integeration tests for test coverage. If you are solving a problem that is reproducible by a fiddle in [morpho.builder.io](https://morpho.builder.io), we highly recommend the following flow:
+In `core`, we use vitest snapshots & integeration tests for test coverage. If you are solving a problem that is reproducible by a fiddle in [morpho.builder.io/playground](/playground), we highly recommend the following flow:
 
 ### Snapshot test
 
