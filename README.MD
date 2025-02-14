@@ -33,6 +33,8 @@ Using Morpho, you can:
 
 _PS: We are actively looking for folks interested in becoming contributors to Morpho. If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or reach out on our [Discord](https://discord.gg/SNusEyNGsx)_
 
+![Gif example of devloping with Morpho](https://cdn.builder.io/api/v1/file/assets%2FYJIGb4i01jvw0SRdL5Bt%2F868af1e6d9fd4923b18ecd1d892f3a6e)
+
 ## Quickstart
 
 To create a new Morpho project from scratch, run the following `create` command:
@@ -44,6 +46,12 @@ npm create @builder.io/morpho@latest
 Once completed, make sure to read the `README.md` generated in your new project. It will explain the structure of your project, and provide a walkthrough on how to build/test your components.
 
 Read the full [getting started docs](https://morpho.builder.io/docs/quickstart/) for more.
+
+### Integration with Figma
+
+This integration streamlines the design-to-code process, ensuring that your design system remains consistent across all platforms from one singular source of truth. Learn more about our [Figma integration](https://morpho.builder.io/docs/figma).
+
+![Demo of using Morpho with Figma](https://cdn.builder.io/api/v1/file/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fde65b7d174354c0baf189ee4e652a31b)
 
 ## Resources
 
