@@ -1,6 +1,6 @@
 ---
-'@builder.io/morpho': minor
-'@builder.io/morpho-cli': minor
+'@builder.io/morpho': patch
+'@builder.io/morpho-cli': patch
 ---
 
 Support for custom generators / targets
