@@ -7,6 +7,7 @@ Add the options to `options.angular` inside [MorphoConfig](https://github.com/Bu
 ```ts
 export interface ToAngularOptions extends BaseTranspilerOptions {
   standalone?: boolean;
+  selector?: string;
   preserveImports?: boolean;
   preserveFileExtensions?: boolean;
   importMapper?: Function;
