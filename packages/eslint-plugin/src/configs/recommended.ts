@@ -21,6 +21,7 @@ const recommendedRules: Record<RulesKeys, 'error' | 'warn' | 'off' | 0 | 1 | 2> 
   '@builder.io/morpho/static-control-flow': 'error',
   '@builder.io/morpho/no-var-name-same-as-prop-name': 'error',
   '@builder.io/morpho/no-map-function-in-jsx-return-body': 'warn',
+  '@builder.io/morpho/no-setter-with-same-name-as-state-prop': 'error',
 };
 
 export default {
