@@ -9,5 +9,6 @@ export function createMorphoNode(): MorphoNode {
     children: [],
     bindings: {},
     properties: {},
+    slots: {},
   };
 }
