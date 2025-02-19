@@ -1,3 +1,4 @@
+import { describe, test } from 'vitest';
 import { MorphoComponent, createTypescriptProject, parseSvelte } from '..';
 import { parseJsx } from '../parsers/jsx';
 import { Target } from '../types/config';
