@@ -31,7 +31,7 @@ Using Morpho, you can:
 - Sync your [design systems from Figma to code](https://morpho.builder.io/docs/figma/) and publish them to npm across frameworks
 - Avoid the [pitfalls of web components](https://morpho.builder.io/docs/overview/) by compiling to native framework code
 
-_PS: We are actively looking for folks interested in becoming contributors to Morpho. If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or reach out on our [Discord](https://discord.gg/SNusEyNGsx)_
+_PS: We are actively looking for folks interested in becoming contributors to Morpho. If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or reach out on our [Discord](https://discord.gg/yxjk5vn6pn)_
 
 ![Gif example of devloping with Morpho](https://cdn.builder.io/api/v1/file/assets%2FYJIGb4i01jvw0SRdL5Bt%2F868af1e6d9fd4923b18ecd1d892f3a6e)
 
@@ -60,11 +60,11 @@ Learn more about our [Figma integration](https://morpho.builder.io/docs/figma).
 - [Documentation](https://morpho.builder.io/docs)
 - [Playground](https://morpho.builder.io/playground)
 - [Figma integration](https://morpho.builder.io/docs/figma/)
-- [Morpho Discord](https://discord.gg/SNusEyNGsx)
+- [Morpho Discord](https://discord.gg/yxjk5vn6pn)
 
 ## Contribute
 
-Interested in contribute? Head over to the [developer](developer/) docs and see how you can get setup & started!
+Interested in contribute? Head over to the [CONTRIBUTING](CONTRIBUTING.md) docs and see how you can get setup & started!
 
 Once you're ready, checkout our [issues](https://github.com/BuilderIO/morpho/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) page and grab your first issue!
 
