@@ -1,7 +1,7 @@
 import * as CSS from 'csstype';
 import json5 from 'json5';
 import { pickBy } from 'lodash';
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 import { MorphoComponent } from '../../types/morpho-component';
 import { MorphoNode } from '../../types/morpho-node';
 import { dashCase } from '../dash-case';

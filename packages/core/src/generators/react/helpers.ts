@@ -3,7 +3,7 @@ import { stripStateAndPropsRefs } from '@/helpers/strip-state-and-props-refs';
 import { MorphoComponent } from '@/types/morpho-component';
 import { MorphoNode } from '@/types/morpho-node';
 import { upperFirst } from 'lodash';
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 
 import { ToReactOptions } from './types';
 

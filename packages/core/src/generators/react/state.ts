@@ -5,7 +5,7 @@ import { transformStateSetters } from '@/helpers/transform-state-setters';
 import { MorphoComponent, StateValue } from '@/types/morpho-component';
 import { types } from '@babel/core';
 import { pipe } from 'fp-ts/lib/function';
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 import { processBinding } from './helpers';
 import { ToReactOptions } from './types';
 

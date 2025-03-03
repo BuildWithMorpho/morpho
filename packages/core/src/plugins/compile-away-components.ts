@@ -1,5 +1,5 @@
 import { mapValues } from 'lodash';
-import traverse, { TraverseContext } from 'traverse';
+import traverse, { TraverseContext } from 'neotraverse/legacy';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { MorphoComponent } from '../types/morpho-component';
 import { MorphoNode } from '../types/morpho-node';
