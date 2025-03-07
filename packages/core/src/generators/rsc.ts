@@ -1,4 +1,4 @@
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 import { Plugin } from '..';
 import { isMorphoNode } from '../helpers/is-morpho-node';
 import { mergeOptions } from '../helpers/merge-options';

@@ -53,6 +53,7 @@ export const blockToMorpho = (
         prettier: options.prettier,
       },
       component,
+      true,
     );
   }
 

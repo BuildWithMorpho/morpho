@@ -308,7 +308,10 @@ export const componentFunctionToJson = (
   if (theReturn) {
     const value = (theReturn as babel.types.ReturnStatement).argument;
     if (types.isJSXElement(value) || types.isJSXFragment(value)) {
-      children.push(jsxElementToJson(value) as MorphoNode);
+      const jsxElement = jsxElementToJson(value);
+      if (jsxElement) {
+        children.push(jsxElement);
+      }
     }
   }
 

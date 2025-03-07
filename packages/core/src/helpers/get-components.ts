@@ -1,4 +1,4 @@
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 import { MorphoComponent } from '../types/morpho-component';
 import { isMorphoNode } from './is-morpho-node';
 import { isUpperCase } from './is-upper-case';

@@ -1,5 +1,5 @@
 import * as babel from '@babel/core';
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 import { createMorphoNode } from '../../helpers/create-morpho-node';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
 import { traceReferenceToModulePath } from '../../helpers/trace-reference-to-module-path';
