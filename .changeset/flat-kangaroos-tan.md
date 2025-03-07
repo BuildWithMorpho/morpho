@@ -1,5 +1,5 @@
 ---
-'@builder.io/morpho': major
+'@builder.io/morpho': patch
 ---
 
 Solid: stop mapping `for` to `htmlFor`
