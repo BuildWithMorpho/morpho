@@ -1,5 +1,36 @@
 # @builder.io/morpho-cli
 
+## 0.3.22
+
+### Patch Changes
+
+- Updated dependencies [f19a00f]
+  - @builder.io/morpho@0.3.22
+
+## 0.3.21
+
+### Patch Changes
+
+- Updated dependencies [45de754]
+- Updated dependencies [03f1f58]
+- Updated dependencies [45de754]
+  - @builder.io/morpho@0.3.21
+
+## 0.3.20
+
+### Patch Changes
+
+- Updated dependencies [34bbd34]
+  - @builder.io/morpho@0.3.20
+
+## 0.3.19
+
+### Patch Changes
+
+- Updated dependencies [3f5fff1]
+- Updated dependencies [4c662df]
+  - @builder.io/morpho@0.3.19
+
 ## 0.3.18
 
 ### Patch Changes
