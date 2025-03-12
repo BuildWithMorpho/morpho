@@ -1,7 +1,7 @@
 import traverse from 'neotraverse/legacy';
 import { MorphoComponent } from '../types/morpho-component';
 
-const propsRegex = /props\s*\.\s*([a-zA-Z0-9_\4]+)\(/;
+const propsRegex = /props\s*\.\s*([a-zA-Z0-9_\x04]+)\(/;
 const allPropsMatchesRegex = new RegExp(propsRegex, 'g');
 
 /**
