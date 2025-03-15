@@ -149,4 +149,16 @@ export type MorphoComponent = {
   propsTypeRef?: string;
   defaultProps?: MorphoState;
   style?: string;
+  /**
+   * Used to store context of a component for a specific framework
+   * that we need access only during compilation (for internal use only) and gets removed after compilation.
+   */
+  compileContext?: {
+    [K in Target]?: {
+      state?: MorphoState;
+      hooks?: {
+        [hookName: string]: BaseHook;
+      };
+    };
+  };
 };
