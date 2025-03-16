@@ -5,7 +5,7 @@
   "fixed": [],
   "linked": [["@builder.io/morpho", "@builder.io/morpho-cli"]],
   "access": "public",
-  "baseBranch": "main",
+  "baseBranch": "origin/main",
   "updateInternalDependencies": "patch",
   "ignore": [
     "@builder.io/morpho-fiddle",
