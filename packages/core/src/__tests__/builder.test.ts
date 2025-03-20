@@ -18,6 +18,7 @@ import customComponentSlotPropertyContent from './data/builder/custom-component-
 import lazyLoadSection from './data/builder/lazy-load-section.json?raw';
 import slotsContent from './data/builder/slots.json?raw';
 import slots2Content from './data/builder/slots2.json?raw';
+import textBindings from './data/builder/text-bindings.json?raw';
 
 const morphoOptions: ToMorphoOptions = {
   format: 'legacy',
@@ -87,6 +88,18 @@ describe('Builder', () => {
     })({ component });
 
     expect(html).toMatchSnapshot();
+  });
+
+  test('Text with bindings', async () => {
+    const originalBuilder = JSON.parse(textBindings);
+    const component = builderContentToMorphoComponent(originalBuilder);
+    const morphoJsx = componentToMorpho()({ component });
+
+    expect(component).toMatchSnapshot();
+    expect(morphoJsx).toMatchSnapshot();
+
+    const backToBuilder = componentToBuilder()({ component });
+    expect(backToBuilder).toMatchSnapshot();
   });
 
   test('Regenerate Image', () => {
