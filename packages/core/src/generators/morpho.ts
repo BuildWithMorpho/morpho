@@ -218,6 +218,8 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
 
       ${!json.hooks.onUnMount?.code ? '' : `onUnMount(() => { ${json.hooks.onUnMount.code} })`}
 
+      ${json.style ? `useStyle(\`${json.style}\`)` : ''}
+
       return (${addWrapper ? '<>' : ''}
         ${json.children.map((item) => blockToMorpho(item, options, component)).join('\n')}
         ${addWrapper ? '</>' : ''})

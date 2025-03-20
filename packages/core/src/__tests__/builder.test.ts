@@ -426,6 +426,36 @@ describe('Builder', () => {
     });
     expect(morpho).toMatchSnapshot();
   });
+
+  test('preserve cssCode when converting', () => {
+    const builderJson: BuilderContent = {
+      data: {
+        cssCode: dedent`
+        .foo {
+          background: green;
+        }
+        
+        .bar {
+          font-weight: bold;
+        }
+      `,
+        blocks: [],
+      },
+    };
+    const builderToMorpho = builderContentToMorphoComponent(builderJson);
+    expect(builderToMorpho.meta.cssCode).toMatchSnapshot();
+
+    const morphoToBuilder = componentToBuilder()({ component: builderToMorpho })!;
+    expect(morphoToBuilder.data!.cssCode).toMatchSnapshot();
+
+    const jsx = componentToMorpho(morphoOptions)({
+      component: builderToMorpho,
+    });
+    expect(jsx).toMatchSnapshot();
+
+    const jsxToMorpho = parseJsx(jsx);
+    expect(jsxToMorpho.style).toMatchSnapshot();
+  });
 });
 
 const bindingJson = {
