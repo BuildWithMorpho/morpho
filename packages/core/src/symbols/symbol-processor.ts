@@ -1,12 +1,12 @@
-import { BuilderContent, BuilderElement } from '@builder.io/sdk';
-import traverse from 'neotraverse/legacy';
-import { minify } from '../generators/minify';
+import { minify } from '@/generators/helpers/minify';
 import {
   builderContentToMorphoComponent,
   createBuilderElement,
   isBuilderElement,
-} from '../parsers/builder';
-import { MorphoComponent } from '../types/morpho-component';
+} from '@/parsers/builder';
+import { MorphoComponent } from '@/types/morpho-component';
+import { BuilderContent, BuilderElement } from '@builder.io/sdk';
+import traverse from 'neotraverse/legacy';
 
 export type SymbolHierarchy = {
   // Reverse sorted symbols

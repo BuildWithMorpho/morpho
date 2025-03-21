@@ -1,3 +1,4 @@
+import { ToMorphoOptions } from '@/generators/morpho/types';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
@@ -6,25 +7,21 @@ import {
 } from '@/modules/plugins';
 import json5 from 'json5';
 import { format } from 'prettier/standalone';
-import { HOOKS } from '../constants/hooks';
-import { SELF_CLOSING_HTML_TAGS } from '../constants/html_tags';
-import { dedent } from '../helpers/dedent';
-import { fastClone } from '../helpers/fast-clone';
-import { getComponents } from '../helpers/get-components';
-import { getRefs } from '../helpers/get-refs';
-import { getStateObjectStringFromComponent } from '../helpers/get-state-object-string';
-import { isRootTextNode } from '../helpers/is-root-text-node';
-import { mapRefs } from '../helpers/map-refs';
-import { renderPreComponent } from '../helpers/render-imports';
-import { checkHasState } from '../helpers/state';
-import { MorphoComponent } from '../types/morpho-component';
-import { MorphoNode, checkIsForNode } from '../types/morpho-node';
-import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
-import { blockToReact, componentToReact } from './react';
-
-export interface ToMorphoOptions extends BaseTranspilerOptions {
-  format: 'react' | 'legacy';
-}
+import { HOOKS } from '../../constants/hooks';
+import { SELF_CLOSING_HTML_TAGS } from '../../constants/html_tags';
+import { dedent } from '../../helpers/dedent';
+import { fastClone } from '../../helpers/fast-clone';
+import { getComponents } from '../../helpers/get-components';
+import { getRefs } from '../../helpers/get-refs';
+import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
+import { isRootTextNode } from '../../helpers/is-root-text-node';
+import { mapRefs } from '../../helpers/map-refs';
+import { renderPreComponent } from '../../helpers/render-imports';
+import { checkHasState } from '../../helpers/state';
+import { MorphoComponent } from '../../types/morpho-component';
+import { MorphoNode, checkIsForNode } from '../../types/morpho-node';
+import { TranspilerGenerator } from '../../types/transpiler';
+import { blockToReact, componentToReact } from '../react';
 
 export const DEFAULT_FORMAT: ToMorphoOptions['format'] = 'legacy';
 

@@ -1,20 +1,19 @@
+import { ToSwiftOptions } from '@/generators/swift/types';
 import traverse from 'neotraverse/legacy';
-import { dedent } from '../helpers/dedent';
-import { fastClone } from '../helpers/fast-clone';
-import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
-import { format } from '../helpers/generic-format';
-import { getStateObjectStringFromComponent } from '../helpers/get-state-object-string';
-import { getStyles } from '../helpers/get-styles';
-import isChildren from '../helpers/is-children';
-import { isMorphoNode } from '../helpers/is-morpho-node';
-import { checkHasState } from '../helpers/state';
-import { tryPrettierFormat } from '../helpers/try-prettier-format';
-import { MorphoComponent } from '../types/morpho-component';
-import { checkIsForNode, MorphoNode } from '../types/morpho-node';
-import { MorphoStyles } from '../types/morpho-styles';
-import { BaseTranspilerOptions, TranspilerGenerator } from '../types/transpiler';
-
-export type ToSwiftOptions = BaseTranspilerOptions;
+import { dedent } from '../../helpers/dedent';
+import { fastClone } from '../../helpers/fast-clone';
+import { filterEmptyTextNodes } from '../../helpers/filter-empty-text-nodes';
+import { format } from '../../helpers/generic-format';
+import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
+import { getStyles } from '../../helpers/get-styles';
+import isChildren from '../../helpers/is-children';
+import { isMorphoNode } from '../../helpers/is-morpho-node';
+import { checkHasState } from '../../helpers/state';
+import { tryPrettierFormat } from '../../helpers/try-prettier-format';
+import { MorphoComponent } from '../../types/morpho-component';
+import { checkIsForNode, MorphoNode } from '../../types/morpho-node';
+import { MorphoStyles } from '../../types/morpho-styles';
+import { TranspilerGenerator } from '../../types/transpiler';
 
 const scrolls = (json: MorphoNode) => {
   return getStyles(json)?.overflow === 'auto';
