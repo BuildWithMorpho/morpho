@@ -353,6 +353,53 @@ const componentMappers: {
 
     return node;
   },
+  PersonalizationContainer(block, options) {
+    const node = builderElementToMorphoNode(block, options, {
+      skipMapper: true,
+    });
+
+    delete node.bindings.variants;
+    delete node.properties.variants;
+
+    const newChildren: MorphoNode[] =
+      block.component?.options.variants?.map((variant: any) => {
+        const variantNode = createMorphoNode({
+          name: 'Variant',
+          properties: {
+            name: variant.name,
+            startDate: variant.startDate,
+            endDate: variant.endDate,
+          },
+          meta: getMetaFromBlock(block, options),
+          children: variant.blocks.map((col: any) => builderElementToMorphoNode(col, options)),
+        });
+        const queryOptions = variant.query as any[];
+        if (Array.isArray(queryOptions)) {
+          variantNode.bindings.query = {
+            type: 'single',
+            code: JSON.stringify(queryOptions.map((q) => omit(q, '@type'))),
+          };
+        } else if (queryOptions) {
+          variantNode.bindings.query = {
+            type: 'single',
+            code: JSON.stringify(omit(queryOptions, '@type')),
+          };
+        }
+        return variantNode;
+      }) || [];
+
+    const defaultVariant = createMorphoNode({
+      name: 'Variant',
+      properties: {
+        default: '',
+      },
+      children: node.children,
+    });
+    newChildren.push(defaultVariant);
+
+    node.children = newChildren;
+    return node;
+  },
   'Shopify:For': (block, options) => {
     return createMorphoNode({
       name: 'For',
