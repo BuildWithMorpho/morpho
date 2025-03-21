@@ -1,5 +1,12 @@
 # @builder.io/morpho-cli
 
+## 0.4.5
+
+### Patch Changes
+
+- Updated dependencies [428b3ab]
+  - @builder.io/morpho@0.4.5
+
 ## 0.4.4
 
 ### Patch Changes
