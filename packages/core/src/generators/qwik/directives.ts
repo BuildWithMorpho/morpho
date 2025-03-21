@@ -1,6 +1,6 @@
 import { getForArguments } from '@/helpers/nodes/for';
 import { ForNode, MorphoNode } from '@/types/morpho-node';
-import { minify } from '../minify';
+import { minify } from '../helpers/minify';
 import { SrcBuilder, iteratorProperty } from './src-generator';
 
 export const DIRECTIVES: Record<

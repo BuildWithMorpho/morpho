@@ -1,14 +1,13 @@
+import { ToRscOptions } from '@/generators/rsc/types';
 import traverse from 'neotraverse/legacy';
-import { Plugin } from '..';
-import { isMorphoNode } from '../helpers/is-morpho-node';
-import { mergeOptions } from '../helpers/merge-options';
-import { checkIsDefined } from '../helpers/nullable';
-import { MorphoComponent } from '../types/morpho-component';
-import { TranspilerGenerator } from '../types/transpiler';
-import { checkIfIsClientComponent } from './helpers/rsc';
-import { componentToReact, ToReactOptions } from './react';
-
-export type ToRscOptions = ToReactOptions;
+import { Plugin } from '../..';
+import { isMorphoNode } from '../../helpers/is-morpho-node';
+import { mergeOptions } from '../../helpers/merge-options';
+import { checkIsDefined } from '../../helpers/nullable';
+import { MorphoComponent } from '../../types/morpho-component';
+import { TranspilerGenerator } from '../../types/transpiler';
+import { checkIfIsClientComponent } from '../helpers/rsc';
+import { componentToReact } from '../react';
 
 /**
  * Transform react to be RSC compatible, such as
