@@ -29,9 +29,10 @@ export const jsxElementToJson = (
   node: babel.types.Expression | babel.types.JSX,
 ): MorphoNode | null => {
   if (types.isJSXText(node)) {
+    const value = typeof node.extra?.raw === 'string' ? node.extra.raw : node.value;
     return createMorphoNode({
       properties: {
-        _text: node.value,
+        _text: value,
       },
     });
   }
