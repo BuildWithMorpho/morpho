@@ -146,7 +146,10 @@ export function mapStateIdentifiers(json: MorphoComponent) {
   plugin(json);
 
   traverse(json).forEach(function (item) {
-    if (isMorphoNode(item)) {
+    // only consolidate bindings for HTML tags, not custom components
+    // custom components are always PascalCase, e.g. MyComponent
+    // but HTML tags are lowercase, e.g. div
+    if (isMorphoNode(item) && item.name.toLowerCase() === item.name) {
       consolidateClassBindings(item);
     }
   });
