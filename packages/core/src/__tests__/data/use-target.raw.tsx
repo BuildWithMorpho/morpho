@@ -1,4 +1,4 @@
-import { onMount, useStore, useTarget } from '@builder.io/morpho';
+import { onMount, useState, useStore, useTarget } from '@builder.io/morpho';
 
 export default function UseTargetComponent() {
   const state = useStore({
@@ -33,15 +33,24 @@ export default function UseTargetComponent() {
     lastName: 'bar',
   });
 
+  const [foo, setFoo] = useState('bar');
+
   onMount(() => {
+    console.log(foo);
+    setFoo('bar');
+
     useTarget({
       react: () => {
         console.log('react');
         state.lastName = 'baz';
+        console.log(foo);
+        setFoo('baz');
       },
       qwik: () => {
         console.log('qwik');
         state.lastName = 'baz';
+        console.log(foo);
+        setFoo('baz');
       },
     });
   });
