@@ -2,7 +2,12 @@ import { babelTransformExpression } from '@/helpers/babel-transform';
 import { capitalize } from '@/helpers/capitalize';
 import { isMorphoNode } from '@/helpers/is-morpho-node';
 import { createCodeProcessorPlugin } from '@/helpers/plugins/process-code';
-import { MorphoComponent, MorphoState, StateValue } from '@/types/morpho-component';
+import {
+  MorphoComponent,
+  MorphoState,
+  StateValue,
+  TargetBlockDefinition,
+} from '@/types/morpho-component';
 import { NodePath } from '@babel/core';
 import {
   BlockStatement,
@@ -144,6 +149,16 @@ export function mapStateIdentifiers(json: MorphoComponent) {
   );
 
   plugin(json);
+
+  for (const key in json.targetBlocks) {
+    const targetBlock = json.targetBlocks[key];
+    for (const targetBlockKey of Object.keys(targetBlock)) {
+      const block = targetBlock[targetBlockKey as keyof TargetBlockDefinition];
+      if (block && 'code' in block) {
+        block.code = mapStateIdentifiersInExpression(block.code, stateProperties);
+      }
+    }
+  }
 
   traverse(json).forEach(function (item) {
     // only consolidate bindings for HTML tags, not custom components
