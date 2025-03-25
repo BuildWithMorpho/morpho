@@ -1,4 +1,5 @@
 import { ToMorphoOptions } from '@/generators/morpho/types';
+import { isMorphoNode } from '@/helpers/is-morpho-node';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
@@ -19,7 +20,7 @@ import { mapRefs } from '../../helpers/map-refs';
 import { renderPreComponent } from '../../helpers/render-imports';
 import { checkHasState } from '../../helpers/state';
 import { MorphoComponent } from '../../types/morpho-component';
-import { MorphoNode, checkIsForNode } from '../../types/morpho-node';
+import { MorphoNode, checkIsForNode, checkIsShowNode } from '../../types/morpho-node';
 import { TranspilerGenerator } from '../../types/transpiler';
 import { blockToReact, componentToReact } from '../react';
 
@@ -34,6 +35,7 @@ export const blockToMorpho = (
   json: MorphoNode,
   toMorphoOptions: Partial<ToMorphoOptions> = {},
   component: MorphoComponent,
+  insideJsx: boolean,
 ): string => {
   const options: ToMorphoOptions = {
     format: DEFAULT_FORMAT,
@@ -50,16 +52,48 @@ export const blockToMorpho = (
         prettier: options.prettier,
       },
       component,
-      true,
+      insideJsx,
     );
+  }
+
+  if (options.nativeConditionals && checkIsShowNode(json)) {
+    const when = json.bindings.when?.code;
+    const elseCase = json.meta.else as MorphoNode;
+    const needsWrapper = json.children.length !== 1;
+
+    const renderChildren = `${needsWrapper ? '<>' : ''}
+      ${json.children
+        .map((child) => blockToMorpho(child, options, component, needsWrapper))
+        .join('\n')}
+  ${needsWrapper ? '</>' : ''}`;
+
+    const renderElse =
+      elseCase && isMorphoNode(elseCase)
+        ? blockToMorpho(elseCase, options, component, false)
+        : 'null';
+    return `${insideJsx ? '{' : ''}(${when}) ? ${renderChildren} : ${renderElse}${
+      insideJsx ? '}' : ''
+    }`;
   }
 
   if (checkIsForNode(json)) {
     const needsWrapper = json.children.length !== 1;
+    if (options.nativeLoops) {
+      const a = `${insideJsx ? '{' : ''}(${json.bindings.each?.code}).map(
+      (${json.scope.forName}, ${json.scope.indexName || 'index'}) => (
+      ${needsWrapper ? '<>' : ''}
+        ${json.children
+          .map((child) => blockToMorpho(child, options, component, needsWrapper))
+          .join('\n')}
+      ${needsWrapper ? '</>' : ''}
+      ))${insideJsx ? '}' : ''}`;
+      console.log(a);
+      return a;
+    }
     return `<For each={${json.bindings.each?.code}}>
     {(${json.scope.forName}, ${json.scope.indexName || 'index'}) =>
       ${needsWrapper ? '<>' : ''}
-        ${json.children.map((child) => blockToMorpho(child, options, component))}}
+        ${json.children.map((child) => blockToMorpho(child, options, component, needsWrapper))}}
       ${needsWrapper ? '</>' : ''}
     </For>`;
   }
@@ -111,7 +145,7 @@ export const blockToMorpho = (
   }
   str += '>';
   if (json.children) {
-    str += json.children.map((item) => blockToMorpho(item, options, component)).join('\n');
+    str += json.children.map((item) => blockToMorpho(item, options, component, true)).join('\n');
   }
 
   str += `</${json.name}>`;
@@ -169,6 +203,13 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
     const addWrapper = json.children.length !== 1 || isRootTextNode(json);
 
     const components = Array.from(getComponents(json));
+    const morphoCoreComponents: string[] = [];
+    if (!options.nativeConditionals) {
+      morphoCoreComponents.push('Show');
+    }
+    if (!options.nativeLoops) {
+      morphoCoreComponents.push('For');
+    }
 
     const morphoComponents = components.filter((item) => morphoCoreComponents.includes(item));
     const otherComponents = components.filter((item) => !morphoCoreComponents.includes(item));
@@ -218,7 +259,9 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
       ${json.style ? `useStyle(\`${json.style}\`)` : ''}
 
       return (${addWrapper ? '<>' : ''}
-        ${json.children.map((item) => blockToMorpho(item, options, component)).join('\n')}
+        ${json.children
+          .map((item) => blockToMorpho(item, options, component, addWrapper))
+          .join('\n')}
         ${addWrapper ? '</>' : ''})
     }
 
