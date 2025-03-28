@@ -11,7 +11,12 @@ describe('Morpho, format: legacy', () => {
 
 describe('Morpho, format: legacy (native loops and conditionals)', () => {
   runTestsForTarget({
-    options: { format: 'legacy', nativeLoops: true, nativeConditionals: true },
+    options: {
+      format: 'legacy',
+      nativeLoops: true,
+      nativeConditionals: true,
+      returnArray: true,
+    },
     target: 'morpho',
     generator: componentToMorpho,
   });
