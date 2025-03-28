@@ -2625,6 +2625,27 @@ exports[`Morpho, format: legacy (native loops and conditionals) > jsx > Javascri
 "
 `;
 
+exports[`Morpho, format: legacy (native loops and conditionals) > jsx > Javascript Test > store-async-function 1`] = `
+"import { useStore } from \\"@builder.io/morpho\\";
+
+export default function StringLiteralStore(props) {
+  const state = useStore({
+    arrowFunction: async function arrowFunction() {
+      return Promise.resolve();
+    },
+    namedFunction: async function namedFunction() {
+      return Promise.resolve();
+    },
+    fetchUsers: async function fetchUsers() {
+      return Promise.resolve();
+    },
+  });
+
+  return [<div />];
+}
+"
+`;
+
 exports[`Morpho, format: legacy (native loops and conditionals) > jsx > Javascript Test > string-literal-store 1`] = `
 "import { useStore } from \\"@builder.io/morpho\\";
 
@@ -5858,6 +5879,27 @@ exports[`Morpho, format: legacy (native loops and conditionals) > jsx > Typescri
 exports[`Morpho, format: legacy (native loops and conditionals) > jsx > Typescript Test > spreadProps 1`] = `
 "export default function MyBasicComponent(props) {
   return [<input {...props} />];
+}
+"
+`;
+
+exports[`Morpho, format: legacy (native loops and conditionals) > jsx > Typescript Test > store-async-function 1`] = `
+"import { useStore } from \\"@builder.io/morpho\\";
+
+export default function StringLiteralStore(props) {
+  const state = useStore({
+    arrowFunction: async function arrowFunction() {
+      return Promise.resolve();
+    },
+    namedFunction: async function namedFunction() {
+      return Promise.resolve();
+    },
+    fetchUsers: async function fetchUsers() {
+      return Promise.resolve();
+    },
+  });
+
+  return [<div />];
 }
 "
 `;
@@ -9459,6 +9501,27 @@ exports[`Morpho, format: legacy > jsx > Javascript Test > spreadProps 1`] = `
 "
 `;
 
+exports[`Morpho, format: legacy > jsx > Javascript Test > store-async-function 1`] = `
+"import { useStore } from \\"@builder.io/morpho\\";
+
+export default function StringLiteralStore(props) {
+  const state = useStore({
+    arrowFunction: async function arrowFunction() {
+      return Promise.resolve();
+    },
+    namedFunction: async function namedFunction() {
+      return Promise.resolve();
+    },
+    fetchUsers: async function fetchUsers() {
+      return Promise.resolve();
+    },
+  });
+
+  return <div />;
+}
+"
+`;
+
 exports[`Morpho, format: legacy > jsx > Javascript Test > string-literal-store 1`] = `
 "import { useStore } from \\"@builder.io/morpho\\";
 
@@ -12755,6 +12818,27 @@ exports[`Morpho, format: legacy > jsx > Typescript Test > spreadNestedProps 1`] 
 exports[`Morpho, format: legacy > jsx > Typescript Test > spreadProps 1`] = `
 "export default function MyBasicComponent(props) {
   return <input {...props} />;
+}
+"
+`;
+
+exports[`Morpho, format: legacy > jsx > Typescript Test > store-async-function 1`] = `
+"import { useStore } from \\"@builder.io/morpho\\";
+
+export default function StringLiteralStore(props) {
+  const state = useStore({
+    arrowFunction: async function arrowFunction() {
+      return Promise.resolve();
+    },
+    namedFunction: async function namedFunction() {
+      return Promise.resolve();
+    },
+    fetchUsers: async function fetchUsers() {
+      return Promise.resolve();
+    },
+  });
+
+  return <div />;
 }
 "
 `;
@@ -16833,6 +16917,29 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`Morpho, format: react > jsx > Javascript Test > store-async-function 1`] = `
+"import * as React from \\"react\\";
+
+function StringLiteralStore(props) {
+  async function arrowFunction() {
+    return Promise.resolve();
+  }
+
+  async function namedFunction() {
+    return Promise.resolve();
+  }
+
+  async function fetchUsers() {
+    return Promise.resolve();
+  }
+
+  return <div />;
+}
+
+export default StringLiteralStore;
+"
+`;
+
 exports[`Morpho, format: react > jsx > Javascript Test > string-literal-store 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
@@ -20308,6 +20415,29 @@ function MyBasicComponent(props) {
 }
 
 export default MyBasicComponent;
+"
+`;
+
+exports[`Morpho, format: react > jsx > Typescript Test > store-async-function 1`] = `
+"import * as React from \\"react\\";
+
+function StringLiteralStore(props) {
+  async function arrowFunction() {
+    return Promise.resolve();
+  }
+
+  async function namedFunction() {
+    return Promise.resolve();
+  }
+
+  async function fetchUsers() {
+    return Promise.resolve();
+  }
+
+  return <div />;
+}
+
+export default StringLiteralStore;
 "
 `;
 
