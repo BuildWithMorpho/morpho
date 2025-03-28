@@ -295,11 +295,11 @@ export const componentToMorpho: TranspilerGenerator<Partial<ToMorphoOptions>> =
 
       ${json.style ? `useStyle(\`${json.style}\`)` : ''}
 
-      return (${addWrapper ? '<>' : ''}
+      return ${options.returnArray ? '[' : '('}${addWrapper ? '<>' : ''}
         ${json.children
           .map((item) => blockToMorpho(item, options, component, addWrapper))
           .join('\n')}
-        ${addWrapper ? '</>' : ''})
+        ${addWrapper ? '</>' : ''}${options.returnArray ? ']' : ')'}
     }
 
   `;
