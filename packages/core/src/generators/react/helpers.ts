@@ -21,9 +21,19 @@ export const processBinding = (str: string, options: ToReactOptions) => {
 
 export const openFrag = (options: ToReactOptions) => getFragment('open', options);
 export const closeFrag = (options: ToReactOptions) => getFragment('close', options);
-export function getFragment(type: 'open' | 'close', options: ToReactOptions) {
-  const tagName = options.preact ? 'Fragment' : '';
-  return type === 'open' ? `<${tagName}>` : `</${tagName}>`;
+export const isFragmentWithKey = (node?: MorphoNode): boolean =>
+  node?.name === 'Fragment' && !!node?.bindings['key'];
+export function getFragment(type: 'open' | 'close', options: ToReactOptions, node?: MorphoNode) {
+  let tag = '';
+  if (node && node.bindings && isFragmentWithKey(node)) {
+    tag = options.preact ? 'Fragment' : 'React.Fragment';
+    if (type === 'open') {
+      tag += ` key={${node.bindings['key']?.code}}`;
+    }
+  } else if (options.preact) {
+    tag = 'Fragment';
+  }
+  return type === 'open' ? `<${tag}>` : `</${tag}>`;
 }
 export const wrapInFragment = (json: MorphoComponent | MorphoNode) => json.children.length !== 1;
 
