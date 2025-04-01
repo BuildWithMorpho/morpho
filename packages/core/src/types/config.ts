@@ -21,6 +21,9 @@ export type generatorsOption = {
 
 export type MorphoConfig = {
   generators?: generatorsOption;
+  /**
+   * Apply common options to all targets
+   */
   commonOptions?: Omit<BaseTranspilerOptions, 'experimental'>;
   /**
    * List of targets to compile to.
@@ -60,6 +63,7 @@ export type MorphoConfig = {
    *   react: {
    *     stateType: 'builder';
    *     stylesType: 'styled-jsx'
+   *     plugins: [myPlugin]
    *   }
    * }
    * ```
