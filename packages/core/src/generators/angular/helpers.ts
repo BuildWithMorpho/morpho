@@ -1,5 +1,6 @@
 import { stripStateAndPropsRefs } from '@/helpers/strip-state-and-props-refs';
 import { type MorphoComponent } from '@/types/morpho-component';
+import { MorphoNode } from '@/types/morpho-node';
 
 export const HELPER_FUNCTIONS = (
   isTs?: boolean,
@@ -120,4 +121,17 @@ export const transformState = (json: MorphoComponent) => {
         }
       }
     });
+};
+
+/**
+ * Checks if the first child has a "key" attribute - used for "For" elements
+ * @param node The node which should be "For"
+ */
+export const hasFirstChildKeyAttribute = (node: MorphoNode): boolean => {
+  if (!node.children || node.children.length === 0) {
+    return false;
+  }
+
+  const firstChildBinding = node.children[0].bindings;
+  return Boolean(firstChildBinding && firstChildBinding.key?.code);
 };
