@@ -2,7 +2,7 @@ import { ToTaroOptions } from '@/generators/taro/types';
 import json5 from 'json5';
 import { camelCase, size } from 'lodash';
 import traverse from 'neotraverse/legacy';
-import { Plugin } from '../..';
+import { MorphoPlugin } from '../..';
 import { createSingleBinding } from '../../helpers/bindings';
 import { fastClone } from '../../helpers/fast-clone';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
@@ -121,7 +121,7 @@ export const TagMap: Record<string, string> = {
  * - Converts DOM tags to @tarojs/components
  * - Removes redundant `class`/`className` attributes
  */
-const PROCESS_TARO_PLUGIN: Plugin = () => ({
+const PROCESS_TARO_PLUGIN: MorphoPlugin = () => ({
   json: {
     pre: (json: MorphoComponent) => {
       const TaroComponentsImports: MorphoImport = { path: '@tarojs/components', imports: {} };

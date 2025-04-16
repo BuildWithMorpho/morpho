@@ -1,12 +1,12 @@
 import {
-  builderContentToMorphoComponent,
-  compileAwayBuilderComponents,
   GeneratorOptions,
   MorphoComponent,
+  MorphoPlugin,
+  Target,
+  builderContentToMorphoComponent,
+  compileAwayBuilderComponents,
   parseJsx,
   parseSvelte,
-  Plugin,
-  Target,
   targets,
 } from '@builder.io/morpho';
 import { GluegunCommand } from 'gluegun';
@@ -44,7 +44,7 @@ const command: GluegunCommand = {
 
     const header = opts.header;
 
-    const plugins: Plugin[] = [];
+    const plugins: MorphoPlugin[] = [];
 
     if (!opts.builderComponents) {
       plugins.push(compileAwayBuilderComponents());

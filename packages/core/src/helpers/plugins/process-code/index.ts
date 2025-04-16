@@ -1,6 +1,6 @@
 import { flow } from 'fp-ts/lib/function';
 import { BaseHook, MorphoComponent } from '../../../types/morpho-component';
-import { Plugin } from '../../../types/plugins';
+import { MorphoPlugin } from '../../../types/plugins';
 import { checkIsDefined } from '../../nullable';
 import { traverseNodes } from '../../traverse-nodes';
 import { CodeProcessor } from './types';
@@ -168,6 +168,6 @@ export const createCodeProcessorPlugin =
  */
 export const CODE_PROCESSOR_PLUGIN = flow(
   createCodeProcessorPlugin,
-  (plugin): Plugin =>
+  (plugin): MorphoPlugin =>
     () => ({ json: { post: plugin } }),
 );

@@ -1,16 +1,30 @@
+import { OutputFiles, TargetContext } from '@/types/config';
 import { MorphoComponent } from './morpho-component';
 
-export type Plugin = (options?: any) => {
-  json?: {
-    // Happens before any modifiers
-    pre?: (json: MorphoComponent) => MorphoComponent | void;
-    // Happens after built in modifiers
-    post?: (json: MorphoComponent) => MorphoComponent | void;
-  };
-  code?: {
-    // Happens before formatting
-    pre?: (code: string, json: MorphoComponent) => string;
-    // Happens after formatting
-    post?: (code: string, json: MorphoComponent) => string;
-  };
+export type MorphoBuildPlugin = (
+  targetContext: TargetContext,
+  files?: {
+    componentFiles: OutputFiles[];
+    nonComponentFiles: OutputFiles[];
+  },
+) => void | Promise<void>;
+
+export type MorphoJsonPlugin = (json: MorphoComponent) => MorphoComponent | void;
+
+export type MorphoCodePlugin = (code: string, json: MorphoComponent) => string;
+
+export type MorphoHook<T> = {
+  pre?: T;
+  post?: T;
+};
+
+export type MorphoPlugin = (options?: any) => {
+  name?: string;
+  order?: number;
+  // Happens before/after build
+  build?: MorphoHook<MorphoBuildPlugin>;
+  // Happens before/after any modifiers
+  json?: MorphoHook<MorphoJsonPlugin>;
+  // Happens before/after formatting
+  code?: MorphoHook<MorphoCodePlugin>;
 };

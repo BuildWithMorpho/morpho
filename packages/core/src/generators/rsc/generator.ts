@@ -1,6 +1,6 @@
 import { ToRscOptions } from '@/generators/rsc/types';
 import traverse from 'neotraverse/legacy';
-import { Plugin } from '../..';
+import { MorphoPlugin } from '../..';
 import { isMorphoNode } from '../../helpers/is-morpho-node';
 import { mergeOptions } from '../../helpers/merge-options';
 import { checkIsDefined } from '../../helpers/nullable';
@@ -16,7 +16,7 @@ import { componentToReact } from '../react';
  * - remove refs
  * - transform context to prop drilling
  */
-const RSC_TRANSFORM_PLUGIN: Plugin = () => ({
+const RSC_TRANSFORM_PLUGIN: MorphoPlugin = () => ({
   json: {
     pre: (json: MorphoComponent) => {
       json.hooks.onMount = [];
