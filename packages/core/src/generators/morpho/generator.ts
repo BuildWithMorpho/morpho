@@ -1,27 +1,29 @@
+import { HOOKS } from '@/constants/hooks';
+import { SELF_CLOSING_HTML_TAGS } from '@/constants/html_tags';
 import { ToMorphoOptions } from '@/generators/morpho/types';
+import { dedent } from '@/helpers/dedent';
+import { checkIsEvent } from '@/helpers/event-handlers';
+import { fastClone } from '@/helpers/fast-clone';
+import { getComponents } from '@/helpers/get-components';
+import { getRefs } from '@/helpers/get-refs';
+import { getStateObjectStringFromComponent } from '@/helpers/get-state-object-string';
 import { isMorphoNode } from '@/helpers/is-morpho-node';
+import { isRootTextNode } from '@/helpers/is-root-text-node';
+import { mapRefs } from '@/helpers/map-refs';
+import { renderPreComponent } from '@/helpers/render-imports';
+import { checkHasState } from '@/helpers/state';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
   runPreCodePlugins,
   runPreJsonPlugins,
 } from '@/modules/plugins';
+import { MorphoComponent } from '@/types/morpho-component';
+import { MorphoNode, checkIsForNode, checkIsShowNode } from '@/types/morpho-node';
+import { TranspilerGenerator } from '@/types/transpiler';
 import json5 from 'json5';
 import { format } from 'prettier/standalone';
-import { HOOKS } from '../../constants/hooks';
-import { SELF_CLOSING_HTML_TAGS } from '../../constants/html_tags';
-import { dedent } from '../../helpers/dedent';
-import { fastClone } from '../../helpers/fast-clone';
-import { getComponents } from '../../helpers/get-components';
-import { getRefs } from '../../helpers/get-refs';
-import { getStateObjectStringFromComponent } from '../../helpers/get-state-object-string';
-import { isRootTextNode } from '../../helpers/is-root-text-node';
-import { mapRefs } from '../../helpers/map-refs';
-import { renderPreComponent } from '../../helpers/render-imports';
-import { checkHasState } from '../../helpers/state';
-import { MorphoComponent } from '../../types/morpho-component';
-import { MorphoNode, checkIsForNode, checkIsShowNode } from '../../types/morpho-node';
-import { TranspilerGenerator } from '../../types/transpiler';
+
 import { blockToReact, componentToReact } from '../react';
 
 export const DEFAULT_FORMAT: ToMorphoOptions['format'] = 'legacy';
@@ -144,7 +146,7 @@ export const blockToMorpho = (
 
     if (json.bindings[key]?.type === 'spread') {
       str += ` {...(${json.bindings[key]?.code})} `;
-    } else if (key.startsWith('on')) {
+    } else if (checkIsEvent(key)) {
       const { arguments: cusArgs = ['event'], async } = json.bindings[key]!;
       const asyncKeyword = async ? 'async ' : '';
       str += ` ${key}={${asyncKeyword}(${cusArgs.join(',')}) => ${value.replace(/\s*;$/, '')}} `;

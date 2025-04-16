@@ -1,11 +1,12 @@
 import { ToStencilOptions } from '@/generators/stencil/types';
 import { dashCase } from '@/helpers/dash-case';
+import { checkIsEvent } from '@/helpers/event-handlers';
 import { renderPreComponent } from '@/helpers/render-imports';
 import { stripStateAndPropsRefs } from '@/helpers/strip-state-and-props-refs';
 import { MorphoComponent, MorphoState } from '@/types/morpho-component';
 import { MorphoNode } from '@/types/morpho-node';
 
-export const isEvent = (key: string): boolean => key.startsWith('on');
+export const isEvent = (key: string): boolean => checkIsEvent(key);
 
 /**
  * We need to "emit" events those can be on multiple places, so we do it as post step
