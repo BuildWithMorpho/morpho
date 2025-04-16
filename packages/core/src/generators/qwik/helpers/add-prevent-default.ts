@@ -1,6 +1,7 @@
+import { checkIsEvent } from '@/helpers/event-handlers';
+import { isMorphoNode } from '@/helpers/is-morpho-node';
+import { MorphoComponent } from '@/types/morpho-component';
 import traverse from 'neotraverse/legacy';
-import { isMorphoNode } from '../../../helpers/is-morpho-node';
-import { MorphoComponent } from '../../../types/morpho-component';
 
 /**
  * Find event handlers that explicitly call .preventDefault() and
@@ -12,7 +13,7 @@ export function addPreventDefault(json: MorphoComponent) {
     if (isMorphoNode(node)) {
       if (node.bindings) {
         for (const key of Object.keys(node.bindings)) {
-          if (key.startsWith('on')) {
+          if (checkIsEvent(key)) {
             if (node.bindings[key]?.code.includes('.preventDefault()')) {
               const event = key.slice(2).toLowerCase();
               node.properties['preventdefault:' + event] = '';

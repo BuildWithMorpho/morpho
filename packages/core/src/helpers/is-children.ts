@@ -1,4 +1,4 @@
-import { MorphoNode } from '../types/morpho-node';
+import { MorphoNode } from '@/types/morpho-node';
 
 export const getTextValue = (node: MorphoNode) => {
   const textValue = node.bindings._text?.code || node.properties.__text || '';

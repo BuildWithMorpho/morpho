@@ -1,3 +1,4 @@
+import { checkIsEvent } from '@/helpers/event-handlers';
 import { isMorphoNode } from '@/helpers/is-morpho-node';
 import type { MorphoComponent } from '@/types/morpho-component';
 import type { MorphoNode } from '@/types/morpho-node';
@@ -18,7 +19,7 @@ export const checkIfIsClientComponent = (json: MorphoComponent) => {
   let foundEventListener = false;
   traverse(json).forEach(function (node) {
     if (isMorphoNode(node) && !checkIsNodeAMorphoComponent(node)) {
-      if (Object.keys(node.bindings).filter((item) => item.startsWith('on')).length) {
+      if (Object.keys(node.bindings).filter((item) => checkIsEvent(item)).length) {
         foundEventListener = true;
         this.stop();
       }
