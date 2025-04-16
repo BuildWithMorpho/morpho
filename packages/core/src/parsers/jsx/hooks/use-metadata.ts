@@ -9,7 +9,7 @@ import { Context, ParseMorphoOptions, ResolvedImport } from '@/parsers/jsx/types
 import { MorphoImport } from '@/types/morpho-component';
 import * as babel from '@babel/core';
 import { NodePath } from '@babel/core';
-import { existsSync, readFileSync } from 'fs-extra-promise';
+import { existsSync, readFileSync } from 'fs';
 import * as path from 'path';
 
 type ResolveData = {
