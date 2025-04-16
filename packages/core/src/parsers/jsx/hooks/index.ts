@@ -1,10 +1,12 @@
+import { HOOKS } from '@/constants/hooks';
+import { resolveMetadata } from '@/parsers/jsx/hooks/use-metadata';
+import { MorphoComponent } from '@/types/morpho-component';
 import * as babel from '@babel/core';
+import { NodePath } from '@babel/core';
 import generate from '@babel/generator';
-import { HOOKS } from '../../../constants/hooks';
-import { MorphoComponent } from '../../../types/morpho-component';
 import { parseCodeJson } from '../helpers';
 import { parseStateObjectToMorphoState } from '../state';
-import { ParseMorphoOptions } from '../types';
+import { Context, ParseMorphoOptions } from '../types';
 import { getHook } from './helpers';
 
 const { types } = babel;
@@ -31,32 +33,43 @@ export function generateUseStyleCode(expression: babel.types.CallExpression) {
  * the returned nodes array
  */
 export const collectModuleScopeHooks =
-  (component: MorphoComponent, options: ParseMorphoOptions) => (nodes: babel.types.Statement[]) =>
-    nodes.filter((node) => {
+  (context: Context, options: ParseMorphoOptions) => (path: NodePath<babel.types.Program>) => {
+    const programNodes = path.node.body;
+    return programNodes.filter((node) => {
       const hook = getHook(node);
       if (!hook) {
         return true;
       }
       if (types.isIdentifier(hook.callee)) {
         const metadataHooks = new Set((options.jsonHookNames || []).concat(HOOKS.METADATA));
-        if (metadataHooks.has(hook.callee.name)) {
+        const name = hook.callee.name;
+        if (metadataHooks.has(name)) {
+          const metaDataObjectNode = hook.arguments[0];
+
+          let json: any;
           try {
-            component.meta[hook.callee.name] = {
-              ...((component.meta[hook.callee.name] as Object) || {}),
-              ...parseCodeJson(hook.arguments[0]),
-            };
-            return false;
+            json = options.filePath
+              ? resolveMetadata({ context, node: metaDataObjectNode, nodePath: path, options })
+              : parseCodeJson(metaDataObjectNode);
           } catch (e) {
-            console.error(`Error parsing metadata hook ${hook.callee.name}`);
+            // Meta data isn't simple json convert it to ast
+            console.error(`Error parsing metadata hook ${name}`);
             throw e;
           }
-        } else if (hook.callee.name === HOOKS.STYLE) {
-          component.style = generateUseStyleCode(hook);
+
+          context.builder.component.meta[name] = {
+            ...((context.builder.component.meta[name] as Object) || {}),
+            ...json,
+          };
           return false;
-        } else if (hook.callee.name === HOOKS.DEFAULT_PROPS) {
-          parseDefaultPropsHook(component, hook);
+        } else if (name === HOOKS.STYLE) {
+          context.builder.component.style = generateUseStyleCode(hook);
+          return false;
+        } else if (name === HOOKS.DEFAULT_PROPS) {
+          parseDefaultPropsHook(context.builder.component, hook);
         }
       }
 
       return true;
     });
+  };

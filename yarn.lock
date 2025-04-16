@@ -3172,6 +3172,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@builder.io/metadata-example@workspace:examples/metdata":
+  version: 0.0.0-use.local
+  resolution: "@builder.io/metadata-example@workspace:examples/metdata"
+  dependencies:
+    "@builder.io/morpho": "workspace:*"
+    "@builder.io/morpho-cli": "workspace:*"
+    eslint: "npm:^7.21.0"
+  languageName: unknown
+  linkType: soft
+
 "@builder.io/morpho-cli@workspace:*, @builder.io/morpho-cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@builder.io/morpho-cli@workspace:packages/cli"
