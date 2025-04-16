@@ -1,5 +1,5 @@
 import { MorphoComponent } from './morpho-component';
-import { Plugin } from './plugins';
+import { MorphoPlugin } from './plugins';
 
 export interface TranspilerArgs {
   path?: string;
@@ -24,7 +24,7 @@ export interface BaseTranspilerOptions {
   /**
    * Morpho Plugins to run during codegen.
    */
-  plugins?: Plugin[];
+  plugins?: MorphoPlugin[];
   /**
    * Enable `typescript` output
    */

@@ -1,4 +1,4 @@
-import { type Plugin } from '@builder.io/morpho';
+import { type MorphoPlugin } from '@builder.io/morpho';
 import { Builder, BuilderElement } from '@builder.io/sdk';
 import json5 from 'json5';
 import { omit, pick, round } from 'lodash';
@@ -582,7 +582,7 @@ export const compileAwayBuilderComponentsFromTree = (
 
 export const compileAwayBuilderComponents = (
   pluginOptions: CompileAwayBuilderComponentsOptions = {},
-): Plugin => {
+): MorphoPlugin => {
   let obj = components;
   if (pluginOptions.omit) {
     obj = omit(obj, pluginOptions.omit);

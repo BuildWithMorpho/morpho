@@ -1,9 +1,12 @@
 import {
+  BaseTranspilerOptions,
   MorphoComponent,
   MorphoConfig,
+  MorphoPlugin,
+  OutputFiles,
   ParseMorphoOptions,
   Target,
-  TranspilerGenerator,
+  TargetContext,
   checkIsMorphoComponentFilePath,
   checkIsSvelteComponentFilePath,
   checkShouldOutputTypeScript,
@@ -37,6 +40,12 @@ const getTargetPath = ({ target }: { target: Target }): string => {
   }
 };
 
+export const sortPlugins = (plugins?: MorphoPlugin[]): MorphoPlugin[] => {
+  if (!plugins) return [];
+
+  return plugins.sort((a: MorphoPlugin, b: MorphoPlugin) => (a().order || 0) - (b().order || 0));
+};
+
 const DEFAULT_CONFIG = {
   targets: [],
   dest: 'output',
@@ -57,11 +66,11 @@ const getOptions = (config?: MorphoConfig): MorphoConfig => {
     generators: Object.assign(targets, config?.generators),
   };
 
-  /**
-   * Apply common options to all targets
-   */
-  if (newConfig.commonOptions) {
-    for (const target of newConfig.targets || []) {
+  for (const target of newConfig.targets || []) {
+    /**
+     * Apply common options to all targets
+     */
+    if (newConfig.commonOptions) {
       newConfig.options[target] = {
         ...newConfig.commonOptions,
         ...newConfig.options[target],
@@ -71,6 +80,9 @@ const getOptions = (config?: MorphoConfig): MorphoConfig => {
         ],
       } as any;
     }
+    const targetConfig: any = newConfig.options[target];
+    const plugins: MorphoPlugin[] | undefined = targetConfig?.plugins;
+    newConfig.options[target] = { ...targetConfig, plugins: sortPlugins(plugins) };
   }
 
   return newConfig;
@@ -116,7 +128,9 @@ const getRequiredParsers = (
 ): { javascript: boolean; typescript: boolean } => {
   const targetsOptions = Object.values(options.options);
 
-  const targetsRequiringTypeScript = targetsOptions.filter((option) => option.typescript).length;
+  const targetsRequiringTypeScript = targetsOptions.filter(
+    (option: BaseTranspilerOptions) => option.typescript,
+  ).length;
   const needsTypeScript = targetsRequiringTypeScript > 0;
 
   /**
@@ -237,12 +251,6 @@ const getMorphoComponentJSONs = async (options: MorphoConfig): Promise<ParsedMor
   );
 };
 
-interface TargetContext {
-  target: Target;
-  generator: TranspilerGenerator<Required<MorphoConfig['options']>[Target]>;
-  outputPath: string;
-}
-
 interface TargetContextWithConfig extends TargetContext {
   options: MorphoConfig;
 }
@@ -261,6 +269,26 @@ const buildAndOutputNonComponentFiles = async (targetContext: TargetContextWithC
   return await outputNonComponentFiles({ ...targetContext, files });
 };
 
+export function runBuildPlugins(type: 'pre' | 'post', plugins: MorphoPlugin[]) {
+  const debugTarget = debug(`morpho:plugin:build:${type}`);
+
+  return async (
+    targetContext: TargetContext,
+    files?: {
+      componentFiles: OutputFiles[];
+      nonComponentFiles: OutputFiles[];
+    },
+  ) => {
+    for (let pluginFn of plugins) {
+      const plugin = pluginFn();
+      if (!plugin.build || !plugin.build[type]) continue;
+      debugTarget(`before run ${plugin.name ?? 'build'} ${type} plugin...`);
+      await plugin.build[type]?.(targetContext, files);
+      debugTarget(`run ${plugin.name ?? 'build'} ${type}  plugin done`);
+    }
+  };
+}
+
 export async function build(config?: MorphoConfig) {
   // merge default options
   const options = getOptions(config);
@@ -268,10 +296,12 @@ export async function build(config?: MorphoConfig) {
   // get all morpho component JSONs
   const morphoComponents = await getMorphoComponentJSONs(options);
 
-  const targetContexts = getTargetContexts(options);
+  const targetContexts: TargetContext[] = getTargetContexts(options);
 
   await Promise.all(
     targetContexts.map(async (targetContext) => {
+      const plugins: MorphoPlugin[] = options?.options[targetContext.target]?.plugins ?? [];
+      await runBuildPlugins('pre', plugins)(targetContext);
       // clean output directory
       await clean(options, targetContext.target);
       // clone morpho JSONs for each target, so we can modify them in each generator without affecting future runs.
@@ -286,6 +316,10 @@ export async function build(config?: MorphoConfig) {
       console.info(
         `Morpho: ${targetContext.target}: generated ${x[1].length} components, ${x[0].length} regular files.`,
       );
+      await runBuildPlugins('post', plugins)(targetContext, {
+        componentFiles: x[1],
+        nonComponentFiles: x[0],
+      });
     }),
   );
 
@@ -301,7 +335,7 @@ async function buildAndOutputComponentFiles({
   options,
   generator,
   outputPath,
-}: TargetContextWithConfig & { files: ParsedMorphoJson[] }) {
+}: TargetContextWithConfig & { files: ParsedMorphoJson[] }): Promise<OutputFiles[]> {
   const debugTarget = debug(`morpho:${target}`);
   const shouldOutputTypescript = checkShouldOutputTypeScript({ options, target });
 
@@ -349,6 +383,7 @@ async function buildAndOutputComponentFiles({
     transpiled = transformImports({ target, options })(transpiled);
 
     await outputFile(`${outputDir}/${outputFilePath}`, transpiled);
+    return { outputDir, outputFilePath };
   });
   return await Promise.all(output);
 }
@@ -378,15 +413,14 @@ const outputNonComponentFiles = async ({
 }: TargetContext & {
   files: { path: string; output: string }[];
   options: MorphoConfig;
-}) => {
-  const folderPath = `${options.dest}/${outputPath}`;
+}): Promise<OutputFiles[]> => {
+  const outputDir = `${options.dest}/${outputPath}`;
   return await Promise.all(
-    files.map(({ path, output }) =>
-      outputFile(
-        `${folderPath}/${getNonComponentOutputFileName({ options, path, target })}`,
-        output,
-      ),
-    ),
+    files.map(async ({ path, output }) => {
+      const outputFilePath = getNonComponentOutputFileName({ options, path, target });
+      await outputFile(`${outputDir}/${outputFilePath}`, output);
+      return { outputDir, outputFilePath };
+    }),
   );
 };
 

@@ -1,4 +1,4 @@
-import { MorphoComponent, MorphoNode, OnEventHook, Plugin } from '..';
+import { MorphoComponent, MorphoNode, MorphoPlugin, OnEventHook } from '..';
 import { createSingleBinding } from './bindings';
 import { capitalize } from './capitalize';
 import { traverseNodes } from './traverse-nodes';
@@ -29,7 +29,7 @@ export const getOnEventHooksForNode = ({
  * Only works with frameworks that support custom events in their templates.
  */
 export const processOnEventHooksPlugin =
-  (args: { setBindings?: boolean; includeRootEvents?: boolean } = {}): Plugin =>
+  (args: { setBindings?: boolean; includeRootEvents?: boolean } = {}): MorphoPlugin =>
   () => ({
     json: {
       pre: (component) => {

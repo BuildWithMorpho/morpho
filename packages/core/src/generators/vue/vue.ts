@@ -21,7 +21,7 @@ import { pickBy, size, uniq } from 'lodash';
 import traverse from 'neotraverse/legacy';
 import { format } from 'prettier/standalone';
 import {
-  Plugin,
+  MorphoPlugin,
   runPostCodePlugins,
   runPostJsonPlugins,
   runPreCodePlugins,
@@ -66,7 +66,7 @@ function processForKeys(json: MorphoComponent, _options: ToVueOptions) {
  *
  * We add a `computed` property for the dependencies, and a matching `watch` function for the `onUpdate` code
  */
-const onUpdatePlugin: Plugin = (options) => ({
+const onUpdatePlugin: MorphoPlugin = (options) => ({
   json: {
     post: (component) => {
       if (component.hooks.onUpdate) {

@@ -1,7 +1,7 @@
 import { MorphoComponent } from '../types/morpho-component';
-import { Plugin } from '../types/plugins';
+import { MorphoPlugin } from '../types/plugins';
 
-export type { Plugin };
+export type { MorphoPlugin };
 
 export const runPreJsonPlugins = ({
   json,
@@ -9,7 +9,7 @@ export const runPreJsonPlugins = ({
   options,
 }: {
   json: MorphoComponent;
-  plugins: Plugin[];
+  plugins: MorphoPlugin[];
   options?: any;
 }) => {
   let useJson = json;
@@ -28,7 +28,7 @@ export const runPostJsonPlugins = ({
   options,
 }: {
   json: MorphoComponent;
-  plugins: Plugin[];
+  plugins: MorphoPlugin[];
   options?: any;
 }) => {
   let useJson = json;
@@ -49,7 +49,7 @@ export const runPreCodePlugins = ({
 }: {
   json: MorphoComponent;
   code: string;
-  plugins: Plugin[];
+  plugins: MorphoPlugin[];
   options?: any;
 }) => {
   let string = code;
@@ -70,7 +70,7 @@ export const runPostCodePlugins = ({
 }: {
   json: MorphoComponent;
   code: string;
-  plugins: Plugin[];
+  plugins: MorphoPlugin[];
   options?: any;
 }) => {
   let string = code;
