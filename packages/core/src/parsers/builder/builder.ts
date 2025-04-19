@@ -776,7 +776,11 @@ export const builderElementToMorphoNode = (
 
   const linkUrl = (block as any).linkUrl;
   if (linkUrl) {
-    if (typeof linkUrl === 'object' && linkUrl['@type'] === '@builder.io/core:LocalizedValue') {
+    if (
+      typeof linkUrl === 'object' &&
+      linkUrl !== null &&
+      linkUrl['@type'] === '@builder.io/core:LocalizedValue'
+    ) {
       properties.href = linkUrl.Default;
       localizedValues['linkUrl'] = linkUrl;
     } else {
@@ -804,6 +808,7 @@ export const builderElementToMorphoNode = (
         properties[key] = value;
       } else if (
         typeof value === 'object' &&
+        value !== null &&
         value['@type'] === '@builder.io/core:LocalizedValue'
       ) {
         properties[key] = value.Default;
