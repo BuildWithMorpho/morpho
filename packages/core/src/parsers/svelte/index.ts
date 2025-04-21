@@ -11,6 +11,7 @@ import { collectTypes, isTypeScriptComponent } from './typescript';
 
 import type { Ast } from 'svelte/types/compiler/interfaces';
 import type { MorphoComponent } from '../../types/morpho-component';
+import { builderContentToMorphoComponent } from '../builder/builder';
 import type { SveltosisComponent } from './types';
 
 function mapAstToMorphoJson(
@@ -73,4 +74,13 @@ export const parseSvelte = async function (
   const ast = parse(processedString.code);
   const componentName = path.split('/').pop()?.split('.')[0] ?? 'MyComponent';
   return mapAstToMorphoJson(ast, componentName, string_, usesTypescript);
+};
+
+export const parseBuilderSyntax = async function (
+  string_: string,
+  path = 'MyComponent.svelte',
+): Promise<MorphoComponent> {
+  const component = builderContentToMorphoComponent(JSON.parse(string_));
+
+  return component;
 };
