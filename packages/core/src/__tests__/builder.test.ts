@@ -3,6 +3,7 @@ import { componentToHtml } from '@/generators/html';
 import { componentToMorpho } from '@/generators/morpho';
 import { ToMorphoOptions } from '@/generators/morpho/types';
 import { componentToReact } from '@/generators/react';
+import { componentToVue } from '@/generators/vue';
 import { dedent } from '@/helpers/dedent';
 import {
   builderContentToMorphoComponent,
@@ -320,6 +321,35 @@ describe('Builder', () => {
       plugins: [compileAwayBuilderComponents()],
     })({ component });
     expect(html).toMatchSnapshot();
+  });
+
+  test('Valid Custom Code', async () => {
+    const builderJson: BuilderContent = {
+      data: {
+        blocks: [
+          {
+            '@type': '@builder.io/sdk:Element',
+            component: {
+              name: 'CustomCode',
+              options: {
+                code: `<svg width="200" height="200"></svg>`,
+              },
+            },
+          },
+        ],
+      },
+    } as BuilderContent;
+    const component = builderContentToMorphoComponent(builderJson);
+
+    const vue = componentToVue({
+      plugins: [compileAwayBuilderComponents()],
+    })({ component });
+    expect(vue).toMatchSnapshot();
+
+    const react = componentToReact({
+      plugins: [compileAwayBuilderComponents()],
+    })({ component });
+    expect(react).toMatchSnapshot();
   });
 
   test('Regenerate custom Hero', () => {
