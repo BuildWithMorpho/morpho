@@ -1,6 +1,6 @@
 {
   "name": "@builder.io/morpho-cli",
-  "version": "0.5.35",
+  "version": "0.5.36",
   "description": "morpho CLI",
   "types": "build/types/types.d.ts",
   "bin": {
