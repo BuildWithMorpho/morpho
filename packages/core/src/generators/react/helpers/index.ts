@@ -5,7 +5,7 @@ import { MorphoNode } from '@/types/morpho-node';
 import { upperFirst } from 'lodash';
 import traverse from 'neotraverse/legacy';
 
-import { ToReactOptions } from './types';
+import { ToReactOptions } from '../types';
 
 export const processBinding = (str: string, options: ToReactOptions) => {
   // fix web-component tag transform issue with dashes by not transforming it
@@ -94,3 +94,6 @@ export function processTagReferences(json: MorphoComponent, options: ToReactOpti
     }
   });
 }
+
+export const isReactForwardRef = (json: MorphoComponent): string | undefined =>
+  json.meta.useMetadata?.forwardRef || json.meta.useMetadata?.react?.forwardRef;
