@@ -1,4 +1,5 @@
 // Morpho output for not yet include .d.ts, so ignore the types when importing.
+// Trigger nx remote cache: 2
 // @ts-ignore
 import { E2eApp } from '@builder.io/e2e-app/react';
 
