@@ -1,8 +1,10 @@
 import { processBinding, ProcessBindingOptions } from '@/generators/stencil/helpers/index';
 import { ToStencilOptions } from '@/generators/stencil/types';
 import { CODE_PROCESSOR_PLUGIN } from '@/helpers/plugins/process-code';
+import { MorphoComponent } from '@/types/morpho-component';
 
 export const getCodeProcessorPlugins = (
+  json: MorphoComponent,
   options: ToStencilOptions,
   processBindingOptions: ProcessBindingOptions,
 ) => {
@@ -18,7 +20,7 @@ export const getCodeProcessorPlugins = (
         case 'context-set':
         case 'dynamic-jsx-elements':
         case 'types':
-          return (code) => processBinding(code, processBindingOptions);
+          return (code) => processBinding(json, code, processBindingOptions);
       }
     }),
   ];
