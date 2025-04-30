@@ -155,7 +155,9 @@ describe('Builder', () => {
 
   test('Custom Component Tags in Angular', async () => {
     const originalBuilder = JSON.parse(customComponentTags);
-    const component = builderContentToMorphoComponent(originalBuilder);
+    const component = builderContentToMorphoComponent(originalBuilder, {
+      includeMeta: true,
+    });
     const angularJsx = componentToAngular()({ component });
 
     expect(angularJsx).toMatchSnapshot();
