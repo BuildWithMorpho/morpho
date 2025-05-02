@@ -1,4 +1,5 @@
 import { componentToMorpho } from '@/generators/morpho';
+import { createSingleBinding } from '@/helpers/bindings';
 import { createMorphoComponent } from '@/helpers/create-morpho-component';
 import { createMorphoNode } from '@/helpers/create-morpho-node';
 import { runTestsForTarget } from './test-generator';
@@ -55,6 +56,24 @@ describe('Can encode <> in text', () => {
         children: [
           createMorphoNode({
             properties: { _text: 'hello <b>world</b>' },
+          }),
+        ],
+        hooks: {},
+      }),
+    });
+
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should not output invalid jsx attributes', () => {
+    const result = componentToMorpho()({
+      component: createMorphoComponent({
+        children: [
+          createMorphoNode({
+            properties: { ':click': 'onClick()', '@click': 'onClick()' },
+            bindings: {
+              ':key': createSingleBinding({ code: '1' }),
+            },
           }),
         ],
         hooks: {},
