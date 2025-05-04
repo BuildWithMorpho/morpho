@@ -6,7 +6,45 @@ title: Configuration - Morpho
 
 ## Morpho Configuration
 
-In the root of the project, from which you run morpho, you can add a `morpho.config.js` file that will be read by Morpho. You can also specify a config file by option: `--config=<file>`.
+In the root of the project, from which you run morpho,
+you can add a `morpho.config.js` file that will be read by Morpho.
+You can also specify a config file by option: `--config=<file>`.
+An example might look like this:
+
+````js react-options.cjs
+// react-options.cjs
+
+/** @type {import('@builder.io/morpho').ToReactOptions} */
+module.exports = {
+	typescript: true
+};
+````
+
+````js vue-options.cjs
+// vue-options.cjs
+
+/** @type {import('@builder.io/morpho').ToVueOptions} */
+module.exports = {
+	typescript: true
+};
+````
+
+````js morpho-config.cjs
+// morpho-config.cjs
+const react = require('./react-options.cjs');
+const vue = require('./vue-options.cjs');
+
+/** @type {import('@builder.io/morpho').MorphoConfig} */
+module.exports = {
+	files: 'src/**',
+	targets: ['vue', 'react'],
+	options: {
+		react,
+		vue
+	}
+};
+````
+
 
 The `morpho.config.js` file uses the [MorphoConfig](https://github.com/BuilderIO/morpho/blob/main/packages/core/src/types/config.ts#L22) type:
 
