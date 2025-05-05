@@ -1,5 +1,14 @@
 # @builder.io/morpho-cli
 
+## 0.9.0
+
+### Patch Changes
+
+- a65e72b: JSX generator properly escapes single character > and <
+- Updated dependencies [8ad66fd]
+- Updated dependencies [a65e72b]
+  - @builder.io/morpho@0.9.0
+
 ## 0.8.0
 
 ### Patch Changes
