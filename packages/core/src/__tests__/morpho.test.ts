@@ -65,6 +65,26 @@ describe('Can encode <> in text', () => {
     expect(result).toMatchSnapshot();
   });
 
+  it('encode single > character', () => {
+    const result = componentToMorpho()({
+      component: createMorphoComponent({
+        children: [
+          createMorphoNode({
+            properties: { _text: '>' },
+          }),
+        ],
+        hooks: {},
+      }),
+    });
+
+    expect(result).toMatchInlineSnapshot(`
+      "export default function MyComponent(props) {
+        return <>&amp;gt;</>;
+      }
+      "
+    `);
+  });
+
   it('should not output invalid jsx attributes', () => {
     const result = componentToMorpho()({
       component: createMorphoComponent({
