@@ -1,9 +1,11 @@
+import type { TraverseContext } from 'neotraverse/legacy';
 import { MorphoComponent } from '../../../types/morpho-component';
 import { MorphoNode } from '../../../types/morpho-node';
 
 export type CodeType =
   | 'hooks'
   | 'hooks-deps'
+  | 'hooks-deps-array'
   | 'bindings'
   | 'properties'
   | 'state'
@@ -20,6 +22,6 @@ declare function codeProcessor(
   codeType: CodeType,
   json: MorphoComponent,
   node?: MorphoNode,
-): (code: string, hookType: string) => string | (() => void);
+): (code: string, hookType: string, context?: TraverseContext) => string | (() => void);
 
 export type CodeProcessor = typeof codeProcessor;
