@@ -84,7 +84,7 @@ const getNamedImports = ({ theImport }: { theImport: MorphoImport }) => {
   }
 };
 
-interface ImportValues {
+export interface ImportValues {
   starImport: string | null;
   defaultImport: string | null;
   namedImports: string | null;
