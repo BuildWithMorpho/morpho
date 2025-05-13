@@ -22,6 +22,7 @@ import { MorphoComponent } from '@/types/morpho-component';
 import { MorphoNode, checkIsForNode, checkIsShowNode } from '@/types/morpho-node';
 import { TranspilerGenerator } from '@/types/transpiler';
 import json5 from 'json5';
+import traverse from 'neotraverse/legacy';
 import { check, format } from 'prettier/standalone';
 
 import { blockToReact, componentToReact } from '../react';
@@ -226,6 +227,17 @@ export const blockToMorpho = (
     str += `}`;
   }
 
+  for (const key in json.blocksSlots) {
+    const value = json.blocksSlots[key];
+    traverse(value).forEach(function (v) {
+      if (isMorphoNode(v)) {
+        this.update(blockToMorpho(v, toMorphoOptions, component, insideJsx));
+      }
+    });
+
+    str += `${key}={${generateBlockSlotsCode(value)}}`;
+  }
+
   if (SELF_CLOSING_HTML_TAGS.has(json.name)) {
     return str + ' />';
   }
@@ -244,6 +256,29 @@ export const blockToMorpho = (
   str += `</${json.name}>`;
 
   return str;
+};
+
+const generateBlockSlotsCode = (blockSlot: any) => {
+  let code = '';
+  // generate array props (foo=[...])
+  if (Array.isArray(blockSlot)) {
+    code += `[${blockSlot.map(generateBlockSlotsCode).join(',')}]`;
+    // generate object props (foo={{ ... }})
+  } else if (typeof blockSlot === 'object' && blockSlot !== null) {
+    code += '{';
+
+    for (const key in blockSlot) {
+      if (blockSlot.hasOwnProperty(key)) {
+        code += `${key}: ${generateBlockSlotsCode(blockSlot[key])},`;
+      }
+    }
+
+    code += '}';
+  } else {
+    code += blockSlot;
+  }
+
+  return code;
 };
 
 const getRefsString = (json: MorphoComponent, refs = Array.from(getRefs(json))) => {
