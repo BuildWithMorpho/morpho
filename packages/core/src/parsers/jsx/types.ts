@@ -9,6 +9,14 @@ export type ParseMorphoOptions = {
     project: Project;
   };
   filePath?: string;
+
+  /**
+   * When `true`, the `blocksSlots` field on Morpho Nodes will be used to transform
+   * deeply nested JSX elements found on properties. Note that not every generator
+   * supports parsing `blocksSlots`.
+   * Defaults to `false`.
+   */
+  enableBlocksSlots?: boolean;
 };
 
 export type ResolvedImport = {
