@@ -2,79 +2,51 @@
 <br>
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F44413839f214431290930e447572b843">
-    <img width="400" alt="Morpho logo" src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F570f689e59824cb78cf5773350ab4144">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/79ef70d9-1c31-43f9-9f8f-8b0e7ef76e2e">
+    <img width="400" alt="Morpho logo" src="https://github.com/user-attachments/assets/79ef70d9-1c31-43f9-9f8f-8b0e7ef76e2e">
   </picture>
 </p>
 
+
 <p align="center">
-  Write components once, compile to every framework
+  Develop components a single time and compile them for any framework
 </p>
 
 <br>
 
-<p align="center">
-  <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" /></a>
-  <a href="https://github.com/BuilderIO/morpho/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
-  <a href="https://github.com/BuilderIO/morpho"><img alt="License" src="https://img.shields.io/github/license/BuilderIO/morpho" /></a>
-  <a href="https://www.npmjs.com/package/@builder.io/morpho"><img alt="Types" src="https://img.shields.io/npm/types/@builder.io/morpho" /></a>
-  <a href="https://www.npmjs.com/package/@builder.io/morpho" rel="nofollow"><img src="https://img.shields.io/npm/v/@builder.io/morpho.svg?sanitize=true"></a>
-</p>
+<h2>Overview</h2>
 
-## Overview
+<p><a href="https://morpho.builder.io/docs/overview/">Morpho</a> offers a consistent development workflow for various frameworks, allowing you to create components in one codebase and then compile them for use in React, Vue, Angular, Svelte, Solid, Alpine, Qwik, and other frameworks.</p>
 
-[Morpho](https://morpho.builder.io/docs/overview/) provides a unified development experience across all frameworks, enabling you to build components in a single codebase and compile them to React, Vue, Angular, Svelte, Solid, Alpine, Qwik, and more.
+<p>With Morpho, you can:</p>
+<ul>
+  <li>Ensure a uniform design system is maintained across different frameworks (<a href="https://github.com/db-ux-design-system/core-web">see example</a>)</li>
+  <li>Synchronize your design systems from Figma directly into code and distribute them via npm for multiple frameworks</li>
+  <li>Steer clear of the common issues associated with web components by compiling directly to the native code of each framework</li>
+</ul>
 
-Using Morpho, you can:
+<p><img src="https://github.com/user-attachments/assets/b8ab4e72-4ed0-4930-9c4a-d1729d75a4a6" alt="Gif example of developing with Morpho"></p>
 
-- Maintain a consistent design system across multiple frameworks ([example](https://github.com/db-ux-design-system/core-web))
-- Sync your [design systems from Figma to code](https://morpho.builder.io/docs/figma/) and publish them to npm across frameworks
-- Avoid the [pitfalls of web components](https://morpho.builder.io/docs/overview/) by compiling to native framework code
+<h2>Quickstart</h2>
 
-_PS: We are actively looking for folks interested in becoming contributors to Morpho. If interested, look at our list of [good first issues](https://github.com/BuilderIO/morpho/contribute) or reach out on our [Discord](https://discord.gg/yxjk5vn6pn)_
+<p>To initiate a new Morpho project from the ground up, execute the <code>create</code> command as follows:</p>
 
-![Gif example of devloping with Morpho](https://cdn.builder.io/api/v1/file/assets%2FYJIGb4i01jvw0SRdL5Bt%2F868af1e6d9fd4923b18ecd1d892f3a6e)
+<pre><code>npm create @builder.io/morpho@latest</code></pre>
 
-## Quickstart
+<p>After completion, be sure to review the <code>README.md</code> file generated in your new project. It will detail the project's structure and offer a step-by-step guide on how to build and test your components.</p>
 
-To create a new Morpho project from scratch, run the following `create` command:
+<p>For more details, consult the complete <a href="https://morpho.builder.io/docs/quickstart/">getting started documentation</a>.</p>
 
-```bash
-npm create @builder.io/morpho@latest
-```
+<h3>Integration with Figma</h3>
 
-Once completed, make sure to read the `README.md` generated in your new project. It will explain the structure of your project, and provide a walkthrough on how to build/test your components.
+<p>Morpho seamlessly integrates with Figma to simplify the process of generating components and to ensure that your design system in code remains aligned with your Figma designs.</p>
 
-Read the full [getting started docs](https://morpho.builder.io/docs/quickstart/) for more.
+<p>Explore further details about our <a href="https://morpho.builder.io/docs/figma/">Figma integration</a>.</p>
 
-### Integration with Figma
+<p><img src="https://github.com/user-attachments/assets/392c4b5e-7501-4b83-962b-e13172e0acc1" alt="Demo of using Morpho with Figma"></p>
 
-To make generating Morpho components easier, as well as to keep your design system in code in sync with your design system in Figma, Morpho integrates with Figma.
+<h2>Resources</h2>
 
-Learn more about our [Figma integration](https://morpho.builder.io/docs/figma).
-
-![Demo of using Morpho with Figma](https://cdn.builder.io/api/v1/file/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fde65b7d174354c0baf189ee4e652a31b)
-
-## Resources
-
-- [Documentation](https://morpho.builder.io/docs)
-- [Playground](https://morpho.builder.io/playground)
-- [Figma integration](https://morpho.builder.io/docs/figma/)
-- [Morpho Discord](https://discord.gg/yxjk5vn6pn)
-
-## Contribute
-
-Interested in contribute? Head over to the [CONTRIBUTING](CONTRIBUTING.md) docs and see how you can get setup & started!
-
-Once you're ready, checkout our [issues](https://github.com/BuilderIO/morpho/contribute) page and grab your first issue!
-
-<br>
-<br>
-<p align="center">
-   <a href="https://www.builder.io/m/developers">
-      <picture>
-         <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/844291/230786554-eb225eeb-2f6b-4286-b8c2-535b1131744a.png">
-         <img width="250" alt="Made with love by Builder.io" src="https://user-images.githubusercontent.com/844291/230786555-a58479e4-75f3-4222-a6eb-74c5af953eac.png">
-       </picture>
-   </a>
-</p>
+<ul>
+  <li><a href="https://trymorpho.com">Official Documentation</a></li>
+</ul>
