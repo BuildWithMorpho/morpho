@@ -2,51 +2,66 @@
 <br>
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/79ef70d9-1c31-43f9-9f8f-8b0e7ef76e2e">
-    <img width="400" alt="Morpho logo" src="https://github.com/user-attachments/assets/79ef70d9-1c31-43f9-9f8f-8b0e7ef76e2e">
+    <source media="(prefers-color-scheme: dark)"
+            srcset="https://github.com/user-attachments/assets/79ef70d9-1c31-43f9-9f8f-8b0e7ef76e2e">
+    <img width="400" alt="Morpho logo"
+         src="https://github.com/user-attachments/assets/79ef70d9-1c31-43f9-9f8f-8b0e7ef76e2e">
   </picture>
 </p>
 
-
 <p align="center">
-  Develop components a single time and compile them for any framework
+  Build once, deploy across frameworks
 </p>
 
 <br>
 
-<h2>Overview</h2>
+<h2>Summary</h2>
 
-<p><a href="https://morpho.builder.io/docs/overview/">Morpho</a> offers a consistent development workflow for various frameworks, allowing you to create components in one codebase and then compile them for use in React, Vue, Angular, Svelte, Solid, Alpine, Qwik, and other frameworks.</p>
+<p><a href="https://trymorpho.com">Morpho</a> streamlines UI development by enabling developers to write component code
+  one time and output it for use in a variety of frontend environments—including React, Vue, Angular, Svelte, Solid,
+  Alpine, Qwik, and others.</p>
 
-<p>With Morpho, you can:</p>
+<p>Using Morpho, you can:</p>
 <ul>
-  <li>Ensure a uniform design system is maintained across different frameworks (<a href="https://github.com/db-ux-design-system/core-web">see example</a>)</li>
-  <li>Synchronize your design systems from Figma directly into code and distribute them via npm for multiple frameworks</li>
-  <li>Steer clear of the common issues associated with web components by compiling directly to the native code of each framework</li>
+  <li>Maintain a consistent UI library across ecosystems (<a href="https://github.com/db-ux-design-system/core-web">see
+    sample</a>)
+  </li>
+  <li>Pull design tokens and elements straight from Figma into code and distribute packages through npm compatible with
+    multiple frameworks
+  </li>
+  <li>Avoid typical pitfalls of web components by converting directly to framework-native code instead of relying on
+    wrappers
+  </li>
 </ul>
 
-<p><img src="https://github.com/user-attachments/assets/b8ab4e72-4ed0-4930-9c4a-d1729d75a4a6" alt="Gif example of developing with Morpho"></p>
+<p><img src="https://github.com/user-attachments/assets/b8ab4e72-4ed0-4930-9c4a-d1729d75a4a6"
+        alt="Morpho development process gif"></p>
 
-<h2>Quickstart</h2>
+<h2>Getting Started</h2>
 
-<p>To initiate a new Morpho project from the ground up, execute the <code>create</code> command as follows:</p>
+<p>To begin a fresh Morpho setup, run the following command:</p>
 
 <pre><code>npm create @builder.io/morpho@latest</code></pre>
 
-<p>After completion, be sure to review the <code>README.md</code> file generated in your new project. It will detail the project's structure and offer a step-by-step guide on how to build and test your components.</p>
+<p>Once setup completes, open the <code>README.md</code> file in your generated project directory. This will guide you
+  through the folder structure and how to start building and testing components.</p>
 
-<p>For more details, consult the complete <a href="https://morpho.builder.io/docs/quickstart/">getting started documentation</a>.</p>
+<p>Find the full setup instructions in the <a href="https://trymorpho.com/quickstart/">quickstart guide</a>.</p>
 
-<h3>Integration with Figma</h3>
+<h3>Figma Sync</h3>
 
-<p>Morpho seamlessly integrates with Figma to simplify the process of generating components and to ensure that your design system in code remains aligned with your Figma designs.</p>
+<p>Morpho includes built-in support for Figma, making it easy to convert designs into usable components while keeping
+  your design system consistent across both design and codebases.</p>
 
-<p>Explore further details about our <a href="https://morpho.builder.io/docs/figma/">Figma integration</a>.</p>
+<p>Read more about the <a href="https://trymorpho.com/figma/">Figma sync feature</a>.</p>
 
-<p><img src="https://github.com/user-attachments/assets/392c4b5e-7501-4b83-962b-e13172e0acc1" alt="Demo of using Morpho with Figma"></p>
+<p><img src="https://github.com/user-attachments/assets/392c4b5e-7501-4b83-962b-e13172e0acc1"
+        alt="Figma integration demonstration"></p>
 
-<h2>Resources</h2>
+<h2>Helpful Links</h2>
 
 <ul>
-  <li><a href="https://trymorpho.com">Official Documentation</a></li>
+  <li><a href="https://trymorpho.com">Official Docs</a></li>
 </ul>
+
+
